@@ -21,21 +21,7 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
         super.viewDidLoad()
 
         view.backgroundColor = .white
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(CauseTableCell.self, forCellReuseIdentifier: "causeTableCell")
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 48
-
-        view.addSubview(tableView)
-        let g = view.safeAreaLayoutGuide
-        NSLayoutConstraint.activate([
-            tableView.leadingAnchor.constraint(equalTo: g.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: g.trailingAnchor),
-            tableView.topAnchor.constraint(equalTo: g.topAnchor, constant: 20),
-            tableView.heightAnchor.constraint(equalTo: g.heightAnchor, multiplier: 0.6)
-        ])
-        
+        setTableView()
         switch nikoFirestoreManager.currentNiko.niko5M {
                     case "methode":
                         cellTitles = causeMethode
@@ -52,6 +38,22 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
 
+    private func setTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.register(CauseTableCell.self, forCellReuseIdentifier: "causeTableCell")
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = 35
+        view.addSubview(tableView)
+        let g = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            tableView.leadingAnchor.constraint(equalTo: g.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: g.trailingAnchor),
+            tableView.topAnchor.constraint(equalTo: g.topAnchor, constant: 20),
+            tableView.heightAnchor.constraint(equalTo: g.heightAnchor, multiplier: 0.6)
+        ])
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cellTitles.count
     }
@@ -79,6 +81,8 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell.accessoryType = .none
         }
         cell.accessoryType = .checkmark
+        navigationController?.popViewController(animated: true)
+//        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -88,11 +92,9 @@ class CauseTableCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: "causeTableCell")
-
         cellLabel.translatesAutoresizingMaskIntoConstraints = false
-        cellLabel.font = UIFont.systemFont(ofSize: 20)
+        cellLabel.font = UIFont.systemFont(ofSize: 16)
         contentView.addSubview(cellLabel)
-
         NSLayoutConstraint.activate([
             cellLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             cellLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)

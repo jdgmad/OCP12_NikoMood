@@ -105,7 +105,7 @@ class NikoSuiviViewController: UIViewController {
             locationTableView.leadingAnchor.constraint(equalTo: g.leadingAnchor),
             locationTableView.trailingAnchor.constraint(equalTo: g.trailingAnchor),
             locationTableView.topAnchor.constraint(equalTo: g.topAnchor, constant: 0),
-            locationTableView.heightAnchor.constraint(equalToConstant: 120)
+            locationTableView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TeamLocationTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TeamLocationTableViewController: UIViewController {
     
     // MARK: - Properties
     
@@ -57,7 +57,6 @@ class TeamLocationTableViewController: UIViewController, UITableViewDelegate, UI
     var tableView = UITableView()
     var cellTitles = [""]
     var locationRank = 0
-
     public var completion: ((String?) -> Void)?
 
     // MARK: - Overrides
@@ -66,11 +65,27 @@ class TeamLocationTableViewController: UIViewController, UITableViewDelegate, UI
         super.viewDidLoad()
 
         view.backgroundColor = .white
+        setTableView()
+        switch locationRank {
+                    case 0:
+                        cellTitles = etablissement
+                    case 1:
+                        cellTitles = service
+                    case 2:
+                        cellTitles = equipe
+                    default:
+                        cellTitles = [""]
+        }
+    }
+
+    // MARK: - Methods
+    
+    private func setTableView() {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(TeamTableCell.self, forCellReuseIdentifier: "teamTableCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 48
+        tableView.rowHeight = 35
 
         view.addSubview(tableView)
         let g = view.safeAreaLayoutGuide
@@ -80,23 +95,12 @@ class TeamLocationTableViewController: UIViewController, UITableViewDelegate, UI
             tableView.topAnchor.constraint(equalTo: g.topAnchor, constant: 20),
             tableView.heightAnchor.constraint(equalTo: g.heightAnchor, multiplier: 0.6)
         ])
-        print(" locationRank = \(locationRank)")
-        switch locationRank {
-                    case 0:
-                        cellTitles = etablissement
-                    case 1:
-                        cellTitles = service
-                    case 2:
-                        cellTitles = equipe
-//                    case 3:
-//                        cellTitles = equipe
-
-                    default:
-//                        cellTitles = etablissement
-                        cellTitles = [""]
-        }
     }
+}
 
+// MARK: - Extension
+
+extension TeamLocationTableViewController : UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return cellTitles.count
     }
@@ -122,12 +126,10 @@ class TeamLocationTableViewController: UIViewController, UITableViewDelegate, UI
         }
         cell.accessoryType = .checkmark
         completion?(cellTitles[indexPath.row])
-        print("dismiss")
         navigationController?.popViewController(animated: true)
 //        dismiss(animated: true, completion: nil)
     }
 }
-
 
 class TeamTableCell: UITableViewCell {
     var cellLabel = UILabel()
@@ -136,7 +138,7 @@ class TeamTableCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: "teamTableCell")
 
         cellLabel.translatesAutoresizingMaskIntoConstraints = false
-        cellLabel.font = UIFont.systemFont(ofSize: 20)
+        cellLabel.font = UIFont.systemFont(ofSize: 16)
         contentView.addSubview(cellLabel)
 
         NSLayoutConstraint.activate([

@@ -304,7 +304,7 @@ public class NikoFirestoreManager {
         }
     }
     
-    func getQuery(uid: String, location: [String], monthVsYear: Bool, personnal: Bool, selectedDate: Date) -> Query? {
+    private func getQuery(uid: String, location: [String], monthVsYear: Bool, personnal: Bool, selectedDate: Date) -> Query? {
         var q: Query?
         let calendarHelper = CalendarHelper()
         let month = calendarHelper.monthString(date: selectedDate)

@@ -33,13 +33,10 @@ class NikoRecordViewController: UIViewController {
     @IBOutlet weak var causeLabel: UILabel!
     @IBOutlet weak var causeTextField: UITextField!
     @IBOutlet weak var nextUIImage: UIImageView!
-    
     @IBOutlet weak var commentUITextField: UITextField!
     @IBOutlet weak var yourEmail: UITextField!
     @IBOutlet weak var validerUIButton: UIButton!
     @IBOutlet weak var causeUIButton: UIButton!
-    
-
     @IBOutlet weak var datePicker: UIDatePicker!
     
     
@@ -59,6 +56,8 @@ class NikoRecordViewController: UIViewController {
     
     func setUpElements() {
         Utilities.styleFilledButton(validerUIButton)
+        causeTextField.rightView = causeUIButton
+        causeTextField.rightViewMode = .always
     }
     
     @IBAction func logoutButtonTapped(_ sender: UIButton) {
@@ -168,17 +167,14 @@ class NikoRecordViewController: UIViewController {
         }
     }
     
-    
-    @IBAction func displayCause(_ sender: UIButton) {
+    @IBAction func displayCauseButton(_ sender: UIButton) {
         let vc = LibraryViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
-
     
     @IBAction func validerNikoRecordButtonTapped(_ sender: UIButton) {
         // validate Data
         nikoFirestoreManager.currentNiko.nikoComment = commentUITextField.text ?? ""
-//******************************* validation saisie à faire
         
         // Store the record in Firestore
         nikoFirestoreManager.storeNikoRecord(record: nikoFirestoreManager.currentNiko)
@@ -231,6 +227,8 @@ class NikoRecordViewController: UIViewController {
         superUIButton.isSelected = false
         toughtUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
         toughtUIButton.isSelected = false
+        causeTextField.text = ""
+        commentUITextField.text = ""
     }
     
     private func raz5MButton () {
@@ -244,6 +242,8 @@ class NikoRecordViewController: UIViewController {
         maindoeuvreUIButton.isSelected = false
         milieuUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
         milieuUIButton.isSelected = false
+        causeTextField.text = ""
+        commentUITextField.text = ""
     }
 
 }

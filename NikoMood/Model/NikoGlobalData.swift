@@ -20,6 +20,56 @@ enum FirebaseError: Error {
     case errSignin, errSignup, noUserConnected, noDocUser, errGettingDoc
 }
 
+public var causeMethode = [
+        "Pas de Modes opératoires",
+        "Procédures non à jour",
+        "Non respect des régles/procédures",
+        "Mauvaise communication",
+        "Mauvaise organisation",
+        "Cause 6 methode",
+        "Cause 7 methode",
+]
+
+public var causeMatiere = [
+        "Qualité matière première",
+        "Rupture matière première",
+        "Exédent matiere premiere",
+        "Coupure énergie",
+        "Coupure énergie",
+        "Cause 6 matiere",
+        "Cause 7 matiere",
+]
+
+public var causeMachine = [
+        "Machine en panne",
+        "Manque de maintenance",
+        "Manque de nettoyage",
+        "Mauvais fonctionnement machine",
+        "Manque de documentation",
+        "Cause 6 machine",
+        "Cause 7 machine",
+]
+
+public var causeMaindoeuvre = [
+        "Manque de compétences",
+        "Manque d'effectif/charge",
+        "Absentéisme",
+        "Manque d'implication",
+        "Cause 5 maindoeuvre",
+        "Cause 6 maindoeuvre",
+        "Cause 7 maindoeuvre",
+]
+
+public var causeMilieu = [
+        "Ergonomie au poste de travail",
+        "Flux en famine",
+        "Flus en saturation",
+        "Cause 4 milieu",
+        "Cause 5 milieu",
+        "Cause 6 milieu",
+        "Cause 7 milieu",
+]
+
 //extension FirebaseError: CustomStringConvertible {
 //    var description: String {
 //        switch self {
@@ -31,54 +81,3 @@ enum FirebaseError: Error {
 //        }
 //    }
 //}
-
-
-public var causeMethode = [
-        "Pas de Modes opératoires",
-        "Procédures non à jour",
-        "Cause 3 methode",
-        "Cause 4 methode",
-        "Cause 5 methode",
-        "Cause 6 methode",
-        "Cause 7 methode",
-]
-
-public var causeMatiere = [
-        "Qualité matière première",
-        "Rupture matière première",
-        "Coupure électricité",
-        "Cause 4 matiere",
-        "Cause 5 matiere",
-        "Cause 6 matiere",
-        "Cause 7 matiere",
-]
-
-public var causeMachine = [
-        "Cause 1 machine",
-        "Cause 2 machine",
-        "Cause 3 machine",
-        "Cause 4 machine",
-        "Cause 5 machine",
-        "Cause 6 machine",
-        "Cause 7 machine",
-]
-
-public var causeMaindoeuvre = [
-        "Cause 1 maindoeuvre",
-        "Cause 2 maindoeuvre",
-        "Cause 3 maindoeuvre",
-        "Cause 4 maindoeuvre",
-        "Cause 5 maindoeuvre",
-        "Cause 6 maindoeuvre",
-        "Cause 7 maindoeuvre",
-]
-
-public var causeMilieu = [
-        "Cause 1 milieu",
-        "Cause 2 milieu",
-        "Cause 3 milieu",
-        "Cause 4 milieu",
-        "Cause 5 milieu",
-        "Cause 6 milieu",
-        "Cause 7 milieu",
-]

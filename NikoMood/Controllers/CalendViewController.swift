@@ -45,7 +45,6 @@ class CalendViewController: UIViewController {
         locationTableView.dataSource = self
         setLocationTableView()
         collectionView.delegate = self
-        setcollectionlayout()
         pieChartView.isHidden = true
 
         
@@ -86,6 +85,8 @@ class CalendViewController: UIViewController {
             //locationTableView.reloadData()
         }
     }
+
+    // MARK: - Methods
     
     // Global settings for tableview locationTableView
     private func setLocationTableView() {
@@ -98,22 +99,16 @@ class CalendViewController: UIViewController {
         locationTableView.rowHeight = 35
         locationTableView.backgroundColor = .none
         view.addSubview(locationTableView)
-        
         let g = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
             locationTableView.leadingAnchor.constraint(equalTo: g.leadingAnchor),
             locationTableView.trailingAnchor.constraint(equalTo: g.trailingAnchor),
             locationTableView.topAnchor.constraint(equalTo: g.topAnchor, constant: 36),
-            locationTableView.heightAnchor.constraint(equalToConstant: 120)
+            locationTableView.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
     
-    
-    private func setcollectionlayout() {
- 
-    }
-    
-    func setCellsView() {
+    private func setCellsView() {
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         flowLayout.sectionInset.left = 0
         flowLayout.sectionInset.right = 0
@@ -125,13 +120,13 @@ class CalendViewController: UIViewController {
         collectionView!.collectionViewLayout = flowLayout
     }
     
-    func setMonthView()
+    private func setMonthView()
     {
         totalSquares.removeAll()
         let daysInMonth = calendarHelper.daysInMonth(date: selectedDate)
         let firstDayOfMonth = calendarHelper.firstOfMonth(date: selectedDate)
         let startingSpaces = calendarHelper.weekDay(date: firstDayOfMonth)
-        
+        // write the number of the day in the calendar
         var count: Int = 1
         while(count <= 42)
         {
@@ -144,16 +139,14 @@ class CalendViewController: UIViewController {
                 totalSquares.append(String(count - startingSpaces))
             }
             count += 1
-            
         }
         let month = calendarHelper.monthString(date: selectedDate)
         let year = calendarHelper.yearString(date: selectedDate)
         monthLabel.text = month + " " + year
-
+        // Update de Niko value with a request to Fierstore
         nikoFirestoreManager.requestRecordUsertrievelocalisationData(uid: uid, selectedDate: selectedDate, location: cellTitlesSelected, personnal: personnalCalendarSwitch, monthVsYear: true, ishikawa: false) { (result) in
             switch result {
             case .success(_):
-                //self.calendarColor = data
                 self.collectionView.reloadData()
             case .failure(let error):
                 self.presentFirebaseAlert(typeError: error, message: "")
@@ -161,14 +154,13 @@ class CalendViewController: UIViewController {
         }
     }
 
-    func displayPieChart(index : Int) {
+    private func displayPieChart(index : Int) {
         if totalSquares[index] != "" {
             var nikoRanks = [Double]()
             let jour = Int(totalSquares[index])
             let nbSuper = nikoFirestoreManager.dataTCDMonth[jour! - 1].nbSuper
             let nbNTR = nikoFirestoreManager.dataTCDMonth[jour! - 1].nbNTR
             let nbTought = nikoFirestoreManager.dataTCDMonth[jour! - 1].nbTought
-            print(" jour: \(String(describing: jour))  nbSuper: \(nbSuper)  nbNTR: \(nbNTR)   nbTought: \(nbTought) ")
             let nikoStatus = ["Super", "OK", "Tought"]
             nikoRanks.append(Double(nbSuper))
             nikoRanks.append(Double(nbNTR))
@@ -177,7 +169,7 @@ class CalendViewController: UIViewController {
         }
     }
 
-    func setPieChart(dataPoints: [String], values: [Double]) {
+    private func setPieChart(dataPoints: [String], values: [Double]) {
         var dataEntries: [ChartDataEntry] = []
         for i in 0..<dataPoints.count {
             let dataEntry1 = ChartDataEntry(x: Double(i), y: values[i], data: dataPoints[i] as AnyObject)
@@ -285,7 +277,7 @@ extension CalendViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 //
-// Extension Delegate et DataSource pour le calendrier
+// Extension Delegate and DataSource for the calendar
 //
 extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -328,9 +320,6 @@ extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSo
         if !personnalCalendarSwitch {
             pieChartView.isHidden = false
             displayPieChart(index: indexPath.item)
-            print(selectedDate)
-            let index = totalSquares[indexPath.item]
-            print("select \(index)")
         } else {
             pieChartView.isHidden = true
         }
@@ -350,9 +339,4 @@ extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSo
             cell.contentView.layer.borderWidth = 0
         }
     }
-    
-//    func collectionView(_ collectionView: UICollectionView, canFocusItemAt indexPath: IndexPath) -> Bool {
-//        <#code#>
-//    }
-    
 }
