@@ -22,10 +22,15 @@
 		6538BA7C27ECB06A00C1B8EF /* UIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6538BA7B27ECB06A00C1B8EF /* UIViewController.swift */; };
 		6538BA7E27EDA92A00C1B8EF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6538BA7D27EDA92A00C1B8EF /* Assets.xcassets */; };
 		6538BA8027F08E9000C1B8EF /* 5MCauseTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6538BA7F27F08E9000C1B8EF /* 5MCauseTableViewController.swift */; };
-		6538BA8427F11B2E00C1B8EF /* NikoGlobalData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6538BA8327F11B2E00C1B8EF /* NikoGlobalData.swift */; };
+		6538BA8427F11B2E00C1B8EF /* NikoGlobalType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6538BA8327F11B2E00C1B8EF /* NikoGlobalType.swift */; };
 		6538BA8627F317BA00C1B8EF /* NikoFirestoreManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6538BA8527F317BA00C1B8EF /* NikoFirestoreManager.swift */; };
 		65462AA227E618AB005C780E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65462AA127E618AB005C780E /* Constants.swift */; };
 		6555E4C027FDD58B0036C64A /* Snipet in Resources */ = {isa = PBXBuildFile; fileRef = 6555E4BF27FDD58B0036C64A /* Snipet */; };
+		655AD4712816CCC80053F2BA /* AuthFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4702816CCC80053F2BA /* AuthFirebase.swift */; };
+		655AD4732816CD390053F2BA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4722816CD390053F2BA /* AuthService.swift */; };
+		655AD4752816CD910053F2BA /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4742816CD910053F2BA /* AuthManager.swift */; };
+		655AD4772816D7EE0053F2BA /* FirebaseDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4762816D7EE0053F2BA /* FirebaseDatabase.swift */; };
+		655AD4792816D7FA0053F2BA /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4782816D7FA0053F2BA /* DatabaseManager.swift */; };
 		656386B927F5E59B00539713 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656386B827F5E59B00539713 /* UITableViewCell.swift */; };
 		656386BB27F6CB2D00539713 /* EntrepriseLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656386BA27F6CB2D00539713 /* EntrepriseLocation.swift */; };
 		656386BD27F72A0600539713 /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656386BC27F72A0600539713 /* CalendarHelper.swift */; };
@@ -34,9 +39,6 @@
 		6563870127FCED7A00539713 /* TeamLocationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6563870027FCED7A00539713 /* TeamLocationTableViewController.swift */; };
 		65AF5428280F4A57003C222A /* IshikawaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AF5427280F4A57003C222A /* IshikawaViewController.swift */; };
 		65D3F12C27F4B0CB00D0355C /* FirestoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D3F12B27F4B0CB00D0355C /* FirestoreError.swift */; };
-		65D3F12E27F4B11500D0355C /* FirestoreDataChartHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D3F12D27F4B11500D0355C /* FirestoreDataChartHandler.swift */; };
-		65D3F13027F4B28200D0355C /* FirestoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D3F12F27F4B28200D0355C /* FirestoreProtocol.swift */; };
-		65D3F13227F4B4EB00D0355C /* FirestoreSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D3F13127F4B4EB00D0355C /* FirestoreSession.swift */; };
 		65D3F13427F5CE2D00D0355C /* CalendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D3F13327F5CE2D00D0355C /* CalendViewController.swift */; };
 		65F5B746280CC040003A9968 /* NikoSuiviViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F5B745280CC040003A9968 /* NikoSuiviViewController.swift */; };
 		FC956A3E822ED87C96C80078 /* Pods_NikoMood.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65924F9B32266F7CDDC68A4F /* Pods_NikoMood.framework */; };
@@ -70,10 +72,15 @@
 		6538BA7B27ECB06A00C1B8EF /* UIViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewController.swift; sourceTree = "<group>"; };
 		6538BA7D27EDA92A00C1B8EF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6538BA7F27F08E9000C1B8EF /* 5MCauseTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = 5MCauseTableViewController.swift; sourceTree = "<group>"; };
-		6538BA8327F11B2E00C1B8EF /* NikoGlobalData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikoGlobalData.swift; sourceTree = "<group>"; };
+		6538BA8327F11B2E00C1B8EF /* NikoGlobalType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikoGlobalType.swift; sourceTree = "<group>"; };
 		6538BA8527F317BA00C1B8EF /* NikoFirestoreManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikoFirestoreManager.swift; sourceTree = "<group>"; };
 		65462AA127E618AB005C780E /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		6555E4BF27FDD58B0036C64A /* Snipet */ = {isa = PBXFileReference; lastKnownFileType = text; path = Snipet; sourceTree = "<group>"; };
+		655AD4702816CCC80053F2BA /* AuthFirebase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthFirebase.swift; sourceTree = "<group>"; };
+		655AD4722816CD390053F2BA /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		655AD4742816CD910053F2BA /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
+		655AD4762816D7EE0053F2BA /* FirebaseDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDatabase.swift; sourceTree = "<group>"; };
+		655AD4782816D7FA0053F2BA /* DatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
 		656386B827F5E59B00539713 /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		656386BA27F6CB2D00539713 /* EntrepriseLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntrepriseLocation.swift; sourceTree = "<group>"; };
 		656386BC27F72A0600539713 /* CalendarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
@@ -83,9 +90,6 @@
 		65924F9B32266F7CDDC68A4F /* Pods_NikoMood.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NikoMood.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65AF5427280F4A57003C222A /* IshikawaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IshikawaViewController.swift; sourceTree = "<group>"; };
 		65D3F12B27F4B0CB00D0355C /* FirestoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreError.swift; sourceTree = "<group>"; };
-		65D3F12D27F4B11500D0355C /* FirestoreDataChartHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDataChartHandler.swift; sourceTree = "<group>"; };
-		65D3F12F27F4B28200D0355C /* FirestoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProtocol.swift; sourceTree = "<group>"; };
-		65D3F13127F4B4EB00D0355C /* FirestoreSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreSession.swift; sourceTree = "<group>"; };
 		65D3F13327F5CE2D00D0355C /* CalendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendViewController.swift; sourceTree = "<group>"; };
 		65F5B745280CC040003A9968 /* NikoSuiviViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikoSuiviViewController.swift; sourceTree = "<group>"; };
 		6FB0920377F7C20C5BE299C4 /* Pods-NikoMood.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NikoMood.debug.xcconfig"; path = "Target Support Files/Pods-NikoMood/Pods-NikoMood.debug.xcconfig"; sourceTree = "<group>"; };
@@ -196,12 +200,11 @@
 		6538BA8127F118C700C1B8EF /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				6538BA8327F11B2E00C1B8EF /* NikoGlobalData.swift */,
+				655AD46E2816CC110053F2BA /* Auth */,
+				655AD46F2816CC410053F2BA /* Database */,
+				6538BA8327F11B2E00C1B8EF /* NikoGlobalType.swift */,
 				6538BA8527F317BA00C1B8EF /* NikoFirestoreManager.swift */,
-				65D3F12F27F4B28200D0355C /* FirestoreProtocol.swift */,
 				65D3F12B27F4B0CB00D0355C /* FirestoreError.swift */,
-				65D3F12D27F4B11500D0355C /* FirestoreDataChartHandler.swift */,
-				65D3F13127F4B4EB00D0355C /* FirestoreSession.swift */,
 				656386BA27F6CB2D00539713 /* EntrepriseLocation.swift */,
 				656386BC27F72A0600539713 /* CalendarHelper.swift */,
 			);
@@ -215,6 +218,25 @@
 				652CB7B127E36833003C9AFB /* LaunchScreen.storyboard */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		655AD46E2816CC110053F2BA /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				655AD4702816CCC80053F2BA /* AuthFirebase.swift */,
+				655AD4722816CD390053F2BA /* AuthService.swift */,
+				655AD4742816CD910053F2BA /* AuthManager.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		655AD46F2816CC410053F2BA /* Database */ = {
+			isa = PBXGroup;
+			children = (
+				655AD4762816D7EE0053F2BA /* FirebaseDatabase.swift */,
+				655AD4782816D7FA0053F2BA /* DatabaseManager.swift */,
+			);
+			path = Database;
 			sourceTree = "<group>";
 		};
 		96605B60BB4623993541E569 /* Pods */ = {
@@ -382,9 +404,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				65D3F12E27F4B11500D0355C /* FirestoreDataChartHandler.swift in Sources */,
+				655AD4752816CD910053F2BA /* AuthManager.swift in Sources */,
+				655AD4792816D7FA0053F2BA /* DatabaseManager.swift in Sources */,
 				656386BF27F72B6A00539713 /* CalendarCell.swift in Sources */,
-				65D3F13227F4B4EB00D0355C /* FirestoreSession.swift in Sources */,
+				655AD4772816D7EE0053F2BA /* FirebaseDatabase.swift in Sources */,
 				656386C127F9D25500539713 /* LocationTableCell.swift in Sources */,
 				6563870127FCED7A00539713 /* TeamLocationTableViewController.swift in Sources */,
 				6538BA8027F08E9000C1B8EF /* 5MCauseTableViewController.swift in Sources */,
@@ -396,15 +419,16 @@
 				652CB7A727E36831003C9AFB /* AppDelegate.swift in Sources */,
 				65D3F12C27F4B0CB00D0355C /* FirestoreError.swift in Sources */,
 				652CB7E127E4BDD6003C9AFB /* Utilities.swift in Sources */,
-				65D3F13027F4B28200D0355C /* FirestoreProtocol.swift in Sources */,
 				656386B927F5E59B00539713 /* UITableViewCell.swift in Sources */,
 				652CB7DA27E36E17003C9AFB /* SignUpViewController.swift in Sources */,
 				652CB7DC27E36E3F003C9AFB /* LoginViewController.swift in Sources */,
+				655AD4712816CCC80053F2BA /* AuthFirebase.swift in Sources */,
 				652CB7A927E36831003C9AFB /* SceneDelegate.swift in Sources */,
 				6538BA8627F317BA00C1B8EF /* NikoFirestoreManager.swift in Sources */,
+				655AD4732816CD390053F2BA /* AuthService.swift in Sources */,
 				652307CB27EC92F40069EB12 /* NikorecordViewController.swift in Sources */,
 				6538BA7C27ECB06A00C1B8EF /* UIViewController.swift in Sources */,
-				6538BA8427F11B2E00C1B8EF /* NikoGlobalData.swift in Sources */,
+				6538BA8427F11B2E00C1B8EF /* NikoGlobalType.swift in Sources */,
 				65462AA227E618AB005C780E /* Constants.swift in Sources */,
 				656386BB27F6CB2D00539713 /* EntrepriseLocation.swift in Sources */,
 			);

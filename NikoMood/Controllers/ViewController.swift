@@ -10,12 +10,16 @@ import FirebaseAuth
 
 
 class ViewController: UIViewController {
+  
+    // MARK: - Properties
     
+    private let authService: AuthService = AuthService()
     private let segueToSigninFromRoot = "segueToLoginFromRoot"
     private var userEmail = ""
     @IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
     
+    // MARK: - Overrides
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,13 +36,15 @@ class ViewController: UIViewController {
         }
     }
     
-    func setUpElements() {
+    // MARK: - Methods
+    
+    private func setUpElements() {
         Utilities.styleFilledButton(signupButton)
         Utilities.styleHollowButton(loginButton)
     }
     
     
-    func presentAlertLogin(userEmail: String) {
+    private func presentAlertLogin(userEmail: String) {
         
         let alert = UIAlertController(title: "Login", message: "Voulez vous continuer avec cet identifiant \(userEmail)", preferredStyle: .alert)
 
@@ -51,11 +57,11 @@ class ViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
-    func deconnect() {
-        do {
-            try Auth.auth().signOut()
-        } catch {
-            presentAlert(title: "Autorisation", message: "Erreur de déconnection")
+    private func deconnect() {
+        authService.signOut { result in
+            if !result {
+                self.presentFirebaseAlert(typeError: .errSignout, message: "Erreur Signout")
+            }
         }
     }
 }

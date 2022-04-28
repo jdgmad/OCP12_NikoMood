@@ -13,15 +13,18 @@ class IshikawaViewController: UIViewController {
     
     // MARK: - Properties
     
-    let nikoFirestoreManager =  NikoFirestoreManager.shared
+    //let nikoFirestoreManager =  NikoFirestoreManager.shared
     let calendarHelper = CalendarHelper()
-    var uid = String()
+    var userUID = String()
     var locationSelected = String()
+    private let authService: AuthService = AuthService()
+    private let databaseManager: DatabaseManager = DatabaseManager()
+    var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
     
     //  Properties for locationTableView
     var locationTableView = UITableView()
     var cellTitles = [ "Etablissement", "Service", "Equipe"]
-    var cellTitlesSelected = ["Etablissement", "Service", "Equipe"]
+    var cellTitlesSelected = ["", "", ""]
     
     //  Properties for Charts
     var selectedBarDate = Date()
@@ -36,17 +39,16 @@ class IshikawaViewController: UIViewController {
     
     @IBOutlet weak var monthLabel: UILabel!
     
-    
     // MARK: - Overrides
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .white
+        getUserData()
         locationTableView.delegate = self
         locationTableView.dataSource = self
         barChartView.delegate = self
-        setLocationTableView()
+
         setBarChart()
         setBarMonthView()
         setHorizontalBarChartView()
@@ -73,16 +75,32 @@ class IshikawaViewController: UIViewController {
     
     // MARK: - Methods
     
+    func getUserData() {
+        guard let uid = authService.currentUID else { return}
+        userUID = uid
+        databaseManager.getUserData(with: userUID) { (result) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    self.currentNiko = data
+                    self.setLocationTableView()
+                    self.locationTableView.reloadData()
+                case .failure(let error):
+                    self.presentFirebaseAlert(typeError: error, message: "Erreur récupération user Data")
+                }
+            }
+        }
+    }
+    
     //
     // Location table View
     //
     
     // Global settings for tableview locationTableView
     private func setLocationTableView() {
-        uid = nikoFirestoreManager.currentNiko.userID
-        cellTitlesSelected[0] = nikoFirestoreManager.currentNiko.plant
-        cellTitlesSelected[1] = nikoFirestoreManager.currentNiko.workshop
-        cellTitlesSelected[2] = nikoFirestoreManager.currentNiko.shift
+        cellTitlesSelected[0] = currentNiko.plant
+        cellTitlesSelected[1] = currentNiko.workshop
+        cellTitlesSelected[2] = currentNiko.shift
         locationTableView.register(LocationTableCell.self, forCellReuseIdentifier: "locationTableCell")
         locationTableView.translatesAutoresizingMaskIntoConstraints = false
         locationTableView.rowHeight = 35
@@ -108,7 +126,7 @@ class IshikawaViewController: UIViewController {
         let year = calendarHelper.yearString(date: selectedBarDate)
         monthLabel.text = month + " " + year
 
-        nikoFirestoreManager.requestRecordUsertrievelocalisationData(uid: uid, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true, ishikawa: false) { (result) in
+        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true, ishikawa: false) { (result) in
             switch result {
             case .success(let data):
                 // update display bar Charts
@@ -158,7 +176,7 @@ class IshikawaViewController: UIViewController {
         
     }
     
-    func setBarChartData(niKoRecords: [NikoFirestoreManager.NikoTCD]) {
+    func setBarChartData(niKoRecords: [NikoTCD]) {
 
         var val5M = [Double]()
         let recordsMethode = niKoRecords.map({$0.nbMethod})
@@ -188,7 +206,7 @@ class IshikawaViewController: UIViewController {
         set.drawIconsEnabled = false
         set.colors = [UIColor.green, UIColor.orange, UIColor.blue, UIColor.yellow, UIColor.red]
         //set.fillAlpha = 65/255
-        set.stackLabels = nikoFirestoreManager.category5M
+        set.stackLabels = databaseManager.category5M
         
         let data = BarChartData(dataSet: set)
         
@@ -231,12 +249,12 @@ class IshikawaViewController: UIViewController {
     
     func drawHorizontalBarChartView(valCategory5M: Int) {
 
-        nikoFirestoreManager.requestRecordUsertrieveIshikawaData(uid: uid, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true, category5MSelected: valCategory5M) { (result) in
+        databaseManager.requestRecordUserRetrieveIshikawaData(uid: userUID, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true, category5MSelected: valCategory5M) { (result) in
             switch result {
             case .success(let data):
                 // update display bar Charts
-                print ("data ishi")
-                print(data.count)
+//                print ("data ishi")
+//                print(data.count)
                 var dataEntries = [ChartDataEntry]()
                 var labels = [String] ()
                 
@@ -276,16 +294,6 @@ class IshikawaViewController: UIViewController {
             case .failure(let error):
                 self.presentFirebaseAlert(typeError: error, message: "")
             }
-        
-    
-            
-//        let values = [5, 10, 15, 28, 52, 70]
-//        let labels = ["Cause 1", "Cause 2", "Cause 3", "Cause 4", "Cause 5", "Cause 6"]
-        
-   
-   
-        //let barChartDataSet = BarChartDataSet(entries: dataEntries, label: "")
-
         }
     }
     
@@ -316,7 +324,7 @@ extension IshikawaViewController: UITableViewDelegate, UITableViewDataSource {
     private func handlePermission(cell: UITableViewCell, button: UIButton, index : Int) {
         switch index {
         case 0:
-        if nikoFirestoreManager.currentNiko.permission >= 4  {
+        if currentNiko.permission >= 4  {
             cell.isUserInteractionEnabled = true
             button.isHidden = false
         } else {
@@ -324,7 +332,7 @@ extension IshikawaViewController: UITableViewDelegate, UITableViewDataSource {
             button.isHidden = true
         }
         case 1:
-        if nikoFirestoreManager.currentNiko.permission >= 3   {
+        if currentNiko.permission >= 3   {
             cell.isUserInteractionEnabled = true
             button.isHidden = false
         } else {
@@ -333,7 +341,7 @@ extension IshikawaViewController: UITableViewDelegate, UITableViewDataSource {
             button.isHidden = true
         }
         case 2:
-        if nikoFirestoreManager.currentNiko.permission >= 2   {
+        if currentNiko.permission >= 2   {
             cell.isUserInteractionEnabled = true
             button.isHidden = false
         } else {

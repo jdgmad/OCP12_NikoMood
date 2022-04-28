@@ -29,6 +29,8 @@ extension UIViewController {
             //message = message
         case .errSignup:
             title = "Signup error"
+        case .errSignout:
+            title = "Erreur Signout"
             //message = "Signup error"
         case .noUserConnected:
             title = "no user connected"
@@ -38,8 +40,11 @@ extension UIViewController {
             //message = "no document user"
         case .errGettingDoc:
             title = "Accès document Firestore"
+        case .errWritingData:
+            title = "Erreur enregistrement de données"
             //message = "Erreur accès document"
         }
+        
         
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let action = UIAlertAction(title: "OK", style: .cancel, handler: nil)

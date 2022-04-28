@@ -6,17 +6,19 @@
 //
 
 import UIKit
-import FirebaseAuth
-import Firebase
-import FirebaseFirestore
+//import FirebaseAuth
+//import Firebase
+//import FirebaseFirestore
 
 class SignUpViewController: UIViewController {
     
     // MARK: - Properties
     
-    let nikoFirestoreManager = NikoFirestoreManager.shared
+    //let nikoFirestoreManager = NikoFirestoreManager.shared
+    private let authService: AuthService = AuthService()
+    private let databaseManager: DatabaseManager = DatabaseManager()
     private let segueToTabbarFromSignup = "segueToTabbarFromSignup"
-
+    var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
 
     // MARK: - Outlets
     
@@ -26,7 +28,7 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
     
-    // MARK: - Override
+    // MARK: - Overrides
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,30 +39,6 @@ class SignUpViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         showError("")
-    }
-    
-    
-    func setUpElements() {
-        errorLabel.alpha = 0
-        Utilities.styleTextField(emailTextField)
-        Utilities.styleTextField(pseudoTextField)
-        Utilities.styleTextField(passwordTextField)
-        Utilities.styleFilledButton(signupButton)
-    }
-    
-    // Check the fields and validate that the data is correct. If everything is correct, this method returns nil. Otherwise, it returns the error message
-    func validateFields() -> String? {
-        // Check that all fields are filled in
-        if emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
-            passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
-            return "Please fill in all the fields"
-        }
-        // Check if the password is secure
-        let cleanedPassword = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        if Utilities.isPasswordValid(cleanedPassword) == false {
-            return "Please make sure your password is at least 8 characters, contains a special character and a number"
-        }
-        return nil
     }
     
     // MARK: - Actions
@@ -77,118 +55,65 @@ class SignUpViewController: UIViewController {
         }
     }
     
-    func createUser() {
-        var userDocumentID = String()
-        let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+    // MARK: - Methods
+    
+    private func setUpElements() {
+        errorLabel.alpha = 0
+        Utilities.styleTextField(emailTextField)
+        Utilities.styleTextField(pseudoTextField)
+        Utilities.styleTextField(passwordTextField)
+        Utilities.styleFilledButton(signupButton)
+    }
+    
+    // Check the fields and validate that the data is correct. If everything is correct, this method returns nil. Otherwise, it returns the error message
+    private func validateFields() -> String? {
+        // Check that all fields are filled in
+        if emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+            passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+            return "Please fill in all the fields"
+        }
+        // Check if the password is secure
+        let cleanedPassword = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+        if Utilities.isPasswordValid(cleanedPassword) == false {
+            return "Please make sure your password is at least 8 characters, contains a special character and a number"
+        }
+        return nil
+    }
+    
+    private func createUser() {
+        //var userDocumentID = String()
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+        guard let password = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
         // Check if the email is in the company list
 
         // Create the user
-        Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
-            // Check for errors
-            if err != nil {
-                // There was an error creating the user
-                self.showError("Error creating user")
-            }
-            else {
-                // User was created successfully, now store the Auth user ID in the collection users
-                guard let authUserID = result?.user.uid else { return }
-                // Check if the email is in the company list
-                let db = Firestore.firestore()
-                let usersRef = db.collection("users")
-                usersRef.whereField("email", isEqualTo: email)
-                    .getDocuments() { (querySnapshot, err) in
-                        if let err = err {
-                            print("Error getting documents: \(err)")
-                        } else {
-                            if querySnapshot?.documents.count == 1 {    // means that the email is in the company list
-                                for document in querySnapshot!.documents {
-                                    userDocumentID = document.documentID
-                                    //print("\(document.documentID) => \(document.data())")
-                                    let userDoc = db.collection("users").document(userDocumentID)
-                                    userDoc.updateData(["userID": authUserID]) { err in
-                                        if let err = err {
-                                            self.showError("Error updating document: \(err)")
-                                        } else {
-                                            print("Document successfully updated")
-                                            // Transition to the home screen
-                                            
-                                            self.nikoFirestoreManager.retrieveUserData(uid: authUserID) { (result) in
-                                                switch result {
-                                                case .success(_):
-                                                    //self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
-                                                    self.performSegue(withIdentifier: self.segueToTabbarFromSignup, sender: self)
-                                                case .failure(let error):
-                                                    self.presentFirebaseAlert(typeError: error, message: "")
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } else {
-                                self.showError("Vous n'êtes pas identifié dans la liste des salariés")
-                            }
-                        }
+        authService.signUp(email: email, password: password) { isSuccess in
+
+            self.databaseManager.getUserData(with: self.authService.currentUID!) { (result) in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let data):
+                        self.currentNiko = data
+                        self.performSegue(withIdentifier: self.segueToTabbarFromSignup, sender: self)
+                    case .failure(let error):
+                        self.presentFirebaseAlert(typeError: error, message: "")
                     }
+                }
             }
         }
     }
     
-                
-                
-//    func createUser() {
-//        var userDocumentID = String()
-//        let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-//        let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-//        // Check if the email is in the company list
-//        let db = Firestore.firestore()
-//        let usersRef = db.collection("users")
-//        usersRef.whereField("email", isEqualTo: email)
-//            .getDocuments() { (querySnapshot, err) in
-//                if let err = err {
-//                    print("Error getting documents: \(err)")
-//                } else {
-//                    if querySnapshot?.documents.count == 1 {    // means that the email is in the company list
-//                        for document in querySnapshot!.documents {
-//                            userDocumentID = document.documentID
-//                            //print("\(document.documentID) => \(document.data())")
-//                        }
-//                        // Create the user
-//                        Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
-//                            // Check for errors
-//                            if err != nil {
-//                                // There was an error creating the user
-//                                self.showError("Error creating user")
-//                            }
-//                            else {
-//                                // User was created successfully, now store the Auth user ID in the collection users
-//                                guard let authUserID = result?.user.uid else { return }
-//                                let db = Firestore.firestore()
-//                                let userDoc = db.collection("users").document(userDocumentID)
-//
-//                                userDoc.updateData(["userID": authUserID]) { err in
-//                                    if let err = err {
-//                                        self.showError("Error updating document: \(err)")
-//                                    } else {
-//                                        print("Document successfully updated")
-//                                    }
-//                                }
-//                                // Transition to the home screen
-//                                self.performSegue(withIdentifier: self.segueToTabbarFromSignup, sender: self)
-//                            }
-//                        }
-//                    }else {
-//                        self.showError("Vous n'êtes pas identifié dans la liste des salariés")
-//                    }
-//                }
-//            }
-//    }
-    
-    
-    func showError(_ message:String) {
+    private func showError(_ message:String) {
         errorLabel.text = message
         errorLabel.alpha = 1
     }
 }
 
-
+extension SignUpViewController {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == segueToTabbarFromSignup {
+            guard let nikoRecordVC = segue.destination as? NikoRecordViewController else { return }
+            nikoRecordVC.currentNiko = self.currentNiko
+        }
+    }
+}

@@ -9,18 +9,19 @@ import Foundation
 
 
 struct Location {
-    let locationName:String?
-    let locationSelected:String?
+    var locationName:String?
+    var locationSelected:String?
 }
 
 class LocationEntreprise {
-    static func getLocations() -> [Location]{
-        let locations = [
-            Location(locationName: "Etablissement", locationSelected: " "),
-            Location(locationName: "Département", locationSelected: " "),
-            Location(locationName: "Service", locationSelected: " "),
-            Location(locationName: "Equipe", locationSelected: " ")
+    static var locations = [
+            Location(locationName: "plant", locationSelected: " "),
+            Location(locationName: "workshop", locationSelected: " "),
+            Location(locationName: "shift", locationSelected: " ")
         ]
-        return locations
-    }
+    
+    // Modifications à venir :
+    // Récupérer depuis Firebase les valeurs pour remplir locations
+
 }
+

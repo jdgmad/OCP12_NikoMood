@@ -12,18 +12,23 @@ class CalendViewController: UIViewController {
 
     
     // MARK: - Properties
-    
-    let nikoFirestoreManager =  NikoFirestoreManager.shared
+    private let authService: AuthService = AuthService()
+    private let databaseManager: DatabaseManager = DatabaseManager()
+    //let nikoFirestoreManager =  NikoFirestoreManager.shared
     let calendarHelper = CalendarHelper()
-    var uid = String()
+    var userUID = String()
     var locationSelected = String()
     
     //  Properties for locationTableView
     var locationTableView = UITableView()
     var cellTitles = [ "Etablissement", "Service", "Equipe"]
-    var cellTitlesSelected = ["Etablissement", "Service", "Equipe"]
+    var cellTitlesSelected = ["", "", ""]
+    var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
+    var dataTCDMonth = [NikoTCD]()
+    var currentNikoTCD = NikoTCD(rankAverage: -1, nbRecord: 0, nbSuper: 0, nbNTR: 0, nbTought: 0, nbMethod: 0, nbMatiere: 0, nbMachine: 0, nbMaindoeuvre: 0, nbMilieu: 0)
+    
+
     var personnalCalendarSwitch = true
-  
     
     //  Properties for calendar
     var selectedDate = Date()
@@ -39,15 +44,18 @@ class CalendViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .white
+        dataTCDMonth = Array(repeating: currentNikoTCD, count: 31)
+        getUserData()
+        
         locationTableView.delegate = self
         locationTableView.dataSource = self
-        setLocationTableView()
+//        setLocationTableView()
+//        locationTableView.reloadData()
+        
         collectionView.delegate = self
         pieChartView.isHidden = true
 
-        
         setCellsView()
         setMonthView()
     }
@@ -88,12 +96,37 @@ class CalendViewController: UIViewController {
 
     // MARK: - Methods
     
+    
+    func getUserData() {
+        guard let uid = authService.currentUID else { return}
+        userUID = uid
+        databaseManager.getUserData(with: userUID) { (result) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    self.currentNiko = data
+                    print("print user Data dans calend view")
+                    print(data)
+                    self.setLocationTableView()
+                    self.locationTableView.reloadData()
+                case .failure(let error):
+                    self.presentFirebaseAlert(typeError: error, message: "Erreur récupération user Data")
+                }
+            }
+        }
+    }
+    
     // Global settings for tableview locationTableView
     private func setLocationTableView() {
-        uid = nikoFirestoreManager.currentNiko.userID
-        cellTitlesSelected[0] = nikoFirestoreManager.currentNiko.plant
-        cellTitlesSelected[1] = nikoFirestoreManager.currentNiko.workshop
-        cellTitlesSelected[2] = nikoFirestoreManager.currentNiko.shift
+        LocationEntreprise.locations[0].locationSelected = currentNiko.plant
+        LocationEntreprise.locations[1].locationSelected = currentNiko.plant
+        LocationEntreprise.locations[2].locationSelected = currentNiko.plant
+        cellTitlesSelected[0] = currentNiko.plant
+        cellTitlesSelected[1] = currentNiko.workshop
+        cellTitlesSelected[2] = currentNiko.shift
+        
+        print(cellTitlesSelected)
+        
         locationTableView.register(LocationTableCell.self, forCellReuseIdentifier: "locationTableCell")
         locationTableView.translatesAutoresizingMaskIntoConstraints = false
         locationTableView.rowHeight = 35
@@ -143,10 +176,15 @@ class CalendViewController: UIViewController {
         let month = calendarHelper.monthString(date: selectedDate)
         let year = calendarHelper.yearString(date: selectedDate)
         monthLabel.text = month + " " + year
+        
+        print("cellTitleSerlected dans calendar view")
+        print(cellTitlesSelected)
+        
         // Update de Niko value with a request to Fierstore
-        nikoFirestoreManager.requestRecordUsertrievelocalisationData(uid: uid, selectedDate: selectedDate, location: cellTitlesSelected, personnal: personnalCalendarSwitch, monthVsYear: true, ishikawa: false) { (result) in
+        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedDate, location: cellTitlesSelected, personnal: personnalCalendarSwitch, monthVsYear: true, ishikawa: false) { (result) in
             switch result {
-            case .success(_):
+            case .success(let data):
+                self.dataTCDMonth = data
                 self.collectionView.reloadData()
             case .failure(let error):
                 self.presentFirebaseAlert(typeError: error, message: "")
@@ -158,9 +196,9 @@ class CalendViewController: UIViewController {
         if totalSquares[index] != "" {
             var nikoRanks = [Double]()
             let jour = Int(totalSquares[index])
-            let nbSuper = nikoFirestoreManager.dataTCDMonth[jour! - 1].nbSuper
-            let nbNTR = nikoFirestoreManager.dataTCDMonth[jour! - 1].nbNTR
-            let nbTought = nikoFirestoreManager.dataTCDMonth[jour! - 1].nbTought
+            let nbSuper = dataTCDMonth[jour! - 1].nbSuper
+            let nbNTR = dataTCDMonth[jour! - 1].nbNTR
+            let nbTought = dataTCDMonth[jour! - 1].nbTought
             let nikoStatus = ["Super", "OK", "Tought"]
             nikoRanks.append(Double(nbSuper))
             nikoRanks.append(Double(nbNTR))
@@ -228,7 +266,7 @@ extension CalendViewController: UITableViewDelegate, UITableViewDataSource {
     private func handlePermission(cell: UITableViewCell, button: UIButton, index : Int) {
         switch index {
         case 0:
-        if nikoFirestoreManager.currentNiko.permission >= 4  {
+        if currentNiko.permission >= 4  {
             cell.isUserInteractionEnabled = true
             button.isHidden = false
         } else {
@@ -236,7 +274,7 @@ extension CalendViewController: UITableViewDelegate, UITableViewDataSource {
             button.isHidden = true
         }
         case 1:
-        if nikoFirestoreManager.currentNiko.permission >= 3   {
+        if currentNiko.permission >= 3   {
             cell.isUserInteractionEnabled = true
             button.isHidden = false
         } else {
@@ -245,7 +283,7 @@ extension CalendViewController: UITableViewDelegate, UITableViewDataSource {
             button.isHidden = true
         }
         case 2:
-        if nikoFirestoreManager.currentNiko.permission >= 2   {
+        if currentNiko.permission >= 2   {
             cell.isUserInteractionEnabled = true
             button.isHidden = false
         } else {
@@ -268,6 +306,7 @@ extension CalendViewController: UITableViewDelegate, UITableViewDataSource {
             let vc = TeamLocationTableViewController()
             vc.completion = {[weak self] text in
                 self!.cellTitlesSelected[buttonNumber] = text ?? ""
+                LocationEntreprise.locations[buttonNumber].locationSelected = text ?? ""
                 self!.setMonthView()
             }
             vc.locationRank = buttonNumber
@@ -291,7 +330,7 @@ extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSo
         cell.backgroundColor = .none
         if totalSquares[indexPath.item] != "" {
             let jour = Int(totalSquares[indexPath.item])
-            let nikoRank = nikoFirestoreManager.dataTCDMonth[jour! - 1].rankAverage
+            let nikoRank = dataTCDMonth[jour! - 1].rankAverage
             print ("jour : \(jour!)  nikoRank : \(nikoRank)")
             switch nikoRank {
             case 0, 1:

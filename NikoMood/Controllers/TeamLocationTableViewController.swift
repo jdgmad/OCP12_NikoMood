@@ -53,7 +53,7 @@ class TeamLocationTableViewController: UIViewController {
             "E"
     ]
     
-    let nikoFirestoreManager =  NikoFirestoreManager.shared
+    //let nikoFirestoreManager =  NikoFirestoreManager.shared
     var tableView = UITableView()
     var cellTitles = [""]
     var locationRank = 0

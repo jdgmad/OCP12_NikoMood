@@ -1,223 +1,72 @@
 //
-//  NikoFirebaseManager.swift
-//  NikoMood
+//  DatabaseManager.swift
+//  FirebaseLoginScreen
 //
-//  Created by José DEGUIGNE on 29/03/2022.
+//  Created by Sebastien Bastide on 02/02/2020.
+//  Copyright © 2020 Sebastien Bastide. All rights reserved.
 //
-/*
+
 import Foundation
-import Firebase
-import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-public class NikoFirestoreManager {
-    
-    // MARK: - Properties
-    
-    //private let firestoreSession: FirestoreProtocol
-    
-    public static let shared = NikoFirestoreManager()
-    
-    struct NikoUser: Codable {
-        @DocumentID var id: String?
-        var userID : String
-        var firstname : String
-        var lastname : String
-        var position : String
-        var plant : String
-        var department : String
-        var workshop : String
-        var shift : String
-        var permission : Int
-        var password : String
-        var birthday : Date
-        var email: String
-    }
+final class DatabaseManager {
 
-    struct NikoRecord: Codable {
-        @DocumentID var id: String?
-        var userID : String
-        var firstname : String
-        var lastname : String
-        var position : String
-        var plant : String
-        var department : String
-        var workshop : String
-        var shift : String
-        var nikoStatus: String
-        var nikoRank : Int
-        var niko5M : String
-        var nikoCause : String
-        var nikoComment : String
-        var permission : Int
-        var date : Date
-        var formattedMonthString : String
-        var formattedDateString : String
-        var formattedYearString : String
-        var error : String?
-    }
-    
-    struct NikoTCD {
-        var rankAverage: Int
-        var nbRecord: Int
-        var nbSuper: Int
-        var nbNTR: Int
-        var nbTought: Int
-        var nbMethod: Int
-        var nbMatiere: Int
-        var nbMachine: Int
-        var nbMaindoeuvre: Int
-        var nbMilieu: Int
-        
-    }
-    
+    // MARK: - Properties
+
+    private let database: DatabaseType
+    private let authService: AuthService = AuthService()
+
     var dataTCDMonth = [NikoTCD]()
     var dataTCDYear = [NikoTCD]()
     var dataCause5M = [Dictionary<String, Int>.Element]()
     //var dataCause5M = [String : Int]()
-    
+
     var currentNikoTCD = NikoTCD(rankAverage: -1, nbRecord: 0, nbSuper: 0, nbNTR: 0, nbTought: 0, nbMethod: 0, nbMatiere: 0, nbMachine: 0, nbMaindoeuvre: 0, nbMilieu: 0)
-    
+
     var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
 
     var currentUser = NikoUser(id: "", userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "",  permission: 0, password: "", birthday: Date(), email: "")
-    
+
     var paramQueryField = ["plant", "workshop", "shift"  ]
-    
+
     var category5M = ["methode", "matiere", "machine", "maindoeuvre", "milieu"]
-    
-    // MARK: - Init
-    
-//    init(firestoreSession: FirestoreProtocol = FirestoreSession()) {
-//        self.firestoreSession = firestoreSession
-//    }
-    
-    private init() {
-        }
 
-    // MARK: - Methods
-    
-    func loginUser(email: String, password: String, completionHandler: @escaping (Result<[NikoRecord], FirebaseError>) -> Void) {
-    
-    Auth.auth().signIn(withEmail: email, password: password) { (result, error) in
-        if error != nil {
-            // Couldn't sign in
-            completionHandler(.failure(.errSignin))
-            self.currentNiko.error = error!.localizedDescription
-            return
-        }
-        else {
-            if Auth.auth().currentUser != nil {
-                if let user = Auth.auth().currentUser {
-                    let uid = user.uid
-                    self.retrieveUserData(uid: uid) {(resultData) in
-                        switch resultData {
-                        case .success(_):
-                            completionHandler(.success([self.currentNiko]))
-                            
-                        case .failure(let error):
-                            completionHandler(.failure(error))
-                        }
-                    }
-                }
-            }else {
-                    completionHandler(.failure(.noUserConnected))
-                    return
-            }
-        }
-        }
+    // MARK: - Initialization
+
+    init(database: DatabaseType = FirebaseDatabase()) {
+        self.database = database
     }
 
-    func deconnectUser(completionHandler: @escaping (Result<Bool, FirebaseError>) -> Void) {
-        do {
-            try Auth.auth().signOut()
-            completionHandler(.success(true))
-        } catch {
-            completionHandler(.failure(.errSignout))
-        }
-    }
-    
-    func retrieveUserData (uid: String, completionHandler: @escaping (Result<[NikoUser], FirebaseError>) -> Void) {
-        // Retrieve the user data
-        let db = Firestore.firestore()
-        let usersRef = db.collection("users")
-        usersRef.whereField("userID", isEqualTo: uid)
-            .getDocuments{ (querySnapshot, err) in
-                if let err = err {
-                    print("Error getting documents: \(err)")
-                    completionHandler(.failure(.errGettingDoc))
-                    return
-                }
-                if querySnapshot?.documents.count == 1 {
-                    for document in querySnapshot!.documents {
-//                        print("\(document.documentID) => \(document.data())")
+    // MARK: - Read Queries
+
+    func getUserData(with uid: String, callback: @escaping (Result<NikoRecord, FirebaseError>) -> Void) {
+        database.getUserData(with: uid) { (result) in
+            switch result {
+            case .success(let data):
+                if data.documents.count == 1 {
+                    for document in data.documents {
                         do {
-//                            let dataDescription = document.data().map(String.init(describing:))
-//                            print("Document data: \(dataDescription)")
                             let decodeData = try document.data(as: NikoUser.self)
                             self.currentUser = decodeData!
                             self.transfertDataUserToNikoRecord()
-                            completionHandler(.success([self.currentUser]))
+                            callback(.success(self.currentNiko))
                             return
                         }
                         catch {
                             print("erreur catch in func retrieveUserData")
-                            completionHandler(.failure(.errGettingDoc))
+                            callback(.failure(.errGettingDoc))
                             return
                         }
                     }
-
-                } else {
-                    completionHandler(.failure(.noDocUser))
-                    return
                 }
+            case .failure(let err):
+                callback(.failure(err))
             }
+        }
     }
     
-    func checkIfRecordExist (uid: String, dateSelected: Date, completionHandler: @escaping (Result<[NikoUser], FirebaseError>) -> Void) {
-        // Retrieve the user data
-        let calendarHelper = CalendarHelper()
-        let dateString = calendarHelper.dateString(date: dateSelected)
-        let db = Firestore.firestore()
-        let usersRef = db.collection("users")
-        usersRef.whereField("userID", isEqualTo: uid)
-            .whereField("formattedDateString", isEqualTo: dateString)
-            .getDocuments{ (querySnapshot, err) in
-                if let err = err {
-                    print("Error getting documents: \(err)")
-                    completionHandler(.failure(.errGettingDoc))
-                    return
-                }
-                if querySnapshot?.documents.count == 1 {
-                    for document in querySnapshot!.documents {
-                        print("\(document.documentID) => \(document.data())")
-                        do {
-//                            let dataDescription = document.data().map(String.init(describing:))
-//                            print("Document data: \(dataDescription)")
-                            let decodeData = try document.data(as: NikoUser.self)
-                            self.currentUser = decodeData!
-                            self.transfertDataUserToNikoRecord()
-                            completionHandler(.success([self.currentUser]))
-                            return
-                        }
-                        catch {
-                            print("erreur catch in func retrieveUserData")
-                            completionHandler(.failure(.errGettingDoc))
-                            return
-                        }
-                    }
-
-                } else {
-                    completionHandler(.failure(.noDocUser))
-                    return
-                }
-            }
-    }
-    
-
-
-    func storeNikoRecord (record : NikoRecord) {
+    func storeNikoRecord (record : NikoRecord, callback: @escaping (Bool) -> Void) {
         
         // MARK: - Properties
         
@@ -245,25 +94,37 @@ public class NikoFirestoreManager {
             "formattedYearString": calendarHelper.yearString(date: date),
             "error": error
         ])
-        let db = Firestore.firestore()
-        var ref: DocumentReference? = nil
-        ref = db.collection("NikoRecord").addDocument(data: docData) { err in
-            if let err = err {
-                print("Error adding document: \(err)")
+        
+        database.addRecord(docData : docData) { result in
+            if result {
+            callback(true)
             } else {
-                print("Document added with ID: \(ref!.documentID)")
+            callback(false)
             }
         }
-        
     }
+    
+    func checkIfRecordExist (uid: String, dateSelected: Date, callback: @escaping (Bool) -> Void)  {
+        // Retrieve the user data
+        let calendarHelper = CalendarHelper()
+        let dateString = calendarHelper.dateString(date: dateSelected)
         
-    func requestRecordUsertrievelocalisationData (uid: String,
+        database.checkIfRecordExist(uid: uid, dateString: dateString) { (result) in 
+            if result {
+                callback(true)
+            } else {
+                callback(false)
+            }
+        }
+    }
+    
+    func requestRecordUserRetrievelocalisationData (uid: String,
                                                   selectedDate: Date,
                                                   location : [String],
                                                   personnal : Bool,
                                                   monthVsYear: Bool,
                                                   ishikawa : Bool,
-                                                  completionHandler: @escaping (Result<[NikoTCD], FirebaseError>) -> Void) {
+                                                  callback: @escaping (Result<[NikoTCD], FirebaseError>) -> Void) {
         //var calendarNiko = Array(repeating: -1 , count: 42)
         var records = [NikoRecord]()
 
@@ -272,39 +133,36 @@ public class NikoFirestoreManager {
         
         //calendarNiko = razCalendarNiko(listDay: calendarNiko)
 
-        if let query = getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) {
-            query.getDocuments {( querySnapshot, err) in
-                if let err = err {
-                    print("Error getting documents: \(err)")
-                    completionHandler(.failure(.errGettingDoc))
-                    return
-                }
-                guard let documents = querySnapshot?.documents else {return}
+        database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { queryResult in
+            
+            switch queryResult {
+            case .success(let data):
+                let documents = data.documents
+                //guard let documents = data?.documents else {return}
                 records = documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
                     return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
-                
                 if monthVsYear {
                     if ishikawa {
                         
                     }
                     self.calcTCDMonth(records: records, selectedDate: selectedDate)
-                    completionHandler(.success(self.dataTCDMonth))
+                    callback(.success(self.dataTCDMonth))
                     return
                 } else {
                     self.calcTCDYear(records: records, selectedDate: selectedDate)
-                    completionHandler(.success(self.dataTCDYear))
+                    callback(.success(self.dataTCDYear))
                     return
                 }
+            case .failure(let err):
+                callback(.failure(err))
+            }
 //                for i in 0...30 {
 //                    let rank = self.dataTCD[i].rankAverage
 //                    print("Boucle before return to view      rank = \(rank)")
 //                }
-
-            }
-
         }
     }
-
+    
     /// - Parameters:
     ///   - uid: user ID
     ///   - selectedDate: date selected by the user in the view controller
@@ -312,59 +170,35 @@ public class NikoFirestoreManager {
     ///   - personnal: Indicate that the user only want to see his data
     ///   - monthVsYear: Indicate weither month or year data retrieve (true for month, false for year)
     ///   - category5MSelected: Give the category selected in the Ishikawa bar chart
-    func requestRecordUsertrieveIshikawaData (uid: String,
+    func requestRecordUserRetrieveIshikawaData (uid: String,
                                               selectedDate: Date,
                                               location : [String],
                                               personnal : Bool,
                                               monthVsYear: Bool,
                                               category5MSelected: Int,
-                                              completionHandler: @escaping (Result<[Dictionary<String, Int>.Element], FirebaseError>) -> Void) {
+                                              callback: @escaping (Result<[Dictionary<String, Int>.Element], FirebaseError>) -> Void) {
         var records = [NikoRecord]()
  
-        if let query = getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) {
-            query.getDocuments {( querySnapshot, err) in
-                if let err = err {
-                    print("Error getting documents: \(err)")
-                    completionHandler(.failure(.errGettingDoc))
-                    return
-                }
-                guard let documents = querySnapshot?.documents else {return}
+        database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { queryResult in
+            
+            switch queryResult {
+            case .success(let data):
+                let documents = data.documents
+                //guard let documents = data?.documents else {return}
                 records = documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
                     return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
-                
                 if monthVsYear {
                     self.calcTCDMonthIshikawa(records: records, category5MSelected: category5MSelected)
                     print(self.dataCause5M)
-                    completionHandler(.success(self.dataCause5M))
+                    callback(.success(self.dataCause5M))
                     return
                 }
+            case .failure(let err):
+                callback(.failure(err))
             }
         }
     }
     
-    private func getQuery(uid: String, location: [String], monthVsYear: Bool, personnal: Bool, selectedDate: Date) -> Query? {
-        var q: Query?
-        let calendarHelper = CalendarHelper()
-        let month = calendarHelper.monthString(date: selectedDate)
-        let year = calendarHelper.yearString(date: selectedDate)
-        let db = Firestore.firestore()
-        let usersRef = db.collection("NikoRecord")
-        if monthVsYear {
-            q = usersRef.whereField("formattedMonthString", isEqualTo: month)
-        } else {
-            q = usersRef.whereField("formattedYearString", isEqualTo: year)
-        }
-        if personnal {
-            q = q?.whereField("userID", isEqualTo: uid)
-        } else {
-            for (index, val) in location.enumerated() {
-                if location[index] != "" {
-                    q = q?.whereField(paramQueryField[index], isEqualTo: val)
-                }
-            }
-        }
-        return q
-    }
     
     private func calcTCDMonth(records: [NikoRecord], selectedDate: Date) {
         
@@ -372,7 +206,7 @@ public class NikoFirestoreManager {
         let calendar = Calendar.current
         let daysInMonth = calendarHelper.daysInMonth(date: selectedDate)
         let firstDayOfMonth = calendarHelper.firstOfMonth(date: selectedDate)
-              
+        print("NB records dans calcMonth : \(records.count)")
         (0...daysInMonth - 1).forEach { n in
             let date = calendar.date(byAdding: .day, value: n, to: firstDayOfMonth)!
             let dateString = calendarHelper.dateString(date: date)
@@ -458,7 +292,6 @@ public class NikoFirestoreManager {
             
             dataTCDYear[n] = currentNikoTCD
             razCurrentTCD()
-            
         }
     }
     
@@ -475,8 +308,16 @@ public class NikoFirestoreManager {
         currentNikoTCD = NikoTCD(rankAverage: -1, nbRecord: 0, nbSuper: 0, nbNTR: 0, nbTought: 0, nbMethod: 0, nbMatiere: 0, nbMachine: 0, nbMaindoeuvre: 0, nbMilieu: 0)
     }
     
+    private func transfertDataUserToNikoRecord() {
+        currentNiko.userID = currentUser.userID
+        currentNiko.firstname = currentUser.firstname
+        currentNiko.lastname =  currentUser.lastname
+        currentNiko.position =  currentUser.position
+        currentNiko.plant =  currentUser.plant
+        currentNiko.department =  currentUser.department
+        currentNiko.workshop =  currentUser.workshop
+        currentNiko.shift = currentUser.shift
+        currentNiko.permission = currentUser.permission
+    }
     
 }
-
-*/
-

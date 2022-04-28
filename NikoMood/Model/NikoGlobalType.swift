@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+import FirebaseFirestoreSwift
 
 enum NikoStatus {
     case nikoNTR, nikoTought, NikoSuper
@@ -16,8 +16,57 @@ enum cause5M {
     case methode, matiere, machine, maindoeuvre, milieu
 }
 
-enum FirebaseError: Error {
-    case errSignin, errSignup, noUserConnected, noDocUser, errGettingDoc
+struct NikoUser: Codable {
+    @DocumentID var id: String?
+    var userID : String
+    var firstname : String
+    var lastname : String
+    var position : String
+    var plant : String
+    var department : String
+    var workshop : String
+    var shift : String
+    var permission : Int
+    var password : String
+    var birthday : Date
+    var email: String
+}
+
+struct NikoRecord: Codable {
+    @DocumentID var id: String?
+    var userID : String
+    var firstname : String
+    var lastname : String
+    var position : String
+    var plant : String
+    var department : String
+    var workshop : String
+    var shift : String
+    var nikoStatus: String
+    var nikoRank : Int
+    var niko5M : String
+    var nikoCause : String
+    var nikoComment : String
+    var permission : Int
+    var date : Date
+    var formattedMonthString : String
+    var formattedDateString : String
+    var formattedYearString : String
+    var error : String?
+}
+
+struct NikoTCD {
+    var rankAverage: Int
+    var nbRecord: Int
+    var nbSuper: Int
+    var nbNTR: Int
+    var nbTought: Int
+    var nbMethod: Int
+    var nbMatiere: Int
+    var nbMachine: Int
+    var nbMaindoeuvre: Int
+    var nbMilieu: Int
+    
 }
 
 public var causeMethode = [
@@ -70,14 +119,4 @@ public var causeMilieu = [
         "Cause 7 milieu",
 ]
 
-//extension FirebaseError: CustomStringConvertible {
-//    var description: String {
-//        switch self {
-//        case .errSignin: return "Erreur Signin"
-//        case .errSignup: return "Erreur Signout"
-//        case .noUserConnected: return "Pas d'utilisteur connecté"
-//        case .noDocUser: return "Pas de document utilisateur"
-//        case .errGettingDoc: return "Erreur accès document"
-//        }
-//    }
-//}
+

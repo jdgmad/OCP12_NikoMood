@@ -6,14 +6,16 @@
 //
 
 import UIKit
-import FirebaseAuth
-import Firebase
+//import FirebaseAuth
+//import Firebase
 
 class NikoRecordViewController: UIViewController {
 
     // MARK: - Properties
-    
-    let nikoFirestoreManager =  NikoFirestoreManager.shared
+    private let authService: AuthService = AuthService()
+    private let databaseManager: DatabaseManager = DatabaseManager()
+    //let nikoFirestoreManager =  NikoFirestoreManager.shared
+    var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
 
     // MARK: - Outlets
     
@@ -39,26 +41,23 @@ class NikoRecordViewController: UIViewController {
     @IBOutlet weak var causeUIButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
     
+    // MARK: - Overrides
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        let useremail = Auth.auth().currentUser?.email
+        let  useremail = authService.currentEmail
         yourEmail.text = useremail
         setUpElements()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        causeTextField.text = nikoFirestoreManager.currentNiko.nikoCause
+        causeTextField.text = currentNiko.nikoCause
     }
     
-    func setUpElements() {
-        Utilities.styleFilledButton(validerUIButton)
-        causeTextField.rightView = causeUIButton
-        causeTextField.rightViewMode = .always
-    }
+    // MARK: - Methods
     
     @IBAction func logoutButtonTapped(_ sender: UIButton) {
         deconnect()
@@ -70,8 +69,8 @@ class NikoRecordViewController: UIViewController {
             razNikoButton()
             hideIshikawa()
             sender.isSelected = true
-            nikoFirestoreManager.currentNiko.nikoStatus = "Super"
-            nikoFirestoreManager.currentNiko.nikoRank = 10
+            currentNiko.nikoStatus = "Super"
+            currentNiko.nikoRank = 10
             superUIButton.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
         } else {
             superUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
@@ -84,8 +83,8 @@ class NikoRecordViewController: UIViewController {
             razNikoButton()
             hideIshikawa()
             sender.isSelected = true
-            nikoFirestoreManager.currentNiko.nikoStatus = "NTR"
-            nikoFirestoreManager.currentNiko.nikoRank = 5
+            currentNiko.nikoStatus = "NTR"
+            currentNiko.nikoRank = 5
             ntrUIButton.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
         } else {
             ntrUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
@@ -98,8 +97,8 @@ class NikoRecordViewController: UIViewController {
             razNikoButton()
             displayIshikawa()
             sender.isSelected = true
-            nikoFirestoreManager.currentNiko.nikoStatus = "Tought"
-            nikoFirestoreManager.currentNiko.nikoRank = 0
+            currentNiko.nikoStatus = "Tought"
+            currentNiko.nikoRank = 0
             toughtUIButton.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
         } else {
             toughtUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
@@ -112,7 +111,7 @@ class NikoRecordViewController: UIViewController {
         if sender.isSelected {
             raz5MButton()
             sender.isSelected = true
-            nikoFirestoreManager.currentNiko.niko5M = "methode"
+            currentNiko.niko5M = "methode"
             methodeUIButton.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
         } else {
             methodeUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
@@ -124,7 +123,7 @@ class NikoRecordViewController: UIViewController {
         if sender.isSelected {
             raz5MButton()
             sender.isSelected = true
-            nikoFirestoreManager.currentNiko.niko5M = "matiere"
+            currentNiko.niko5M = "matiere"
             matiereUIButton.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
         } else {
             matiereUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
@@ -136,7 +135,7 @@ class NikoRecordViewController: UIViewController {
         if sender.isSelected {
             raz5MButton()
             sender.isSelected = true
-            nikoFirestoreManager.currentNiko.niko5M = "machine"
+            currentNiko.niko5M = "machine"
             machineUIButton.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
         } else {
             machineUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
@@ -148,7 +147,7 @@ class NikoRecordViewController: UIViewController {
         if sender.isSelected {
             raz5MButton()
             sender.isSelected = true
-            nikoFirestoreManager.currentNiko.niko5M = "maindoeuvre"
+            currentNiko.niko5M = "maindoeuvre"
             maindoeuvreUIButton.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
         } else {
             maindoeuvreUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
@@ -160,7 +159,7 @@ class NikoRecordViewController: UIViewController {
         if sender.isSelected {
             raz5MButton()
             sender.isSelected = true
-            nikoFirestoreManager.currentNiko.niko5M = "milieu"
+            currentNiko.niko5M = "milieu"
             milieuUIButton.setImage(UIImage(systemName: "circle.inset.filled"), for: .normal)
         } else {
             milieuUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
@@ -169,30 +168,56 @@ class NikoRecordViewController: UIViewController {
     
     @IBAction func displayCauseButton(_ sender: UIButton) {
         let vc = LibraryViewController()
+        vc.completion = {[weak self] currentNiko in
+            self?.currentNiko = currentNiko
+        }
+        vc.currentNiko = currentNiko
         navigationController?.pushViewController(vc, animated: true)
     }
     
     @IBAction func validerNikoRecordButtonTapped(_ sender: UIButton) {
         // validate Data
-        nikoFirestoreManager.currentNiko.nikoComment = commentUITextField.text ?? ""
-        
-        // Store the record in Firestore
-        nikoFirestoreManager.storeNikoRecord(record: nikoFirestoreManager.currentNiko)
+        currentNiko.nikoComment = commentUITextField.text ?? ""
+        // Ckeck if a record already exist at the same date
+        databaseManager.checkIfRecordExist(uid: currentNiko.userID, dateSelected: currentNiko.date) { (result) in
+            DispatchQueue.main.async {
+                if result {
+                    self.presentFirebaseAlert(typeError: .errWritingData, message: "Cette date contient déjà un enregistrement")
+                } else {
+                    // Store the record in Firestore
+                    self.databaseManager.storeNikoRecord(record: self.currentNiko) { (result) in
+                        DispatchQueue.main.async {
+                            if !result {
+                                self.presentFirebaseAlert(typeError: .errWritingData, message: "Erreur enregistrement de données")
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
     
     @IBAction func actionDatePicker(_ sender: UIDatePicker) {
-        nikoFirestoreManager.currentNiko.date = sender.date
+        currentNiko.date = sender.date
     }
     
+    // MARK: - Methods
     
-    
+    private func setUpElements() {
+        Utilities.styleFilledButton(validerUIButton)
+        causeTextField.rightView = causeUIButton
+        causeTextField.rightViewMode = .always
+        transitionToStart()
+    }
     
     private func deconnect() {
-        do {
-            try Auth.auth().signOut()
-            transitionToStart()
-        } catch {
-            print("Error signing out ")
+        authService.signOut { result in
+            if result {
+                self.transitionToStart()
+            }
+            else {
+                self.presentFirebaseAlert(typeError: .errSignout, message: "Erreur Signout")
+            }
         }
     }
     

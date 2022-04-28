@@ -11,9 +11,11 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     // MARK: - Properties
     
-    let nikoFirestoreManager =  NikoFirestoreManager.shared
+    //let nikoFirestoreManager =  NikoFirestoreManager.shared
     var tableView = UITableView()
     var cellTitles = [ ""]
+    var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
+    public var completion: ((NikoRecord) -> Void)?
 
     // MARK: - Overrides
     
@@ -22,7 +24,7 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
 
         view.backgroundColor = .white
         setTableView()
-        switch nikoFirestoreManager.currentNiko.niko5M {
+        switch currentNiko.niko5M {
                     case "methode":
                         cellTitles = causeMethode
                     case "matiere":
@@ -76,11 +78,12 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let cell = tableView.cellForRow(at: indexPath) as? CauseTableCell else {return}
-        nikoFirestoreManager.currentNiko.nikoCause = cellTitles[indexPath.row]
+        currentNiko.nikoCause = cellTitles[indexPath.row]
         for cell in tableView.visibleCells {
             cell.accessoryType = .none
         }
         cell.accessoryType = .checkmark
+        completion?(currentNiko)
         navigationController?.popViewController(animated: true)
 //        dismiss(animated: true, completion: nil)
     }

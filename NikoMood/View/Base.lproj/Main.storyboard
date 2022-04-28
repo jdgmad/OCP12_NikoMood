@@ -524,7 +524,7 @@
                                 </connections>
                             </switch>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AbV-Ot-3bt" customClass="PieChartView" customModule="Charts">
-                                <rect key="frame" x="110" y="612.5" width="194" height="200.5"/>
+                                <rect key="frame" x="110" y="527" width="194" height="200.5"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="AbV-Ot-3bt" secondAttribute="height" multiplier="214:221" id="sVE-p7-aqs"/>
@@ -534,7 +534,7 @@
                         <viewLayoutGuide key="safeArea" id="a0f-ot-cmS"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="a0f-ot-cmS" firstAttribute="bottom" secondItem="AbV-Ot-3bt" secondAttribute="bottom" id="5AY-Wn-Ex7"/>
+                            <constraint firstItem="AbV-Ot-3bt" firstAttribute="top" secondItem="MDt-cp-2zf" secondAttribute="bottom" constant="5" id="37N-cb-dae"/>
                             <constraint firstItem="MDt-cp-2zf" firstAttribute="leading" secondItem="00d-EP-Gnl" secondAttribute="leadingMargin" constant="80" id="D9E-cW-Z3e"/>
                             <constraint firstItem="a0f-ot-cmS" firstAttribute="trailing" secondItem="AbV-Ot-3bt" secondAttribute="trailing" constant="110" id="KBJ-kS-fQn"/>
                             <constraint firstItem="Mrq-m7-hju" firstAttribute="top" secondItem="a0f-ot-cmS" secondAttribute="top" id="PeI-xS-Sjd"/>

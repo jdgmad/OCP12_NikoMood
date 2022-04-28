@@ -9,20 +9,16 @@ import UIKit
 import Charts
 
 class NikoSuiviViewController: UIViewController {
-
-    // MARK: - IBOutlets
-    
-    @IBOutlet weak var monthLabel: UILabel!
-    @IBOutlet weak var yearLabel: UILabel!
-    @IBOutlet weak var barChartView: BarChartView!
-    @IBOutlet weak var lineChartView: LineChartView!
     
     // MARK: - Properties
     
-    let nikoFirestoreManager =  NikoFirestoreManager.shared
+    //let nikoFirestoreManager =  NikoFirestoreManager.shared
     let calendarHelper = CalendarHelper()
-    var uid = String()
+    var userUID = String()
     var locationSelected = String()
+    private let authService: AuthService = AuthService()
+    private let databaseManager: DatabaseManager = DatabaseManager()
+    var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
     
     //  Properties for locationTableView
     var locationTableView = UITableView()
@@ -32,16 +28,23 @@ class NikoSuiviViewController: UIViewController {
     //  Properties for Charts
     var selectedBarDate = Date()
     var selectedLineDate = Date()
+ 
+    // MARK: - IBOutlets
+    
+    @IBOutlet weak var monthLabel: UILabel!
+    @IBOutlet weak var yearLabel: UILabel!
+    @IBOutlet weak var barChartView: BarChartView!
+    @IBOutlet weak var lineChartView: LineChartView!
     
     // MARK: - Overrides
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .white
+        getUserData()
         locationTableView.delegate = self
         locationTableView.dataSource = self
-        setLocationTableView()
+  
         
         setBarChart()
         setBarMonthView()
@@ -78,22 +81,35 @@ class NikoSuiviViewController: UIViewController {
         selectedLineDate = calendarHelper.plusYear(date: selectedLineDate)
         setLineYearView()
     }
-    
-    
-    
      
     // MARK: - Methods
-
+    
+    func getUserData() {
+        guard let uid = authService.currentUID else { return}
+        userUID = uid
+        databaseManager.getUserData(with: userUID) { (result) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    self.currentNiko = data
+                    self.setLocationTableView()
+                    self.locationTableView.reloadData()
+                case .failure(let error):
+                    self.presentFirebaseAlert(typeError: error, message: "Erreur récupération user Data")
+                }
+            }
+        }
+    }
+    
     //
     // Location table View
     //
     
     // Global settings for tableview locationTableView
     private func setLocationTableView() {
-        uid = nikoFirestoreManager.currentNiko.userID
-        cellTitlesSelected[0] = nikoFirestoreManager.currentNiko.plant
-        cellTitlesSelected[1] = nikoFirestoreManager.currentNiko.workshop
-        cellTitlesSelected[2] = nikoFirestoreManager.currentNiko.shift
+        cellTitlesSelected[0] = currentNiko.plant
+        cellTitlesSelected[1] = currentNiko.workshop
+        cellTitlesSelected[2] = currentNiko.shift
         locationTableView.register(LocationTableCell.self, forCellReuseIdentifier: "locationTableCell")
         locationTableView.translatesAutoresizingMaskIntoConstraints = false
         locationTableView.rowHeight = 35
@@ -119,7 +135,7 @@ class NikoSuiviViewController: UIViewController {
         let year = calendarHelper.yearString(date: selectedBarDate)
         monthLabel.text = month + " " + year
 
-        nikoFirestoreManager.requestRecordUsertrievelocalisationData(uid: uid, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true, ishikawa: false) { (result) in
+        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true, ishikawa: false) { (result) in
             switch result {
             case .success(let data):
                 // update display bar Charts
@@ -163,7 +179,7 @@ class NikoSuiviViewController: UIViewController {
         
     }
     
-    func setBarChartData(niKoRecords: [NikoFirestoreManager.NikoTCD]) {
+    func setBarChartData(niKoRecords: [NikoTCD]) {
         let yVals = (0..<niKoRecords.count).map { (i) -> BarChartDataEntry in
             let val1 = Double(niKoRecords[i].nbSuper)
             let val2 = Double(niKoRecords[i].nbNTR)
@@ -197,7 +213,7 @@ class NikoSuiviViewController: UIViewController {
         let year = calendarHelper.yearString(date: selectedLineDate)
         yearLabel.text =  year
 
-        nikoFirestoreManager.requestRecordUsertrievelocalisationData(uid: uid, selectedDate: selectedLineDate, location: cellTitlesSelected, personnal: false, monthVsYear: false, ishikawa: false) { (result) in
+        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedLineDate, location: cellTitlesSelected, personnal: false, monthVsYear: false, ishikawa: false) { (result) in
             switch result {
             case .success(let data):
                 // update display bar Charts
@@ -238,7 +254,7 @@ class NikoSuiviViewController: UIViewController {
         lineChartView.animate(xAxisDuration: 1)
     }
 
-    func setLineChartData(niKoRecords: [NikoFirestoreManager.NikoTCD]) {
+    func setLineChartData(niKoRecords: [NikoTCD]) {
 
         let yVals1 = (0..<niKoRecords.count).map { (i) -> ChartDataEntry in
             let val1 = Double(niKoRecords[i].nbNTR)
@@ -326,7 +342,7 @@ extension NikoSuiviViewController: UITableViewDelegate, UITableViewDataSource {
     private func handlePermission(cell: UITableViewCell, button: UIButton, index : Int) {
         switch index {
         case 0:
-        if nikoFirestoreManager.currentNiko.permission >= 4  {
+        if currentNiko.permission >= 4  {
             cell.isUserInteractionEnabled = true
             button.isHidden = false
         } else {
@@ -334,7 +350,7 @@ extension NikoSuiviViewController: UITableViewDelegate, UITableViewDataSource {
             button.isHidden = true
         }
         case 1:
-        if nikoFirestoreManager.currentNiko.permission >= 3   {
+        if currentNiko.permission >= 3   {
             cell.isUserInteractionEnabled = true
             button.isHidden = false
         } else {
@@ -343,7 +359,7 @@ extension NikoSuiviViewController: UITableViewDelegate, UITableViewDataSource {
             button.isHidden = true
         }
         case 2:
-        if nikoFirestoreManager.currentNiko.permission >= 2   {
+        if currentNiko.permission >= 2   {
             cell.isUserInteractionEnabled = true
             button.isHidden = false
         } else {
