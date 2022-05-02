@@ -13,17 +13,17 @@ import FirebaseFirestoreSwift
 
 
 protocol DatabaseType {
-    func getUserData(with uid: String, callback: @escaping (Result<QuerySnapshot, FirebaseError>) -> Void)
+    func getUserData(with uid: String, callback: @escaping (Result<NikoUser, FirebaseError>) -> Void)
     func addRecord(docData : [String: Any], callback: @escaping (Bool) -> Void)
     func checkIfRecordExist (uid: String, dateString: String, callback: @escaping (Bool) -> Void)
-    func getQuery(uid: String, location: [String], monthVsYear: Bool, personnal: Bool, selectedDate: Date, callback: @escaping (Result<QuerySnapshot, FirebaseError>) -> Void)
+    func getQuery(uid: String, location: [String], monthVsYear: Bool, personnal: Bool, selectedDate: Date, callback: @escaping (Result<[NikoRecord], FirebaseError>) -> Void)
 }
 
 final class FirebaseDatabase: DatabaseType {
 
     // MARK: - Read Queries
 
-    func getUserData(with uid: String, callback: @escaping (Result<QuerySnapshot, FirebaseError>) -> Void) {
+    func getUserData(with uid: String, callback: @escaping (Result<NikoUser, FirebaseError>) -> Void) {
         
         let db = Firestore.firestore()
         let usersRef = db.collection("users")
@@ -34,7 +34,20 @@ final class FirebaseDatabase: DatabaseType {
                     callback(.failure(.errGettingDoc))
                     return
                 }
-            callback(.success(querySnapshot!))
+//print("query snapshot user")
+//print(querySnapshot!.documents.description)
+                let document = querySnapshot?.documents.first
+                do {
+                    let decodeData = try document!.data(as: NikoUser.self)
+                    callback(.success(decodeData!))
+                    return
+                }
+                catch {
+                    callback(.failure(.errGettingDoc))
+                    return
+                }
+  
+            //callback(.success(querySnapshot!))
         }
     }
     
@@ -53,8 +66,11 @@ final class FirebaseDatabase: DatabaseType {
     }
     
     func checkIfRecordExist (uid: String, dateString: String, callback: @escaping (Bool) -> Void) {
+        print("checkIfRecorsExist")
+        print("uid: \(uid)")
+        print("date: \(dateString)")
         let db = Firestore.firestore()
-        let usersRef = db.collection("users")
+        let usersRef = db.collection("NikoRecord")
         usersRef.whereField("userID", isEqualTo: uid)
             .whereField("formattedDateString", isEqualTo: dateString)
             .getDocuments{ (querySnapshot, err) in
@@ -63,56 +79,24 @@ final class FirebaseDatabase: DatabaseType {
                     callback(false)
                     return
                 } else {
-                    if querySnapshot?.documents.count == 1 {
+                    if (querySnapshot?.documents.count)! >= 1 {
                         callback(true)
-
                     }
                 }
             }
     }
     
-    func getQuery(uid: String, location: [String], monthVsYear: Bool, personnal: Bool, selectedDate: Date, callback: @escaping (Result<QuerySnapshot, FirebaseError>) -> Void) {
-        print("\n\n")
-        print("uid: \(uid)")
-        print("location: \(location)")
-        print("monthVsYear: \(monthVsYear)")
-        print("personnal: \(personnal)")
-        print("date: \(selectedDate)")
+    func getQuery(uid: String, location: [String], monthVsYear: Bool, personnal: Bool, selectedDate: Date, callback: @escaping (Result<[NikoRecord], FirebaseError>) -> Void) {
         
-//        //var q: Query?
-//        let calendarHelper = CalendarHelper()
-//        let month = calendarHelper.monthString(date: selectedDate)
-//        let year = calendarHelper.yearString(date: selectedDate)
-//        let db = Firestore.firestore()
-//        let usersRef = db.collection("NikoRecord")
-//        if monthVsYear {
-//            usersRef.whereField("formattedMonthString", isEqualTo: month)
-//        } else {
-//            usersRef.whereField("formattedYearString", isEqualTo: year)
-//        }
-//        if personnal {
-//            usersRef.whereField("userID", isEqualTo: uid)
-//        } else {
-//            for (index, val) in location.enumerated() {
-//                if location[index] != "" {
-//                    //q = q?.whereField(paramQueryField[index], isEqualTo: val)
-//                    print("location name : \(LocationEntreprise.locations[index].locationName!) val: \(val)")
-//                    usersRef.whereField(LocationEntreprise.locations[index].locationName!, isEqualTo: val)
-//                }
-//            }
-//        }
-//        usersRef.getDocuments{ (querySnapshot, err) in
-//            if let err = err {
-//                print("Error getting documents: \(err)")
-//                callback(.failure(.errGettingDoc))
-//                return
-//            }
-//            print ("querysnapshot getquery: \(querySnapshot?.count)")
-//        callback(.success(querySnapshot!))
-//        }
-//    }
+print("\n\n")
+print("uid: \(uid)")
+print("location: \(location)")
+print("monthVsYear: \(monthVsYear)")
+print("personnal: \(personnal)")
+print("date: \(selectedDate)")
     
     var q: Query?
+    var records = [NikoRecord]()
     let calendarHelper = CalendarHelper()
     let month = calendarHelper.monthString(date: selectedDate)
     let year = calendarHelper.yearString(date: selectedDate)
@@ -140,8 +124,10 @@ final class FirebaseDatabase: DatabaseType {
             callback(.failure(.errGettingDoc))
             return
         }
-        print ("querysnapshot getquery: \(querySnapshot?.count)")
-    callback(.success(querySnapshot!))
+        records = querySnapshot!.documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
+            return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
+        callback(.success(records))
+    //callback(.success(querySnapshot!))
     }
 }
 

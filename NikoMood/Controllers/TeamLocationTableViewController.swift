@@ -66,6 +66,7 @@ class TeamLocationTableViewController: UIViewController {
 
         view.backgroundColor = .white
         setTableView()
+        print("location rank: \(locationRank)")
         switch locationRank {
                     case 0:
                         cellTitles = etablissement

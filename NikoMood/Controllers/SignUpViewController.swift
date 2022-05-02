@@ -23,7 +23,7 @@ class SignUpViewController: UIViewController {
     // MARK: - Outlets
     
     @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var pseudoTextField: UITextField!
+    @IBOutlet weak var password2TextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
@@ -60,7 +60,7 @@ class SignUpViewController: UIViewController {
     private func setUpElements() {
         errorLabel.alpha = 0
         Utilities.styleTextField(emailTextField)
-        Utilities.styleTextField(pseudoTextField)
+        Utilities.styleTextField(password2TextField)
         Utilities.styleTextField(passwordTextField)
         Utilities.styleFilledButton(signupButton)
     }
@@ -68,14 +68,20 @@ class SignUpViewController: UIViewController {
     // Check the fields and validate that the data is correct. If everything is correct, this method returns nil. Otherwise, it returns the error message
     private func validateFields() -> String? {
         // Check that all fields are filled in
-        if emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
-            passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in email text"}
+        guard let cleanedPassword2 = password2TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in first password text"}
+        guard let cleanedPassword = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in second password text"}
+        if email == "" || cleanedPassword == "" {
             return "Please fill in all the fields"
         }
         // Check if the password is secure
-        let cleanedPassword = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        if Utilities.isPasswordValid(cleanedPassword) == false {
+
+        if Utilities.isPasswordValid(cleanedPassword2) == false {
             return "Please make sure your password is at least 8 characters, contains a special character and a number"
+        }
+        if cleanedPassword != cleanedPassword2 { return "Passwords are not identical"}
+        if Utilities.isValidEmail(email: email) == false {
+            return "Your email do not respect the email format"
         }
         return nil
     }
@@ -85,10 +91,11 @@ class SignUpViewController: UIViewController {
         guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
         guard let password = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
         // Check if the email is in the company list
+        
+        
 
         // Create the user
         authService.signUp(email: email, password: password) { isSuccess in
-
             self.databaseManager.getUserData(with: self.authService.currentUID!) { (result) in
                 DispatchQueue.main.async {
                     switch result {
@@ -107,13 +114,8 @@ class SignUpViewController: UIViewController {
         errorLabel.text = message
         errorLabel.alpha = 1
     }
+    
+
 }
 
-extension SignUpViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == segueToTabbarFromSignup {
-            guard let nikoRecordVC = segue.destination as? NikoRecordViewController else { return }
-            nikoRecordVC.currentNiko = self.currentNiko
-        }
-    }
-}
+

@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09C2D1EEDA09619A1468EC8F /* Pods_NikoMoodTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D595B9DA5E0315C8DABBD17 /* Pods_NikoMoodTests.framework */; };
+		650F236D281FFE110022E6A5 /* FakeResponseData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 650F236C281FFE110022E6A5 /* FakeResponseData.swift */; };
 		652307CB27EC92F40069EB12 /* NikorecordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652307CA27EC92F40069EB12 /* NikorecordViewController.swift */; };
 		652CB7A727E36831003C9AFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652CB7A627E36831003C9AFB /* AppDelegate.swift */; };
 		652CB7A927E36831003C9AFB /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652CB7A827E36831003C9AFB /* SceneDelegate.swift */; };
 		652CB7AB27E36831003C9AFB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652CB7AA27E36831003C9AFB /* ViewController.swift */; };
 		652CB7AE27E36831003C9AFB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 652CB7AC27E36831003C9AFB /* Main.storyboard */; };
 		652CB7B327E36833003C9AFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 652CB7B127E36833003C9AFB /* LaunchScreen.storyboard */; };
-		652CB7BE27E36833003C9AFB /* NikoMoodTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652CB7BD27E36833003C9AFB /* NikoMoodTests.swift */; };
 		652CB7D727E36A84003C9AFB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 652CB7D627E36A84003C9AFB /* GoogleService-Info.plist */; };
-		652CB7D827E36A84003C9AFB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 652CB7D627E36A84003C9AFB /* GoogleService-Info.plist */; };
 		652CB7DA27E36E17003C9AFB /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652CB7D927E36E17003C9AFB /* SignUpViewController.swift */; };
 		652CB7DC27E36E3F003C9AFB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652CB7DB27E36E3F003C9AFB /* LoginViewController.swift */; };
 		652CB7E127E4BDD6003C9AFB /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 652CB7E027E4BDD6003C9AFB /* Utilities.swift */; };
@@ -31,12 +31,14 @@
 		655AD4752816CD910053F2BA /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4742816CD910053F2BA /* AuthManager.swift */; };
 		655AD4772816D7EE0053F2BA /* FirebaseDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4762816D7EE0053F2BA /* FirebaseDatabase.swift */; };
 		655AD4792816D7FA0053F2BA /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4782816D7FA0053F2BA /* DatabaseManager.swift */; };
+		655AD481281D591F0053F2BA /* AuthServiceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD480281D591F0053F2BA /* AuthServiceTests.swift */; };
 		656386B927F5E59B00539713 /* UITableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656386B827F5E59B00539713 /* UITableViewCell.swift */; };
 		656386BB27F6CB2D00539713 /* EntrepriseLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656386BA27F6CB2D00539713 /* EntrepriseLocation.swift */; };
 		656386BD27F72A0600539713 /* CalendarHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656386BC27F72A0600539713 /* CalendarHelper.swift */; };
 		656386BF27F72B6A00539713 /* CalendarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656386BE27F72B6A00539713 /* CalendarCell.swift */; };
 		656386C127F9D25500539713 /* LocationTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 656386C027F9D25500539713 /* LocationTableCell.swift */; };
 		6563870127FCED7A00539713 /* TeamLocationTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6563870027FCED7A00539713 /* TeamLocationTableViewController.swift */; };
+		657BA442281EB40600602981 /* DatabaseManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 657BA441281EB40600602981 /* DatabaseManagerTests.swift */; };
 		65AF5428280F4A57003C222A /* IshikawaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AF5427280F4A57003C222A /* IshikawaViewController.swift */; };
 		65D3F12C27F4B0CB00D0355C /* FirestoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D3F12B27F4B0CB00D0355C /* FirestoreError.swift */; };
 		65D3F13427F5CE2D00D0355C /* CalendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D3F13327F5CE2D00D0355C /* CalendViewController.swift */; };
@@ -45,7 +47,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		652CB7BA27E36833003C9AFB /* PBXContainerItemProxy */ = {
+		655AD482281D591F0053F2BA /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 652CB79B27E36831003C9AFB /* Project object */;
 			proxyType = 1;
@@ -55,6 +57,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		357FC984621A25277A837CA4 /* Pods-NikoMoodTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NikoMoodTests.debug.xcconfig"; path = "Target Support Files/Pods-NikoMoodTests/Pods-NikoMoodTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3D595B9DA5E0315C8DABBD17 /* Pods_NikoMoodTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NikoMoodTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B1FE6FE1A7E2918404F6AB3 /* Pods-NikoMoodTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NikoMoodTests.release.xcconfig"; path = "Target Support Files/Pods-NikoMoodTests/Pods-NikoMoodTests.release.xcconfig"; sourceTree = "<group>"; };
+		650F236C281FFE110022E6A5 /* FakeResponseData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FakeResponseData.swift; sourceTree = "<group>"; };
 		652307CA27EC92F40069EB12 /* NikorecordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikorecordViewController.swift; sourceTree = "<group>"; };
 		652CB7A327E36831003C9AFB /* NikoMood.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NikoMood.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		652CB7A627E36831003C9AFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -63,8 +69,6 @@
 		652CB7AD27E36831003C9AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		652CB7B227E36833003C9AFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		652CB7B427E36833003C9AFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		652CB7B927E36833003C9AFB /* NikoMoodTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NikoMoodTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		652CB7BD27E36833003C9AFB /* NikoMoodTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikoMoodTests.swift; sourceTree = "<group>"; };
 		652CB7D627E36A84003C9AFB /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		652CB7D927E36E17003C9AFB /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		652CB7DB27E36E3F003C9AFB /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -81,12 +85,15 @@
 		655AD4742816CD910053F2BA /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		655AD4762816D7EE0053F2BA /* FirebaseDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDatabase.swift; sourceTree = "<group>"; };
 		655AD4782816D7FA0053F2BA /* DatabaseManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		655AD47E281D591F0053F2BA /* NikoMoodTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = NikoMoodTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		655AD480281D591F0053F2BA /* AuthServiceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceTests.swift; sourceTree = "<group>"; };
 		656386B827F5E59B00539713 /* UITableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITableViewCell.swift; sourceTree = "<group>"; };
 		656386BA27F6CB2D00539713 /* EntrepriseLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EntrepriseLocation.swift; sourceTree = "<group>"; };
 		656386BC27F72A0600539713 /* CalendarHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarHelper.swift; sourceTree = "<group>"; };
 		656386BE27F72B6A00539713 /* CalendarCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalendarCell.swift; sourceTree = "<group>"; };
 		656386C027F9D25500539713 /* LocationTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationTableCell.swift; sourceTree = "<group>"; };
 		6563870027FCED7A00539713 /* TeamLocationTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TeamLocationTableViewController.swift; sourceTree = "<group>"; };
+		657BA441281EB40600602981 /* DatabaseManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManagerTests.swift; sourceTree = "<group>"; };
 		65924F9B32266F7CDDC68A4F /* Pods_NikoMood.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NikoMood.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		65AF5427280F4A57003C222A /* IshikawaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IshikawaViewController.swift; sourceTree = "<group>"; };
 		65D3F12B27F4B0CB00D0355C /* FirestoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreError.swift; sourceTree = "<group>"; };
@@ -105,10 +112,11 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		652CB7B627E36833003C9AFB /* Frameworks */ = {
+		655AD47B281D591F0053F2BA /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				09C2D1EEDA09619A1468EC8F /* Pods_NikoMoodTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -119,7 +127,7 @@
 			isa = PBXGroup;
 			children = (
 				652CB7A527E36831003C9AFB /* NikoMood */,
-				652CB7BC27E36833003C9AFB /* NikoMoodTests */,
+				655AD47F281D591F0053F2BA /* NikoMoodTests */,
 				652CB7A427E36831003C9AFB /* Products */,
 				96605B60BB4623993541E569 /* Pods */,
 				F677EA97AC1BA140B4FDFC80 /* Frameworks */,
@@ -130,7 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				652CB7A327E36831003C9AFB /* NikoMood.app */,
-				652CB7B927E36833003C9AFB /* NikoMoodTests.xctest */,
+				655AD47E281D591F0053F2BA /* NikoMoodTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -150,14 +158,6 @@
 				652CB7D627E36A84003C9AFB /* GoogleService-Info.plist */,
 			);
 			path = NikoMood;
-			sourceTree = "<group>";
-		};
-		652CB7BC27E36833003C9AFB /* NikoMoodTests */ = {
-			isa = PBXGroup;
-			children = (
-				652CB7BD27E36833003C9AFB /* NikoMoodTests.swift */,
-			);
-			path = NikoMoodTests;
 			sourceTree = "<group>";
 		};
 		652CB7DF27E36EB1003C9AFB /* Controllers */ = {
@@ -239,11 +239,23 @@
 			path = Database;
 			sourceTree = "<group>";
 		};
+		655AD47F281D591F0053F2BA /* NikoMoodTests */ = {
+			isa = PBXGroup;
+			children = (
+				655AD480281D591F0053F2BA /* AuthServiceTests.swift */,
+				657BA441281EB40600602981 /* DatabaseManagerTests.swift */,
+				650F236C281FFE110022E6A5 /* FakeResponseData.swift */,
+			);
+			path = NikoMoodTests;
+			sourceTree = "<group>";
+		};
 		96605B60BB4623993541E569 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
 				6FB0920377F7C20C5BE299C4 /* Pods-NikoMood.debug.xcconfig */,
 				A897EF6B93E9ADE363CC83D4 /* Pods-NikoMood.release.xcconfig */,
+				357FC984621A25277A837CA4 /* Pods-NikoMoodTests.debug.xcconfig */,
+				4B1FE6FE1A7E2918404F6AB3 /* Pods-NikoMoodTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -252,6 +264,7 @@
 			isa = PBXGroup;
 			children = (
 				65924F9B32266F7CDDC68A4F /* Pods_NikoMood.framework */,
+				3D595B9DA5E0315C8DABBD17 /* Pods_NikoMoodTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -278,22 +291,23 @@
 			productReference = 652CB7A327E36831003C9AFB /* NikoMood.app */;
 			productType = "com.apple.product-type.application";
 		};
-		652CB7B827E36833003C9AFB /* NikoMoodTests */ = {
+		655AD47D281D591F0053F2BA /* NikoMoodTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 652CB7D027E36833003C9AFB /* Build configuration list for PBXNativeTarget "NikoMoodTests" */;
+			buildConfigurationList = 655AD484281D591F0053F2BA /* Build configuration list for PBXNativeTarget "NikoMoodTests" */;
 			buildPhases = (
-				652CB7B527E36833003C9AFB /* Sources */,
-				652CB7B627E36833003C9AFB /* Frameworks */,
-				652CB7B727E36833003C9AFB /* Resources */,
+				F1DA47F74F756225C778D9E2 /* [CP] Check Pods Manifest.lock */,
+				655AD47A281D591F0053F2BA /* Sources */,
+				655AD47B281D591F0053F2BA /* Frameworks */,
+				655AD47C281D591F0053F2BA /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				652CB7BB27E36833003C9AFB /* PBXTargetDependency */,
+				655AD483281D591F0053F2BA /* PBXTargetDependency */,
 			);
 			name = NikoMoodTests;
 			productName = NikoMoodTests;
-			productReference = 652CB7B927E36833003C9AFB /* NikoMoodTests.xctest */;
+			productReference = 655AD47E281D591F0053F2BA /* NikoMoodTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -309,8 +323,8 @@
 					652CB7A227E36831003C9AFB = {
 						CreatedOnToolsVersion = 13.3;
 					};
-					652CB7B827E36833003C9AFB = {
-						CreatedOnToolsVersion = 13.3;
+					655AD47D281D591F0053F2BA = {
+						CreatedOnToolsVersion = 13.3.1;
 						TestTargetID = 652CB7A227E36831003C9AFB;
 					};
 				};
@@ -329,7 +343,7 @@
 			projectRoot = "";
 			targets = (
 				652CB7A227E36831003C9AFB /* NikoMood */,
-				652CB7B827E36833003C9AFB /* NikoMoodTests */,
+				655AD47D281D591F0053F2BA /* NikoMoodTests */,
 			);
 		};
 /* End PBXProject section */
@@ -347,11 +361,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		652CB7B727E36833003C9AFB /* Resources */ = {
+		655AD47C281D591F0053F2BA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				652CB7D827E36A84003C9AFB /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,6 +410,28 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F1DA47F74F756225C778D9E2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-NikoMoodTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -434,21 +469,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		652CB7B527E36833003C9AFB /* Sources */ = {
+		655AD47A281D591F0053F2BA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				652CB7BE27E36833003C9AFB /* NikoMoodTests.swift in Sources */,
+				657BA442281EB40600602981 /* DatabaseManagerTests.swift in Sources */,
+				655AD481281D591F0053F2BA /* AuthServiceTests.swift in Sources */,
+				650F236D281FFE110022E6A5 /* FakeResponseData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		652CB7BB27E36833003C9AFB /* PBXTargetDependency */ = {
+		655AD483281D591F0053F2BA /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 652CB7A227E36831003C9AFB /* NikoMood */;
-			targetProxy = 652CB7BA27E36833003C9AFB /* PBXContainerItemProxy */;
+			targetProxy = 655AD482281D591F0053F2BA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -522,7 +559,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -576,7 +613,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -642,15 +679,14 @@
 			};
 			name = Release;
 		};
-		652CB7D127E36833003C9AFB /* Debug */ = {
+		655AD485281D591F0053F2BA /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 357FC984621A25277A837CA4 /* Pods-NikoMoodTests.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jdgmad.NikoMoodTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -661,15 +697,14 @@
 			};
 			name = Debug;
 		};
-		652CB7D227E36833003C9AFB /* Release */ = {
+		655AD486281D591F0053F2BA /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4B1FE6FE1A7E2918404F6AB3 /* Pods-NikoMoodTests.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jdgmad.NikoMoodTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -701,11 +736,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		652CB7D027E36833003C9AFB /* Build configuration list for PBXNativeTarget "NikoMoodTests" */ = {
+		655AD484281D591F0053F2BA /* Build configuration list for PBXNativeTarget "NikoMoodTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				652CB7D127E36833003C9AFB /* Debug */,
-				652CB7D227E36833003C9AFB /* Release */,
+				655AD485281D591F0053F2BA /* Debug */,
+				655AD486281D591F0053F2BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

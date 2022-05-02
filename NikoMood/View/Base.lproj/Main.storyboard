@@ -2,6 +2,7 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="PEL-JA-bQI">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -79,10 +80,10 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" smartDashesType="no" smartInsertDeleteType="no" smartQuotesType="no"/>
                                     </textField>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Pseudo" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zcl-Kr-kCh">
+                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="zcl-Kr-kCh" userLabel="Password2 Text Field">
                                         <rect key="frame" x="0.0" y="70" width="334" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Z0c-lz-4Z3">
                                         <rect key="frame" x="0.0" y="140" width="334" height="50"/>
@@ -126,8 +127,8 @@
                     <connections>
                         <outlet property="emailTextField" destination="Ymq-br-uRB" id="cGR-aO-rAR"/>
                         <outlet property="errorLabel" destination="Otj-E8-uP0" id="YVq-yx-YdX"/>
+                        <outlet property="password2TextField" destination="zcl-Kr-kCh" id="a8E-dF-IBu"/>
                         <outlet property="passwordTextField" destination="Z0c-lz-4Z3" id="M4G-9D-KJl"/>
-                        <outlet property="pseudoTextField" destination="zcl-Kr-kCh" id="xms-dP-W7h"/>
                         <outlet property="signupButton" destination="kga-mz-F8f" id="TpE-AX-hqg"/>
                         <segue destination="svC-WM-bek" kind="show" identifier="segueToTabbarFromSignup" id="1Iy-XP-pe0"/>
                     </connections>
@@ -248,14 +249,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="Rp8-d1-njN">
-                                <rect key="frame" x="30" y="198" width="488" height="450"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalCentering" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Rp8-d1-njN">
+                                <rect key="frame" x="30" y="198" width="354" height="426"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="34" translatesAutoresizingMaskIntoConstraints="NO" id="fhQ-8K-5tc">
-                                        <rect key="frame" x="0.0" y="0.0" width="488" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="354" height="30"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3vP-oS-cCr" userLabel="ButtonMonthLeft">
-                                                <rect key="frame" x="0.0" y="0.0" width="140" height="30"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="95.5" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="jZo-ub-JWN"/>
                                                 </constraints>
@@ -266,7 +267,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feb 2022" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ubH-J3-kv8">
-                                                <rect key="frame" x="174" y="0.0" width="140" height="30"/>
+                                                <rect key="frame" x="129.5" y="0.0" width="95" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="STE-a1-qbu"/>
                                                     <constraint firstAttribute="width" constant="140" id="fm4-qX-1QJ"/>
@@ -276,7 +277,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FdW-RP-se9" userLabel="ButtonMonthRight">
-                                                <rect key="frame" x="348" y="0.0" width="140" height="30"/>
+                                                <rect key="frame" x="258.5" y="0.0" width="95.5" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="3kt-Lm-pOT"/>
                                                 </constraints>
@@ -289,17 +290,17 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LeM-es-s43" customClass="BarChartView" customModule="Charts">
-                                        <rect key="frame" x="0.0" y="40" width="488" height="180"/>
+                                        <rect key="frame" x="0.0" y="32" width="354" height="180"/>
                                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="180" id="rrF-48-oS4"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="34" translatesAutoresizingMaskIntoConstraints="NO" id="Urg-IJ-I77">
-                                        <rect key="frame" x="0.0" y="230" width="488" height="30"/>
+                                        <rect key="frame" x="0.0" y="214" width="354" height="30"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e5M-n0-dJZ" userLabel="ButtonYearLeft">
-                                                <rect key="frame" x="0.0" y="0.0" width="140" height="30"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="95.5" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="G97-ke-9nj"/>
                                                 </constraints>
@@ -310,7 +311,7 @@
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2022" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y7e-9h-Jnk">
-                                                <rect key="frame" x="174" y="0.0" width="140" height="30"/>
+                                                <rect key="frame" x="129.5" y="0.0" width="95" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="wH8-7V-tPh"/>
                                                 </constraints>
@@ -319,7 +320,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lpz-U3-wTN" userLabel="ButtonYearRight">
-                                                <rect key="frame" x="348" y="0.0" width="140" height="30"/>
+                                                <rect key="frame" x="258.5" y="0.0" width="95.5" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="xTn-c3-zho"/>
                                                 </constraints>
@@ -332,7 +333,7 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yPO-Qs-OX8" customClass="LineChartView" customModule="Charts">
-                                        <rect key="frame" x="0.0" y="270" width="488" height="180"/>
+                                        <rect key="frame" x="0.0" y="246" width="354" height="180"/>
                                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="180" id="Jnd-fs-iqh"/>
@@ -353,7 +354,6 @@
                         <constraints>
                             <constraint firstItem="Rp8-d1-njN" firstAttribute="top" secondItem="1PV-Se-HTX" secondAttribute="top" constant="110" id="SFS-C5-Bas"/>
                             <constraint firstItem="1PV-Se-HTX" firstAttribute="trailing" secondItem="Rp8-d1-njN" secondAttribute="trailing" constant="30" id="XhG-kX-A0H"/>
-                            <constraint firstItem="1PV-Se-HTX" firstAttribute="bottom" secondItem="Rp8-d1-njN" secondAttribute="bottom" constant="10" id="eE0-dJ-J47"/>
                             <constraint firstItem="Rp8-d1-njN" firstAttribute="leading" secondItem="1PV-Se-HTX" secondAttribute="leading" constant="30" id="mgF-vE-NQJ"/>
                         </constraints>
                     </view>
@@ -927,7 +927,7 @@
                                                     <constraint firstAttribute="height" constant="30" id="Yip-4i-Go0"/>
                                                     <constraint firstAttribute="width" constant="140" id="qgC-7K-lns"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -955,12 +955,12 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="34" translatesAutoresizingMaskIntoConstraints="NO" id="lX0-t2-nel">
                                         <rect key="frame" x="0.0" y="230" width="354" height="30"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ishikwa causes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cXd-Iv-Pxj">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ishikawa causes" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cXd-Iv-Pxj">
                                                 <rect key="frame" x="0.0" y="0.0" width="354" height="30"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="30" id="yQK-FB-8xy"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>

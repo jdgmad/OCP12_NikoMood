@@ -12,7 +12,7 @@ import Firebase
 protocol AuthType {
     var currentUID: String? { get }
     var currentEmail: String? { get }
-    func signIn(email: String, password: String, callback: @escaping (Result<AuthDataResult, FirebaseError>) -> Void)
+    func signIn(email: String, password: String, callback: @escaping (Bool) -> Void)
     func signUp(email: String, password: String, callback: @escaping (Bool) -> Void)
     func signOut(callback: @escaping (Bool) -> Void)
     func isUserConnected(callback: @escaping (Bool) -> Void)
@@ -33,14 +33,13 @@ final class AuthFirebase: AuthType {
     
     // MARK: - Auth Methods
     
-    func signIn(email: String, password: String, callback: @escaping (Result<AuthDataResult, FirebaseError>) -> Void) {
+    func signIn(email: String, password: String, callback: @escaping (Bool) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password) { authDataResult, error in
             guard (authDataResult != nil), error == nil else {
-                callback(.failure(.errSignin))
-                //error?.localizedDescription
+                callback(false)
                 return
             }
-            callback(.success(authDataResult!))
+            callback(true)
         }
     }
 

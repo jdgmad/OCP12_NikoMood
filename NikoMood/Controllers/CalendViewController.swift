@@ -331,7 +331,7 @@ extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSo
         if totalSquares[indexPath.item] != "" {
             let jour = Int(totalSquares[indexPath.item])
             let nikoRank = dataTCDMonth[jour! - 1].rankAverage
-            print ("jour : \(jour!)  nikoRank : \(nikoRank)")
+//print ("jour : \(jour!)  nikoRank : \(nikoRank)")
             switch nikoRank {
             case 0, 1:
                 cell.backgroundColor = .red

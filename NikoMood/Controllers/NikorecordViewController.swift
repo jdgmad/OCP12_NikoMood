@@ -15,7 +15,9 @@ class NikoRecordViewController: UIViewController {
     private let authService: AuthService = AuthService()
     private let databaseManager: DatabaseManager = DatabaseManager()
     //let nikoFirestoreManager =  NikoFirestoreManager.shared
-    var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
+    var currentNiko = NikoRecord(userID: "user", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
+    //var userUID = String()
+
 
     // MARK: - Outlets
     
@@ -41,6 +43,7 @@ class NikoRecordViewController: UIViewController {
     @IBOutlet weak var causeUIButton: UIButton!
     @IBOutlet weak var datePicker: UIDatePicker!
     
+    
     // MARK: - Overrides
     
     override func viewDidLoad() {
@@ -49,6 +52,7 @@ class NikoRecordViewController: UIViewController {
         // Do any additional setup after loading the view.
         let  useremail = authService.currentEmail
         yourEmail.text = useremail
+        getUserData()
         setUpElements()
     }
     
@@ -57,7 +61,8 @@ class NikoRecordViewController: UIViewController {
         causeTextField.text = currentNiko.nikoCause
     }
     
-    // MARK: - Methods
+    
+    // MARK: - IBActions
     
     @IBAction func logoutButtonTapped(_ sender: UIButton) {
         deconnect()
@@ -104,7 +109,6 @@ class NikoRecordViewController: UIViewController {
             toughtUIButton.setImage(UIImage(systemName: "poweroff"), for: .normal)
         }
     }
-
     
     @IBAction func methodeUIButtonTapped(_ sender: UIButton) {
         sender.isSelected = !sender.isSelected
@@ -181,14 +185,18 @@ class NikoRecordViewController: UIViewController {
         // Ckeck if a record already exist at the same date
         databaseManager.checkIfRecordExist(uid: currentNiko.userID, dateSelected: currentNiko.date) { (result) in
             DispatchQueue.main.async {
-                if result {
+                switch result {
+                case true:
                     self.presentFirebaseAlert(typeError: .errWritingData, message: "Cette date contient déjà un enregistrement")
-                } else {
+                case false:
                     // Store the record in Firestore
                     self.databaseManager.storeNikoRecord(record: self.currentNiko) { (result) in
                         DispatchQueue.main.async {
-                            if !result {
-                                self.presentFirebaseAlert(typeError: .errWritingData, message: "Erreur enregistrement de données")
+                            switch result {
+                            case true:
+                                print("Niko record has been stored")
+                            case false:
+                                    self.presentFirebaseAlert(typeError: .errWritingData, message: "Erreur enregistrement de données")
                             }
                         }
                     }
@@ -203,8 +211,24 @@ class NikoRecordViewController: UIViewController {
     
     // MARK: - Methods
     
+    private func getUserData() {
+        guard let uid = authService.currentUID else { return}
+        //userUID = uid
+        databaseManager.getUserData(with: uid) { (result) in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let data):
+                    self.currentNiko = data
+                case .failure(let error):
+                    self.presentFirebaseAlert(typeError: error, message: "Erreur récupération user Data")
+                }
+            }
+        }
+    }
+    
     private func setUpElements() {
         Utilities.styleFilledButton(validerUIButton)
+        causeUIButton.titleLabel!.text = ""
         causeTextField.rightView = causeUIButton
         causeTextField.rightViewMode = .always
         transitionToStart()

@@ -24,7 +24,7 @@ final class AuthService {
 
     // MARK: - Auth Methods
 
-    func signIn(email: String, password: String, callback: @escaping (Result<AuthDataResult, FirebaseError>) -> Void) {
+    func signIn(email: String, password: String, callback: @escaping (Bool) -> Void) {
         auth.signIn(email: email, password: password, callback: callback)
         
     }

@@ -45,19 +45,12 @@ class NikoSuiviViewController: UIViewController {
         locationTableView.delegate = self
         locationTableView.dataSource = self
   
-        
-        setBarChart()
-        setBarMonthView()
 
-        setLineChart()
-        setLineYearView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         locationTableView.reloadData()
         //collectionView.reloadData()
-
     }
     
     // MARK: - IBActions
@@ -94,6 +87,10 @@ class NikoSuiviViewController: UIViewController {
                     self.currentNiko = data
                     self.setLocationTableView()
                     self.locationTableView.reloadData()
+                    self.setBarChart()
+                    self.setBarMonthView()
+                    self.setLineChart()
+                    self.setLineYearView()
                 case .failure(let error):
                     self.presentFirebaseAlert(typeError: error, message: "Erreur récupération user Data")
                 }
@@ -145,7 +142,6 @@ class NikoSuiviViewController: UIViewController {
                 self.presentFirebaseAlert(typeError: error, message: "")
             }
         }
-
     }
     
     func setBarChart() {
@@ -172,11 +168,6 @@ class NikoSuiviViewController: UIViewController {
         barChartView.legend.enabled = false
         
         barChartView.backgroundColor = .systemBlue
-        
-//        barChartView.xAxis.gridColor = .clear
-//        barChartView.leftAxis.gridColor = .clear
-//        barChartView.rightAxis.gridColor = .clear
-        
     }
     
     func setBarChartData(niKoRecords: [NikoTCD]) {
@@ -247,7 +238,6 @@ class NikoSuiviViewController: UIViewController {
         leftAxis.gridColor = .white
         
         lineChartView.backgroundColor = .systemBlue
-//        lineChartView.leftAxis.enabled = false
         lineChartView.rightAxis.enabled = false
         lineChartView.legend.enabled = false
 
@@ -276,8 +266,6 @@ class NikoSuiviViewController: UIViewController {
         set1.lineWidth = 2
         set1.circleRadius = 3
         set1.fillAlpha = 65/255
-        //set1.fillColor = UIColor(red: 51/255, green: 181/255, blue: 229/255, alpha: 1)
-        //set1.highlightColor = UIColor(red: 244/255, green: 117/255, blue: 117/255, alpha: 1)
         set1.drawCircleHoleEnabled = false
         set1.axisDependency = Charts.YAxis.AxisDependency.left
 
@@ -288,8 +276,6 @@ class NikoSuiviViewController: UIViewController {
         set2.lineWidth = 2
         set2.circleRadius = 3
         set2.fillAlpha = 65/255
-        //set2.fillColor = .red
-        //set2.highlightColor = UIColor(red: 244/255, green: 117/255, blue: 117/255, alpha: 1)
         set2.drawCircleHoleEnabled = false
         set2.axisDependency = Charts.YAxis.AxisDependency.left
 
@@ -300,8 +286,6 @@ class NikoSuiviViewController: UIViewController {
         set3.lineWidth = 2
         set3.circleRadius = 3
         set3.fillAlpha = 65/255
-        //set3.fillColor = UIColor.yellow.withAlphaComponent(200/255)
-        //set3.highlightColor = UIColor(red: 244/255, green: 117/255, blue: 117/255, alpha: 1)
         set3.drawCircleHoleEnabled = false
         set3.axisDependency = Charts.YAxis.AxisDependency.left
 

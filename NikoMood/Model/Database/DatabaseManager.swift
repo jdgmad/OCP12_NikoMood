@@ -44,22 +44,11 @@ final class DatabaseManager {
         database.getUserData(with: uid) { (result) in
             switch result {
             case .success(let data):
-                if data.documents.count == 1 {
-                    for document in data.documents {
-                        do {
-                            let decodeData = try document.data(as: NikoUser.self)
-                            self.currentUser = decodeData!
+                            self.currentUser = data
                             self.transfertDataUserToNikoRecord()
                             callback(.success(self.currentNiko))
                             return
-                        }
-                        catch {
-                            print("erreur catch in func retrieveUserData")
-                            callback(.failure(.errGettingDoc))
-                            return
-                        }
-                    }
-                }
+            
             case .failure(let err):
                 callback(.failure(err))
             }
@@ -126,21 +115,34 @@ final class DatabaseManager {
                                                   ishikawa : Bool,
                                                   callback: @escaping (Result<[NikoTCD], FirebaseError>) -> Void) {
         //var calendarNiko = Array(repeating: -1 , count: 42)
-        var records = [NikoRecord]()
+        
+        //var records = [NikoRecord]()
 
         dataTCDMonth = Array(repeating: currentNikoTCD, count: 31)
         dataTCDYear = Array(repeating: currentNikoTCD, count: 12)
         
         //calendarNiko = razCalendarNiko(listDay: calendarNiko)
 
-        database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { queryResult in
+        database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { records in
             
-            switch queryResult {
-            case .success(let data):
-                let documents = data.documents
-                //guard let documents = data?.documents else {return}
-                records = documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
-                    return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
+            switch records {
+            case .success(let records):
+
+
+print("records dans requestRecordUser")
+print(records)
+//                database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { queryResult in
+//
+//                    switch queryResult {
+//                    case .success(let data):
+//                        let documents = data.documents
+//        print("documents dans requestRecordUser")
+//        print(documents)
+//                        //guard let documents = data?.documents else {return}
+//                        records = documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
+//                            return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
+//        print("records dans requestRecordUser")
+//        print(records)
                 if monthVsYear {
                     if ishikawa {
                         
@@ -177,25 +179,38 @@ final class DatabaseManager {
                                               monthVsYear: Bool,
                                               category5MSelected: Int,
                                               callback: @escaping (Result<[Dictionary<String, Int>.Element], FirebaseError>) -> Void) {
-        var records = [NikoRecord]()
+        //var records = [NikoRecord]()
  
-        database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { queryResult in
+        database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { records in
             
-            switch queryResult {
-            case .success(let data):
-                let documents = data.documents
-                //guard let documents = data?.documents else {return}
-                records = documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
-                    return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
+            switch records {
+            case .success(let records):
+
                 if monthVsYear {
                     self.calcTCDMonthIshikawa(records: records, category5MSelected: category5MSelected)
-                    print(self.dataCause5M)
                     callback(.success(self.dataCause5M))
                     return
                 }
             case .failure(let err):
                 callback(.failure(err))
             }
+            
+            
+//            switch queryResult {
+//            case .success(let data):
+//                let documents = data.documents
+//                //guard let documents = data?.documents else {return}
+//                records = documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
+//                    return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
+//                if monthVsYear {
+//                    self.calcTCDMonthIshikawa(records: records, category5MSelected: category5MSelected)
+//                    callback(.success(self.dataCause5M))
+//                    return
+//                }
+//            case .failure(let err):
+//                callback(.failure(err))
+//            }
+            
         }
     }
     
@@ -206,7 +221,7 @@ final class DatabaseManager {
         let calendar = Calendar.current
         let daysInMonth = calendarHelper.daysInMonth(date: selectedDate)
         let firstDayOfMonth = calendarHelper.firstOfMonth(date: selectedDate)
-        print("NB records dans calcMonth : \(records.count)")
+print("NB records dans calcMonth : \(records.count)")
         (0...daysInMonth - 1).forEach { n in
             let date = calendar.date(byAdding: .day, value: n, to: firstDayOfMonth)!
             let dateString = calendarHelper.dateString(date: date)
@@ -236,7 +251,7 @@ final class DatabaseManager {
             let recordsMilieu = recordsDate.filter({$0.niko5M == "milieu"})
             currentNikoTCD.nbMilieu = recordsMilieu.count
         
-            print(" \(dateString) \(n)  nbRecord = \(currentNikoTCD.nbRecord) Method = \(currentNikoTCD.nbMethod) nbMatiere = \(currentNikoTCD.nbMatiere)  nbMachine = \(currentNikoTCD.nbMachine)  nbMO : \(currentNikoTCD.nbMaindoeuvre)")
+//print(" \(dateString) \(n)  nbRecord = \(currentNikoTCD.nbRecord) Method = \(currentNikoTCD.nbMethod) nbMatiere = \(currentNikoTCD.nbMatiere)  nbMachine = \(currentNikoTCD.nbMachine)  nbMO : \(currentNikoTCD.nbMaindoeuvre)")
             
             dataTCDMonth[n] = currentNikoTCD
             razCurrentTCD()
@@ -288,7 +303,7 @@ final class DatabaseManager {
             let recordsMilieu = recordsDate.filter({$0.nikoCause == "Milieu"})
             currentNikoTCD.nbMilieu = recordsMilieu.count
         
-            print(" \(monthString) \(n)  nbRecord = \(currentNikoTCD.nbRecord) rank = \(currentNikoTCD.rankAverage) nbSuper = \(currentNikoTCD.nbSuper)  nbNTR = \(currentNikoTCD.nbNTR)  nbTought : \(currentNikoTCD.nbTought)")
+//print(" \(monthString) \(n)  nbRecord = \(currentNikoTCD.nbRecord) rank = \(currentNikoTCD.rankAverage) nbSuper = \(currentNikoTCD.nbSuper)  nbNTR = \(currentNikoTCD.nbNTR)  nbTought : \(currentNikoTCD.nbTought)")
             
             dataTCDYear[n] = currentNikoTCD
             razCurrentTCD()

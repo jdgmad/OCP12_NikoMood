@@ -35,19 +35,21 @@ class LoginViewController: UIViewController {
         authService.isUserConnected { isConnected in
             switch isConnected {
             case true:
-                self.databaseManager.getUserData(with: self.authService.currentUID!) { (result) in
-                    DispatchQueue.main.async {
-                        print("dans dispatch get user data de signin view")
-                        switch result {
-                        case .success(let data):
-                            self.currentNiko = data
-                            self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
-                            
-                        case .failure(let error):
-                            self.presentFirebaseAlert(typeError: error, message: "")
-                        }
-                    }
-                }
+                self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
+//                self.databaseManager.getUserData(with: self.authService.currentUID!) { (result) in
+//                    DispatchQueue.main.async {
+//                        print("dans dispatch get user data de signin view")
+//                        switch result {
+//                        case .success(let data):
+//                            self.currentNiko = data
+//                            print("currentNiko userID: \(self.currentNiko.userID)")
+//                            self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
+//
+//                        case .failure(let error):
+//                            self.presentFirebaseAlert(typeError: error, message: "")
+//                        }
+//                    }
+//                }
             case false:
                 print(" pas d'user connecté dans Login view")
             }
@@ -56,27 +58,6 @@ class LoginViewController: UIViewController {
         
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-//        authService.isUserConnected { isConnected in
-//            if !isConnected {
-//
-//                self.databaseManager.getUserData(with: self.authService.currentUID!) { (result) in
-//                    DispatchQueue.main.async {
-//                        switch result {
-//                        case .success(let data):
-//                            self.currentNiko = data
-//                            self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
-//
-//                        case .failure(let error):
-//                            self.presentFirebaseAlert(typeError: error, message: "")
-//                        }
-//                    }
-//                }
-//            } else {
-//                print(" pas d'user connecté dans Login view")
-//            }
-//        }
-    }
     
     // MARK: - IBActions
     
@@ -87,27 +68,28 @@ class LoginViewController: UIViewController {
         let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
         // Signing in the user
-        authService.signIn(email: email, password: password) { (result) in
+        authService.signIn(email: email, password: password) { isSuccess in
             DispatchQueue.main.async {
-            switch result {
-            case .success(_):
-                self.databaseManager.getUserData(with: self.authService.currentUID!) { (result) in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let data):
-                            self.currentNiko = data
-                            self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
-                        case .failure(let error):
-                            self.presentFirebaseAlert(typeError: error, message: "")
-                        }
-                    }
-                }
+                switch isSuccess {
+                case true:
+                    self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
+//            case .success(let authResult):
+//                let userID = authResult.user.uid
+//                self.databaseManager.getUserData(with: userID) { (result) in
+//                    DispatchQueue.main.async {
+//                        switch result {
+//                        case .success(let data):
+//                            self.currentNiko = data
+//                            self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
+//                        case .failure(let error):
+//                            self.presentFirebaseAlert(typeError: error, message: "")
+//                        }
+//                    }
+//                }
 
-            case .failure(let error):
-                self.presentFirebaseAlert(typeError: error, message: self.currentNiko.error!)
-            }
-            
-            self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
+                case false:
+                    self.presentFirebaseAlert(typeError: .errSignin, message: self.currentNiko.error!)
+                }
             }
         }
     }
@@ -122,13 +104,5 @@ class LoginViewController: UIViewController {
     }
 }
 
-extension LoginViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == segueToTabbarFromLogin {
-            guard let nikoRecordVC = segue.destination as? NikoRecordViewController else { return }
-            nikoRecordVC.currentNiko = self.currentNiko
-        }
-    }
-}
 
 
