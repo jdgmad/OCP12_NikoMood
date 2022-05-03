@@ -114,38 +114,18 @@ final class DatabaseManager {
                                                   monthVsYear: Bool,
                                                   ishikawa : Bool,
                                                   callback: @escaping (Result<[NikoTCD], FirebaseError>) -> Void) {
-        //var calendarNiko = Array(repeating: -1 , count: 42)
-        
-        //var records = [NikoRecord]()
 
         dataTCDMonth = Array(repeating: currentNikoTCD, count: 31)
         dataTCDYear = Array(repeating: currentNikoTCD, count: 12)
-        
-        //calendarNiko = razCalendarNiko(listDay: calendarNiko)
 
         database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { records in
             
             switch records {
             case .success(let records):
-
-
 print("records dans requestRecordUser")
 print(records)
-//                database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { queryResult in
-//
-//                    switch queryResult {
-//                    case .success(let data):
-//                        let documents = data.documents
-//        print("documents dans requestRecordUser")
-//        print(documents)
-//                        //guard let documents = data?.documents else {return}
-//                        records = documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
-//                            return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
-//        print("records dans requestRecordUser")
-//        print(records)
                 if monthVsYear {
                     if ishikawa {
-                        
                     }
                     self.calcTCDMonth(records: records, selectedDate: selectedDate)
                     callback(.success(self.dataTCDMonth))
@@ -179,13 +159,11 @@ print(records)
                                               monthVsYear: Bool,
                                               category5MSelected: Int,
                                               callback: @escaping (Result<[Dictionary<String, Int>.Element], FirebaseError>) -> Void) {
-        //var records = [NikoRecord]()
  
         database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { records in
             
             switch records {
             case .success(let records):
-
                 if monthVsYear {
                     self.calcTCDMonthIshikawa(records: records, category5MSelected: category5MSelected)
                     callback(.success(self.dataCause5M))
@@ -194,23 +172,6 @@ print(records)
             case .failure(let err):
                 callback(.failure(err))
             }
-            
-            
-//            switch queryResult {
-//            case .success(let data):
-//                let documents = data.documents
-//                //guard let documents = data?.documents else {return}
-//                records = documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
-//                    return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
-//                if monthVsYear {
-//                    self.calcTCDMonthIshikawa(records: records, category5MSelected: category5MSelected)
-//                    callback(.success(self.dataCause5M))
-//                    return
-//                }
-//            case .failure(let err):
-//                callback(.failure(err))
-//            }
-            
         }
     }
     
