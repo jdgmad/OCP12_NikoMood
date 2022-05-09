@@ -1,0 +1,189 @@
+
+/* Class = "UILabel"; text = "Sat"; ObjectID = "0GM-RF-uKF"; */
+"0GM-RF-uKF.text" = "Sat";
+
+/* Class = "UILabel"; text = "Thur"; ObjectID = "0fA-mM-3a7"; */
+"0fA-mM-3a7.text" = "Thur";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "1te-dm-TzL"; */
+"1te-dm-TzL.placeholder" = "Email";
+
+/* Class = "UIButton"; configuration.title = "Validate"; ObjectID = "2WZ-FU-Fam"; */
+"2WZ-FU-Fam.configuration.title" = "Validate";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "2WZ-FU-Fam"; */
+"2WZ-FU-Fam.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "1"; ObjectID = "3yd-MG-oc2"; */
+"3yd-MG-oc2.text" = "1";
+
+/* Class = "UITabBarItem"; title = "Calendar"; ObjectID = "4AI-By-isR"; */
+"4AI-By-isR.title" = "Calendar";
+
+/* Class = "UIButton"; configuration.title = "Methods"; ObjectID = "56h-qM-bye"; */
+"56h-qM-bye.configuration.title" = "Methods";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "56h-qM-bye"; */
+"56h-qM-bye.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "Super"; ObjectID = "5sy-bn-8R1"; */
+"5sy-bn-8R1.configuration.title" = "Super";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "5sy-bn-8R1"; */
+"5sy-bn-8R1.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "Fri"; ObjectID = "626-TM-Ce5"; */
+"626-TM-Ce5.text" = "Fri";
+
+/* Class = "UILabel"; text = "Comments"; ObjectID = "81M-3n-23q"; */
+"81M-3n-23q.text" = "Comments";
+
+/* Class = "UITabBarItem"; title = "Record"; ObjectID = "8fa-Ix-clt"; */
+"8fa-Ix-clt.title" = "Record";
+
+/* Class = "UIButton"; configuration.title = "Sign up"; ObjectID = "A1H-Vp-6aB"; */
+"A1H-Vp-6aB.configuration.title" = "Sign up";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "A1H-Vp-6aB"; */
+"A1H-Vp-6aB.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "Login"; ObjectID = "BDp-3q-UYe"; */
+"BDp-3q-UYe.configuration.title" = "Login";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "BDp-3q-UYe"; */
+"BDp-3q-UYe.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "Error"; ObjectID = "CDb-PY-XRh"; */
+"CDb-PY-XRh.text" = "Error";
+
+/* Class = "UIButton"; configuration.title = "Management"; ObjectID = "EkZ-cO-CZC"; */
+"EkZ-cO-CZC.configuration.title" = "Management";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "EkZ-cO-CZC"; */
+"EkZ-cO-CZC.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "Logout"; ObjectID = "GJ3-Ac-qpT"; */
+"GJ3-Ac-qpT.configuration.title" = "Logout";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "GJ3-Ac-qpT"; */
+"GJ3-Ac-qpT.normalTitle" = "Button";
+
+/* Class = "UITabBarItem"; title = "Isikawa"; ObjectID = "H0a-X2-2V7"; */
+"H0a-X2-2V7.title" = "Isikawa";
+
+/* Class = "UILabel"; text = "Feb 2021"; ObjectID = "Hd1-QW-Hxo"; */
+"Hd1-QW-Hxo.text" = "Feb 2021";
+
+/* Class = "UILabel"; text = "Sun"; ObjectID = "Hx1-LI-DZG"; */
+"Hx1-LI-DZG.text" = "Sun";
+
+/* Class = "UIButton"; configuration.title = "Materials"; ObjectID = "JXS-Jy-kzy"; */
+"JXS-Jy-kzy.configuration.title" = "Materials";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "JXS-Jy-kzy"; */
+"JXS-Jy-kzy.normalTitle" = "Button";
+
+/* Class = "UIButton"; configuration.title = "Manpower"; ObjectID = "KcS-No-XCe"; */
+"KcS-No-XCe.configuration.title" = "Manpower";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "KcS-No-XCe"; */
+"KcS-No-XCe.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "Wed"; ObjectID = "M0a-Uk-ldm"; */
+"M0a-Uk-ldm.text" = "Wed";
+
+/* Class = "UILabel"; text = "Display personnal data"; ObjectID = "Mrq-m7-hju"; */
+"Mrq-m7-hju.text" = "Display personnal data";
+
+/* Class = "UIButton"; configuration.title = "Login"; ObjectID = "Mwd-my-lnE"; */
+"Mwd-my-lnE.configuration.title" = "Login";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "Mwd-my-lnE"; */
+"Mwd-my-lnE.normalTitle" = "Button";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "O15-mK-TT9"; */
+"O15-mK-TT9.placeholder" = "Password";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "Otj-E8-uP0"; */
+"Otj-E8-uP0.text" = "Label";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "PyU-k2-uTH"; */
+"PyU-k2-uTH.normalTitle" = "Button";
+
+/* Class = "UITextField"; placeholder = "Your Email"; ObjectID = "Vsw-5f-l6P"; */
+"Vsw-5f-l6P.placeholder" = "Your Email";
+
+/* Class = "UITextField"; placeholder = "Select a cause"; ObjectID = "XBR-8n-mbl"; */
+"XBR-8n-mbl.placeholder" = "Select a cause";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "Ymq-br-uRB"; */
+"Ymq-br-uRB.placeholder" = "Email";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "Z0c-lz-4Z3"; */
+"Z0c-lz-4Z3.placeholder" = "Password";
+
+/* Class = "UITabBarItem"; title = "Follow up"; ObjectID = "and-6X-FWi"; */
+"and-6X-FWi.title" = "Follow up";
+
+/* Class = "UILabel"; text = "Ishikawa causes"; ObjectID = "cXd-Iv-Pxj"; */
+"cXd-Iv-Pxj.text" = "Ishikawa causes";
+
+/* Class = "UITextField"; placeholder = "Entrer a comment"; ObjectID = "fFT-An-7xa"; */
+"fFT-An-7xa.placeholder" = "Entrer a comment";
+
+/* Class = "UILabel"; text = "Cause :"; ObjectID = "fdU-sV-hzl"; */
+"fdU-sV-hzl.text" = "Cause :";
+
+/* Class = "UINavigationItem"; title = "Calendar"; ObjectID = "fz2-f6-aIl"; */
+"fz2-f6-aIl.title" = "Calendar";
+
+/* Class = "UILabel"; text = "Feb 2022"; ObjectID = "igq-fq-AfD"; */
+"igq-fq-AfD.text" = "Feb 2022";
+
+/* Class = "UIButton"; configuration.title = "Sign up"; ObjectID = "kga-mz-F8f"; */
+"kga-mz-F8f.configuration.title" = "Sign up";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "kga-mz-F8f"; */
+"kga-mz-F8f.normalTitle" = "Button";
+
+/* Class = "UINavigationItem"; title = "Niko Following"; ObjectID = "mc1-m8-052"; */
+"mc1-m8-052.title" = "Niko Following";
+
+/* Class = "UILabel"; text = "Tue"; ObjectID = "ml8-E3-NG6"; */
+"ml8-E3-NG6.text" = "Tue";
+
+/* Class = "UIButton"; configuration.title = "Tought"; ObjectID = "oBz-Jl-brQ"; */
+"oBz-Jl-brQ.configuration.title" = "Tought";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "oBz-Jl-brQ"; */
+"oBz-Jl-brQ.normalTitle" = "Button";
+
+/* Class = "UINavigationItem"; title = "Ishikawa records"; ObjectID = "pZt-sQ-v8U"; */
+"pZt-sQ-v8U.title" = "Ishikawa records";
+
+/* Class = "UIButton"; configuration.title = "NTR"; ObjectID = "u6Q-B7-9J3"; */
+"u6Q-B7-9J3.configuration.title" = "NTR";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "u6Q-B7-9J3"; */
+"u6Q-B7-9J3.normalTitle" = "Button";
+
+/* Class = "UINavigationItem"; title = "How was the day ?"; ObjectID = "uLM-4Q-IQk"; */
+"uLM-4Q-IQk.title" = "How was the day ?";
+
+/* Class = "UILabel"; text = "Feb 2022"; ObjectID = "ubH-J3-kv8"; */
+"ubH-J3-kv8.text" = "Feb 2022";
+
+/* Class = "UILabel"; text = "Mon"; ObjectID = "ueN-9a-cAH"; */
+"ueN-9a-cAH.text" = "Mon";
+
+/* Class = "UIButton"; configuration.title = "Machinery"; ObjectID = "xkH-mw-F1Z"; */
+"xkH-mw-F1Z.configuration.title" = "Machinery";
+
+/* Class = "UIButton"; normalTitle = "Button"; ObjectID = "xkH-mw-F1Z"; */
+"xkH-mw-F1Z.normalTitle" = "Button";
+
+/* Class = "UILabel"; text = "2022"; ObjectID = "y7e-9h-Jnk"; */
+"y7e-9h-Jnk.text" = "2022";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "zcl-Kr-kCh"; */
+"zcl-Kr-kCh.placeholder" = "Password";

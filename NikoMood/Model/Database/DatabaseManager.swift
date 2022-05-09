@@ -58,26 +58,26 @@ final class DatabaseManager {
     func storeNikoRecord (record : NikoRecord, callback: @escaping (Bool) -> Void) {
         
         // MARK: - Properties
-        
+        let currentNiko = record
         let calendarHelper = CalendarHelper()
         let date = currentNiko.date
         let error = (currentNiko.error ?? "")
         let docData: [String: Any] = ([
-            "userID": currentUser.userID,
-            "firstname": currentUser.firstname,
-            "lastname": currentUser.lastname,
-            "position": currentUser.position,
-            "plant": currentUser.plant,
-            "department": currentUser.department,
-            "workshop": currentUser.workshop,
-            "shift": currentUser.shift,
-            "nikoStatus": currentNiko.nikoStatus,
-            "nikoRank": currentNiko.nikoRank,
-            "niko5M": currentNiko.niko5M,
-            "nikoCause": currentNiko.nikoCause,
-            "nikoComment": currentNiko.nikoComment,
-            "permission": currentNiko.permission,
-            "date": currentNiko.date,
+            "userID": record.userID,
+            "firstname": record.firstname,
+            "lastname": record.lastname,
+            "position": record.position,
+            "plant": record.plant,
+            "department": record.department,
+            "workshop": record.workshop,
+            "shift": record.shift,
+            "nikoStatus": record.nikoStatus,
+            "nikoRank": record.nikoRank,
+            "niko5M": record.niko5M,
+            "nikoCause": record.nikoCause,
+            "nikoComment": record.nikoComment,
+            "permission": record.permission,
+            "date": record.date,
             "formattedMonthString": calendarHelper.monthString(date: date),
             "formattedDateString": calendarHelper.dateString(date: date),
             "formattedYearString": calendarHelper.yearString(date: date),
@@ -125,8 +125,6 @@ final class DatabaseManager {
 print("records dans requestRecordUser")
 print(records)
                 if monthVsYear {
-                    if ishikawa {
-                    }
                     self.calcTCDMonth(records: records, selectedDate: selectedDate)
                     callback(.success(self.dataTCDMonth))
                     return
@@ -138,10 +136,6 @@ print(records)
             case .failure(let err):
                 callback(.failure(err))
             }
-//                for i in 0...30 {
-//                    let rank = self.dataTCD[i].rankAverage
-//                    print("Boucle before return to view      rank = \(rank)")
-//                }
         }
     }
     

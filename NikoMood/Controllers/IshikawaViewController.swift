@@ -23,7 +23,7 @@ class IshikawaViewController: UIViewController {
     
     //  Properties for locationTableView
     var locationTableView = UITableView()
-    var cellTitles = [ "Etablissement", "Service", "Equipe"]
+    var cellTitles = [ "Plant".localized(), "Workshop".localized(), "Shift".localized()]
     var cellTitlesSelected = ["", "", ""]
     
     //  Properties for Charts

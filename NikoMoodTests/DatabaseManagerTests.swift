@@ -231,9 +231,6 @@ class DatabaseManagerTests: XCTestCase {
                 XCTFail("Get User Data Method Success Tests Fails")
                 return
             }
-            print("ISHIKAWA<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-            print("userData: \(userData.count)")
-            
             XCTAssertTrue(userData.count == 1) // only one record with cause "method"
             expectation.fulfill()
         }

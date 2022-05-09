@@ -70,53 +70,52 @@ struct NikoTCD {
 }
 
 public var causeMethode = [
-        "Pas de Modes opératoires",
-        "Procédures non à jour",
-        "Non respect des régles/procédures",
-        "Mauvaise communication",
-        "Mauvaise organisation",
-        "Cause 6 methode",
-        "Cause 7 methode",
+    "No instructions list".localized(),
+    "Procedure not updated".localized(),
+    "No respect procedure or rules".localized(),
+    "Bad communication".localized(),
+    "Bad organisation".localized(),
+    "Cause 6 methods".localized(),
+    "Cause 7 methods".localized(),
 ]
 
 public var causeMatiere = [
-        "Qualité matière première",
-        "Rupture matière première",
-        "Exédent matiere premiere",
-        "Coupure énergie",
-        "Coupure énergie",
-        "Cause 6 matiere",
-        "Cause 7 matiere",
+    "Bad materials quality".localized(),
+    "Materials out of stock".localized(),
+    "Materials on excedent".localized(),
+    "Electrical blackout".localized(),
+    "Cause 6 matierials".localized(),
+    "Cause 7 matierials".localized(),
 ]
 
 public var causeMachine = [
-        "Machine en panne",
-        "Manque de maintenance",
-        "Manque de nettoyage",
-        "Mauvais fonctionnement machine",
-        "Manque de documentation",
-        "Cause 6 machine",
-        "Cause 7 machine",
+    "Machine break down".localized(),
+    "Lack of maintenance".localized(),
+    "Lack of cleanning".localized(),
+    "Bad machine".localized(),
+    "Lack of documentation".localized(),
+    "Cause 6 machinery".localized(),
+    "Cause 7 machinery".localized(),
 ]
 
 public var causeMaindoeuvre = [
-        "Manque de compétences",
-        "Manque d'effectif/charge",
-        "Absentéisme",
-        "Manque d'implication",
-        "Cause 5 maindoeuvre",
-        "Cause 6 maindoeuvre",
-        "Cause 7 maindoeuvre",
+    "Lack of competencies".localized(),
+    "Lack of people/load".localized(),
+    "Absenteism".localized(),
+    "Lack of involvement".localized(),
+    "Lack of versatility".localized(),
+    "Cause 6 manpower".localized(),
+    "Cause 7 manpower".localized(),
 ]
 
 public var causeMilieu = [
-        "Ergonomie au poste de travail",
-        "Flux en famine",
-        "Flus en saturation",
-        "Cause 4 milieu",
-        "Cause 5 milieu",
-        "Cause 6 milieu",
-        "Cause 7 milieu",
+    "Ergonomics at workplace".localized(),
+    "Flow in starvation".localized(),
+    "Flow in saturation".localized(),
+    "Cause 4 management".localized(),
+    "Cause 5 management".localized(),
+    "Cause 6 management".localized(),
+    "Cause 7 management".localized(),
 ]
 
 

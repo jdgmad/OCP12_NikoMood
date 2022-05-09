@@ -38,11 +38,11 @@ class TeamLocationTableViewController: UIViewController {
             "Marketing",
             "R&D",
             "Production",
-            "Qalité",
+            "Quality",
             "Maintenance",
             "Process",
-            "Achats",
-            "Comptabilité"
+            "Purchasing",
+            "Comptability"
     ]
     var equipe = [
             "",

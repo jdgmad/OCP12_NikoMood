@@ -46,7 +46,7 @@ class ViewController: UIViewController {
     
     private func presentAlertLogin(userEmail: String) {
         
-        let alert = UIAlertController(title: "Login", message: "Voulez vous continuer avec cet identifiant \(userEmail)", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Login", message: "Are you sure to continue with this user identifier".localized() + " \(userEmail)", preferredStyle: .alert)
 
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { _ in
             self.deconnect()
@@ -60,7 +60,7 @@ class ViewController: UIViewController {
     private func deconnect() {
         authService.signOut { result in
             if !result {
-                self.presentFirebaseAlert(typeError: .errSignout, message: "Erreur Signout")
+                self.presentFirebaseAlert(typeError: .errSignout, message: "Error Signout".localized())
             }
         }
     }

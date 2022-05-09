@@ -15,9 +15,9 @@ struct Location {
 
 class LocationEntreprise {
     static var locations = [
-            Location(locationName: "plant", locationSelected: " "),
-            Location(locationName: "workshop", locationSelected: " "),
-            Location(locationName: "shift", locationSelected: " ")
+        Location(locationName: "plant", locationSelected: " "),
+        Location(locationName: "workshop", locationSelected: " "),
+        Location(locationName: "shift", locationSelected: " ")
         ]
     
     // Modifications à venir :

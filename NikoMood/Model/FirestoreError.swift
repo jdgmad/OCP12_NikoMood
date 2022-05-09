@@ -15,13 +15,13 @@ enum FirebaseError: Error {
 extension FirebaseError: CustomStringConvertible {
     var description: String {
         switch self {
-        case .errSignin: return "Erreur Signin"
-        case .errSignup: return "Erreur Signup"
-        case .errSignout: return "Erreur Signout"
-        case .noUserConnected: return "Pas d'utilisteur connecté"
-        case .noDocUser: return "Pas de document utilisateur"
-        case .errGettingDoc: return "Erreur accès document"
-        case .errWritingData: return "Erreur enregistrement de données"
+        case .errSignin: return "Error Signin".localized()
+        case .errSignup: return "Error Signup".localized()
+        case .errSignout: return "Error Signout".localized()
+        case .noUserConnected: return "No user connected".localized()
+        case .noDocUser: return "No user document".localized()
+        case .errGettingDoc: return "Error access to document".localized()
+        case .errWritingData: return "Error writing data".localized()
         }
     }
 }

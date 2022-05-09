@@ -51,7 +51,7 @@ class LoginViewController: UIViewController {
 //                    }
 //                }
             case false:
-                print(" pas d'user connecté dans Login view")
+                print("No user selected in Login view")
             }
         }
     

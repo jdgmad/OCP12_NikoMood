@@ -177,3 +177,15 @@ for (key, value) in dict
 }
 
 
+uid: 6zxxcvxJXcOqFxuBOfDcj74S6Yf2
+location: ["Salin", "Production", "B"]
+monthVsYear: true
+personnal: false
+date: 2022-04-08 22:17:48 +0000
+location name : plant val: Salin
+location name : workshop val: Production
+location name : shift val: B
+records dans requestRecordUser
+[NikoMood.NikoRecord(_id: FirebaseFirestoreSwift.DocumentID<Swift.String>(value: Optional("3iinfwS06dulNzBe4hcr")), userID: "6zxxcvxJXcOqFxuBOfDcj74S6Yf2", firstname: "Serge", lastname: "Marinier", position: "Chef de poste", plant: "Salin", department:
+
+

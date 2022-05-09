@@ -34,8 +34,6 @@ final class FirebaseDatabase: DatabaseType {
                     callback(.failure(.errGettingDoc))
                     return
                 }
-//print("query snapshot user")
-//print(querySnapshot!.documents.description)
                 let document = querySnapshot?.documents.first
                 do {
                     let decodeData = try document!.data(as: NikoUser.self)
@@ -46,8 +44,6 @@ final class FirebaseDatabase: DatabaseType {
                     callback(.failure(.errGettingDoc))
                     return
                 }
-  
-            //callback(.success(querySnapshot!))
         }
     }
     
@@ -81,6 +77,8 @@ final class FirebaseDatabase: DatabaseType {
                 } else {
                     if (querySnapshot?.documents.count)! >= 1 {
                         callback(true)
+                    } else {
+                        callback(false)
                     }
                 }
             }
@@ -88,48 +86,46 @@ final class FirebaseDatabase: DatabaseType {
     
     func getQuery(uid: String, location: [String], monthVsYear: Bool, personnal: Bool, selectedDate: Date, callback: @escaping (Result<[NikoRecord], FirebaseError>) -> Void) {
         
-print("\n\n")
-print("uid: \(uid)")
-print("location: \(location)")
-print("monthVsYear: \(monthVsYear)")
-print("personnal: \(personnal)")
-print("date: \(selectedDate)")
-    
-    var q: Query?
-    var records = [NikoRecord]()
-    let calendarHelper = CalendarHelper()
-    let month = calendarHelper.monthString(date: selectedDate)
-    let year = calendarHelper.yearString(date: selectedDate)
-    let db = Firestore.firestore()
-    let usersRef = db.collection("NikoRecord")
-    if monthVsYear {
-        q = usersRef.whereField("formattedMonthString", isEqualTo: month)
-    } else {
-        q = usersRef.whereField("formattedYearString", isEqualTo: year)
-    }
-    if personnal {
-        q = q?.whereField("userID", isEqualTo: uid)
-    } else {
-        for (index, val) in location.enumerated() {
-            if location[index] != "" {
-                //q = q?.whereField(paramQueryField[index], isEqualTo: val)
-                print("location name : \(LocationEntreprise.locations[index].locationName!) val: \(val)")
-                q = q?.whereField(LocationEntreprise.locations[index].locationName!, isEqualTo: val)
+        print("\n\n")
+        print("uid: \(uid)")
+        print("location: \(location)")
+        print("monthVsYear: \(monthVsYear)")
+        print("personnal: \(personnal)")
+        print("date: \(selectedDate)")
+        
+        var q: Query?
+        var records = [NikoRecord]()
+        let calendarHelper = CalendarHelper()
+        let month = calendarHelper.monthString(date: selectedDate)
+        let year = calendarHelper.yearString(date: selectedDate)
+        let db = Firestore.firestore()
+        let usersRef = db.collection("NikoRecord")
+        if monthVsYear {
+            q = usersRef.whereField("formattedMonthString", isEqualTo: month)
+        } else {
+            q = usersRef.whereField("formattedYearString", isEqualTo: year)
+        }
+        if personnal {
+            q = q?.whereField("userID", isEqualTo: uid)
+        } else {
+            for (index, val) in location.enumerated() {
+                if location[index] != "" {
+print("location name : \(LocationEntreprise.locations[index].locationName!) val: \(val)")
+                    q = q?.whereField(LocationEntreprise.locations[index].locationName!, isEqualTo: val)
+                }
             }
         }
-    }
-    q?.getDocuments{ (querySnapshot, err) in
-        if let err = err {
-            print("Error getting documents: \(err)")
-            callback(.failure(.errGettingDoc))
-            return
+        q?.getDocuments{ (querySnapshot, err) in
+            if let err = err {
+                print("Error getting documents: \(err)")
+                callback(.failure(.errGettingDoc))
+                return
+            }
+            records = querySnapshot!.documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
+                return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
+            callback(.success(records))
         }
-        records = querySnapshot!.documents.compactMap { queryDocumentSnapshot -> NikoRecord? in
-            return try? queryDocumentSnapshot.data(as: NikoRecord.self)}
-        callback(.success(records))
-    //callback(.success(querySnapshot!))
     }
-}
 
     
 }

@@ -73,7 +73,7 @@ final class AuthFirebase: AuthType {
                                             callback(false)
                                             return
                                         } else {
-                                            print("Document successfully updated")
+                                            //print("Document successfully updated")
                                             callback(true)
                                             return
                                         }
@@ -99,13 +99,6 @@ final class AuthFirebase: AuthType {
     }
 
     func isUserConnected(callback: @escaping (Bool) -> Void) {
-//        _ = Auth.auth().addStateDidChangeListener { _, user in
-//            guard (user != nil) else {
-//                callback(false)
-//                return
-//            }
-//            callback(true)
-//        }
         if Auth.auth().currentUser != nil {
             callback(true)
         } else {

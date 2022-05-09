@@ -68,20 +68,20 @@ class SignUpViewController: UIViewController {
     // Check the fields and validate that the data is correct. If everything is correct, this method returns nil. Otherwise, it returns the error message
     private func validateFields() -> String? {
         // Check that all fields are filled in
-        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in email text"}
-        guard let cleanedPassword2 = password2TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in first password text"}
-        guard let cleanedPassword = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in second password text"}
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in email text".localized()}
+        guard let cleanedPassword2 = password2TextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in first password text".localized()}
+        guard let cleanedPassword = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in second password text".localized()}
         if email == "" || cleanedPassword == "" {
-            return "Please fill in all the fields"
+            return "Please fill in all the fields".localized()
         }
         // Check if the password is secure
 
         if Utilities.isPasswordValid(cleanedPassword2) == false {
-            return "Please make sure your password is at least 8 characters, contains a special character and a number"
+            return "Please make sure your password is at least 8 characters, contains a special character and a number".localized()
         }
-        if cleanedPassword != cleanedPassword2 { return "Passwords are not identical"}
+        if cleanedPassword != cleanedPassword2 { return "Passwords are not identical".localized()}
         if Utilities.isValidEmail(email: email) == false {
-            return "Your email do not respect the email format"
+            return "Your email do not respect the email format".localized()
         }
         return nil
     }

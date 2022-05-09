@@ -21,7 +21,7 @@ class CalendViewController: UIViewController {
     
     //  Properties for locationTableView
     var locationTableView = UITableView()
-    var cellTitles = [ "Etablissement", "Service", "Equipe"]
+    var cellTitles = [ "Plant".localized(), "Workshop".localized(), "Shift".localized()]
     var cellTitlesSelected = ["", "", ""]
     var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
     var dataTCDMonth = [NikoTCD]()
@@ -105,12 +105,12 @@ class CalendViewController: UIViewController {
                 switch result {
                 case .success(let data):
                     self.currentNiko = data
-                    print("print user Data dans calend view")
-                    print(data)
+print("print user Data dans calend view")
+print(data)
                     self.setLocationTableView()
                     self.locationTableView.reloadData()
                 case .failure(let error):
-                    self.presentFirebaseAlert(typeError: error, message: "Erreur récupération user Data")
+                    self.presentFirebaseAlert(typeError: error, message: "Error retrieving user Data")
                 }
             }
         }
@@ -147,8 +147,8 @@ class CalendViewController: UIViewController {
         flowLayout.sectionInset.right = 0
         flowLayout.minimumInteritemSpacing = 0
         flowLayout.minimumLineSpacing = 0
-        let width = (collectionView.frame.size.width - 3 ) / 7
-        let height = (collectionView.frame.size.height - 3 ) / 7
+        let width = (collectionView.frame.size.width - 2 ) / 9
+        let height = (collectionView.frame.size.height - 2 ) / 9
         flowLayout.itemSize = CGSize(width: width, height: height)
         collectionView!.collectionViewLayout = flowLayout
     }
@@ -199,7 +199,7 @@ class CalendViewController: UIViewController {
             let nbSuper = dataTCDMonth[jour! - 1].nbSuper
             let nbNTR = dataTCDMonth[jour! - 1].nbNTR
             let nbTought = dataTCDMonth[jour! - 1].nbTought
-            let nikoStatus = ["Super", "OK", "Tought"]
+            let nikoStatus = ["Super".localized(), "NTR".localized(), "Tought".localized()]
             nikoRanks.append(Double(nbSuper))
             nikoRanks.append(Double(nbNTR))
             nikoRanks.append(Double(nbTought))

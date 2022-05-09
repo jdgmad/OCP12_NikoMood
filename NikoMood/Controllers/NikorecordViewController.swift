@@ -187,16 +187,17 @@ class NikoRecordViewController: UIViewController {
             DispatchQueue.main.async {
                 switch result {
                 case true:
-                    self.presentFirebaseAlert(typeError: .errWritingData, message: "Cette date contient déjà un enregistrement")
+                    self.presentFirebaseAlert(typeError: .errWritingData, message: "This date has already a record")
                 case false:
+print("date disponible <<<<<<<<<<<<<<<<<<<")
                     // Store the record in Firestore
                     self.databaseManager.storeNikoRecord(record: self.currentNiko) { (result) in
                         DispatchQueue.main.async {
                             switch result {
                             case true:
-                                print("Niko record has been stored")
+print("Niko record has been stored")
                             case false:
-                                    self.presentFirebaseAlert(typeError: .errWritingData, message: "Erreur enregistrement de données")
+                                    self.presentFirebaseAlert(typeError: .errWritingData, message: "Error recording data")
                             }
                         }
                     }
@@ -220,7 +221,7 @@ class NikoRecordViewController: UIViewController {
                 case .success(let data):
                     self.currentNiko = data
                 case .failure(let error):
-                    self.presentFirebaseAlert(typeError: error, message: "Erreur récupération user Data")
+                    self.presentFirebaseAlert(typeError: error, message: "Erreur retrieving user Data")
                 }
             }
         }
