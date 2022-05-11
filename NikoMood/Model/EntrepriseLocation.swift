@@ -23,5 +23,8 @@ class LocationEntreprise {
     // Modifications à venir :
     // Récupérer depuis Firebase les valeurs pour remplir locations
 
+    
+    
+    
 }
 

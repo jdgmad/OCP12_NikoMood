@@ -10,33 +10,27 @@ import Charts
 
 class IshikawaViewController: UIViewController {
 
-    
+    //Refactor the location table view in : Niko Record, Niko following and Ishikawa by creating a genericTableView
     // MARK: - Properties
     
-    //let nikoFirestoreManager =  NikoFirestoreManager.shared
-    let calendarHelper = CalendarHelper()
-    var userUID = String()
-    var locationSelected = String()
     private let authService: AuthService = AuthService()
     private let databaseManager: DatabaseManager = DatabaseManager()
+    let calendarHelper = CalendarHelper()
+    var userUID = String()
     var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
-    
     //  Properties for locationTableView
-    var locationTableView = UITableView()
+    var reustableTable: GenericTableView!
     var cellTitles = [ "Plant".localized(), "Workshop".localized(), "Shift".localized()]
     var cellTitlesSelected = ["", "", ""]
-    
+    var locationSelected = String()
     //  Properties for Charts
     var selectedBarDate = Date()
     
     // MARK: - IBOutlets
     
     @IBOutlet weak var barChartView: BarChartView!
-    
     @IBOutlet weak var horizontalBarChartView: HorizontalBarChartView!
-    
     @IBOutlet weak var causeBarChartView: BarChartView!
-    
     @IBOutlet weak var monthLabel: UILabel!
     
     // MARK: - Overrides
@@ -45,8 +39,6 @@ class IshikawaViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         getUserData()
-        locationTableView.delegate = self
-        locationTableView.dataSource = self
         barChartView.delegate = self
 
         setBarChart()
@@ -55,10 +47,6 @@ class IshikawaViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        locationTableView.reloadData()
-        //collectionView.reloadData()
-
     }
 
     // MARK: - IBActions
@@ -75,7 +63,7 @@ class IshikawaViewController: UIViewController {
     
     // MARK: - Methods
     
-    func getUserData() {
+    private func getUserData() {
         guard let uid = authService.currentUID else { return}
         userUID = uid
         databaseManager.getUserData(with: userUID) { (result) in
@@ -84,35 +72,45 @@ class IshikawaViewController: UIViewController {
                 case .success(let data):
                     self.currentNiko = data
                     self.setLocationTableView()
-                    self.locationTableView.reloadData()
+                    self.reustableTable.reload(items: self.cellTitles, itemsSelected: self.cellTitlesSelected)
                 case .failure(let error):
-                    self.presentFirebaseAlert(typeError: error, message: "Erreur récupération user Data")
+                    self.presentFirebaseAlert(typeError: error, message: error.description)
                 }
             }
         }
     }
     
-    //
-    // Location table View
-    //
-    
-    // Global settings for tableview locationTableView
+    // Create an instance of the GeneriTableview class to display the location table view
+    // On touch inside the right button display the TeamLocationTableViewController to select a location
+    // Retrieve the location enter and update the locationTableView
     private func setLocationTableView() {
+        // Use the by default the data location of the current user
         cellTitlesSelected[0] = currentNiko.plant
         cellTitlesSelected[1] = currentNiko.workshop
         cellTitlesSelected[2] = currentNiko.shift
-        locationTableView.register(LocationTableCell.self, forCellReuseIdentifier: "locationTableCell")
-        locationTableView.translatesAutoresizingMaskIntoConstraints = false
-        locationTableView.rowHeight = 35
-        locationTableView.backgroundColor = .none
-        view.addSubview(locationTableView)
         
+        reustableTable = GenericTableView(frame: view.frame, items: cellTitles, itemsSelected: cellTitlesSelected, permission: currentNiko.permission
+                , config: { (item, itemSelected, cell) in
+                    cell.cellLabelEtablissement.text = item
+                    cell.cellLabelEtablissementSelected.text = itemSelected }
+                , selectHandler: { (item) in       // item = buttonnumber
+                    let vc = TeamLocationTableViewController()
+                    vc.completion = {[weak self] text in    // text contains the location selected
+                        self!.cellTitlesSelected[item] = text ?? ""
+                        LocationEntreprise.locations[item].locationSelected = text ?? ""
+                        // Update the tableview location
+                        self!.reustableTable.reload(items: self!.cellTitles, itemsSelected: self!.cellTitlesSelected)
+                    }
+                    vc.locationRank = item
+                    self.navigationController?.pushViewController(vc, animated: true)
+                })
+        view.addSubview(reustableTable)
         let g = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            locationTableView.leadingAnchor.constraint(equalTo: g.leadingAnchor),
-            locationTableView.trailingAnchor.constraint(equalTo: g.trailingAnchor),
-            locationTableView.topAnchor.constraint(equalTo: g.topAnchor, constant: 0),
-            locationTableView.heightAnchor.constraint(equalToConstant: 100)
+            reustableTable.leadingAnchor.constraint(equalTo: g.leadingAnchor),
+            reustableTable.trailingAnchor.constraint(equalTo: g.trailingAnchor),
+            reustableTable.topAnchor.constraint(equalTo: g.topAnchor, constant: 0),
+            reustableTable.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
     
@@ -139,45 +137,31 @@ class IshikawaViewController: UIViewController {
     }
     
     func setBarChart() {
-        
         let category5M = ["Methode", "Matiere", "Machine", "MO", "Milieu"]
-        
-        //barChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: nikoFirestoreManager.category5M)
-        //chartView.chartDescription.enabled = false
         barChartView.maxVisibleCount = 40
         barChartView.drawBarShadowEnabled = false
         barChartView.drawValueAboveBarEnabled = false
         barChartView.highlightFullBarEnabled = false
+        barChartView.fitBars = true
+        barChartView.legend.enabled = false
+        barChartView.backgroundColor = .systemBlue
+        barChartView.xAxis.gridColor = .clear
+        barChartView.leftAxis.gridColor = .white
+        barChartView.rightAxis.enabled = false
         
         let leftAxis = barChartView.leftAxis
         leftAxis.axisMinimum = 0
         leftAxis.labelTextColor = .white
         leftAxis.gridColor = .white
         
-        barChartView.rightAxis.enabled = false
-        
         let xAxis = barChartView.xAxis
         xAxis.labelPosition = .bottom
         xAxis.labelTextColor = .white
         xAxis.gridColor = .clear
         xAxis.valueFormatter = IndexAxisValueFormatter(values: category5M)
-        
-        barChartView.fitBars = true
-        barChartView.legend.enabled = false
-        
-        barChartView.backgroundColor = .systemBlue
-        
-//        barChartView.xAxis.gridColor = .clear
-//        barChartView.leftAxis.gridColor = .clear
-//        barChartView.rightAxis.gridColor = .clear
-        
-        barChartView.xAxis.gridColor = .clear
-        barChartView.leftAxis.gridColor = .white
-        
     }
     
     func setBarChartData(niKoRecords: [NikoTCD]) {
-
         var val5M = [Double]()
         let recordsMethode = niKoRecords.map({$0.nbMethod})
         let sumRecordsMethode = Double(recordsMethode.reduce(0,+))
@@ -201,7 +185,6 @@ class IshikawaViewController: UIViewController {
             return BarChartDataEntry(x: Double(i), yValues: [val])
         }
 
-        
         let set = BarChartDataSet(entries: yVals, label: "Ishikawa 5M")
         set.drawIconsEnabled = false
         set.colors = [UIColor.green, UIColor.orange, UIColor.blue, UIColor.yellow, UIColor.red]
@@ -218,13 +201,13 @@ class IshikawaViewController: UIViewController {
         data.setValueFormatter(DefaultValueFormatter(formatter: pFormatter))
         
         barChartView.data = data
-        }
+    }
  
     //
     // Bar Chart Cause (horizontal)
     //
+    
     func setHorizontalBarChartView() {
-        
         horizontalBarChartView.legend.enabled = false
         horizontalBarChartView.xAxis.granularityEnabled = true
         horizontalBarChartView.xAxis.granularity = 1
@@ -234,16 +217,12 @@ class IshikawaViewController: UIViewController {
 
         let rightAxis = horizontalBarChartView.rightAxis
         rightAxis.drawGridLinesEnabled = false
-        
         let leftAxis = horizontalBarChartView.leftAxis
         leftAxis.drawGridLinesEnabled = false
-
-        
         let xAxis = horizontalBarChartView.xAxis
         xAxis.drawGridLinesEnabled = false
         
         horizontalBarChartView.setVisibleXRange(minXRange: 6.0, maxXRange: 6.0)
-        
         horizontalBarChartView.setExtraOffsets (left: 30.0, top: 20.0, right:30.0, bottom: 20.0)
     }
     
@@ -253,8 +232,9 @@ class IshikawaViewController: UIViewController {
             switch result {
             case .success(let data):
                 // update display bar Charts
-//                print ("data ishi")
-//                print(data.count)
+print ("data ishi")
+print(data)
+print(data.count)
                 var dataEntries = [ChartDataEntry]()
                 var labels = [String] ()
                 
@@ -279,97 +259,9 @@ class IshikawaViewController: UIViewController {
                     self.horizontalBarChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: labels)
                     }
                 }
-                
-//                for (key, value) in data
-//                {
-//                   // data[key] = value.sorted(by: { $0.pri < $1.pri })
-//                    print("Key: \(key) value: \(value)")
-//                }
-//
-//                var dataEntries = [ChartDataEntry]()
-//                for i in 0..<data.count {
-//                    let entry = BarChartDataEntry(x: Double(i), y: Double(data[i]))
-//                    dataEntries.append(entry)
-//                }
             case .failure(let error):
                 self.presentFirebaseAlert(typeError: error, message: "")
             }
-        }
-    }
-    
-}
-    
-
-//
-// Extension Delegate et DataSource pour la la table locationTableView
-//
-extension IshikawaViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cellTitles.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = locationTableView.dequeueReusableCell(withIdentifier: "locationTableCell", for: indexPath) as? LocationTableCell else { fatalError("Unable to dequeue locationTableCell") }
-        handlePermission(cell: cell, button: cell.button, index: indexPath.row)
-        cell.button.tag = indexPath.row
-        cell.button.addTarget(self, action: #selector(didChangeButton(_:)), for: .touchUpInside)
-        let title = cellTitles[indexPath.row]
-        let titleSlected = cellTitlesSelected[indexPath.row]
-        cell.cellLabelEtablissement.text = title
-        cell.cellLabelEtablissementSelected.text = titleSlected
-        return cell
-    }
-
-    private func handlePermission(cell: UITableViewCell, button: UIButton, index : Int) {
-        switch index {
-        case 0:
-        if currentNiko.permission >= 4  {
-            cell.isUserInteractionEnabled = true
-            button.isHidden = false
-        } else {
-            cell.isUserInteractionEnabled = false
-            button.isHidden = true
-        }
-        case 1:
-        if currentNiko.permission >= 3   {
-            cell.isUserInteractionEnabled = true
-            button.isHidden = false
-        } else {
-            cell.isUserInteractionEnabled = false
-            button.isHidden = false
-            button.isHidden = true
-        }
-        case 2:
-        if currentNiko.permission >= 2   {
-            cell.isUserInteractionEnabled = true
-            button.isHidden = false
-        } else {
-            cell.isUserInteractionEnabled = false
-            button.isHidden = true
-        }
-        default:
-            return
-        }
-    }
-    
-    func tableView(_ TableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.separatorInset = UIEdgeInsets(top: 8, left: 20, bottom: 8, right: 8)
-    }
-    
-    @objc func didChangeButton(_ sender: UIButton) {
-        
-        if sender.isTouchInside {
-            let buttonNumber = sender.tag
-            let vc = TeamLocationTableViewController()
-            vc.completion = {[weak self] text in
-                self!.cellTitlesSelected[buttonNumber] = text ?? ""
-                print("Action suite selection location")
-                self!.setBarMonthView()
-                //self!.setLineYearView()
-            }
-            vc.locationRank = buttonNumber
-            navigationController?.pushViewController(vc, animated: true)
         }
     }
 }

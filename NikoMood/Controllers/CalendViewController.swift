@@ -9,30 +9,25 @@ import UIKit
 import Charts
 
 class CalendViewController: UIViewController {
-
     
     // MARK: - Properties
+    
     private let authService: AuthService = AuthService()
     private let databaseManager: DatabaseManager = DatabaseManager()
-    //let nikoFirestoreManager =  NikoFirestoreManager.shared
     let calendarHelper = CalendarHelper()
     var userUID = String()
-    var locationSelected = String()
-    
+    var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
     //  Properties for locationTableView
-    var locationTableView = UITableView()
+    var reustableTable: GenericTableView!
     var cellTitles = [ "Plant".localized(), "Workshop".localized(), "Shift".localized()]
     var cellTitlesSelected = ["", "", ""]
-    var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
-    var dataTCDMonth = [NikoTCD]()
-    var currentNikoTCD = NikoTCD(rankAverage: -1, nbRecord: 0, nbSuper: 0, nbNTR: 0, nbTought: 0, nbMethod: 0, nbMatiere: 0, nbMachine: 0, nbMaindoeuvre: 0, nbMilieu: 0)
-    
-
-    var personnalCalendarSwitch = true
-    
+    var locationSelected = String()
     //  Properties for calendar
     var selectedDate = Date()
     var totalSquares = [String]()
+    var personnalCalendarSwitch = true
+    var dataTCDMonth = [NikoTCD]()
+    var currentNikoTCD = NikoTCD(rankAverage: -1, nbRecord: 0, nbSuper: 0, nbNTR: 0, nbTought: 0, nbMethod: 0, nbMatiere: 0, nbMachine: 0, nbMaindoeuvre: 0, nbMilieu: 0)
     
     // MARK: - IBOutlets
     
@@ -47,24 +42,15 @@ class CalendViewController: UIViewController {
         view.backgroundColor = .white
         dataTCDMonth = Array(repeating: currentNikoTCD, count: 31)
         getUserData()
-        
-        locationTableView.delegate = self
-        locationTableView.dataSource = self
-//        setLocationTableView()
-//        locationTableView.reloadData()
-        
         collectionView.delegate = self
         pieChartView.isHidden = true
-
-        setCellsView()
+        setCellsViewCalendar()
         setMonthView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        locationTableView.reloadData()
-        //collectionView.reloadData()
-
+        // Update the calendar view
+        setMonthView()
     }
     
     // MARK: - IBActions
@@ -73,7 +59,6 @@ class CalendViewController: UIViewController {
         selectedDate = calendarHelper.minusMonth(date: selectedDate)
         setMonthView()
     }
-    
     
     @IBAction func nextMonth(_ sender: UIButton) {
         selectedDate = calendarHelper.plusMonth(date: selectedDate)
@@ -85,17 +70,14 @@ class CalendViewController: UIViewController {
             personnalCalendarSwitch = true
             pieChartView.isHidden = true
             setMonthView()
-            //locationTableView.reloadData()
         } else {
             personnalCalendarSwitch = false
             pieChartView.isHidden = false
             setMonthView()
-            //locationTableView.reloadData()
         }
     }
 
     // MARK: - Methods
-    
     
     func getUserData() {
         guard let uid = authService.currentUID else { return}
@@ -105,43 +87,51 @@ class CalendViewController: UIViewController {
                 switch result {
                 case .success(let data):
                     self.currentNiko = data
-print("print user Data dans calend view")
-print(data)
                     self.setLocationTableView()
-                    self.locationTableView.reloadData()
+                    self.reustableTable.reload(items: self.cellTitles, itemsSelected: self.cellTitlesSelected)
                 case .failure(let error):
-                    self.presentFirebaseAlert(typeError: error, message: "Error retrieving user Data")
+                    self.presentFirebaseAlert(typeError: error, message: error.description)
                 }
             }
         }
     }
     
     // Global settings for tableview locationTableView
+    // Create an instance of the GeneriTableview class to display the location table view
+    // On touch inside the right button display the TeamLocationTableViewController to select a location
+    // Retrieve the location enter and update the locationTableView
     private func setLocationTableView() {
-        LocationEntreprise.locations[0].locationSelected = currentNiko.plant
-        LocationEntreprise.locations[1].locationSelected = currentNiko.plant
-        LocationEntreprise.locations[2].locationSelected = currentNiko.plant
+        // Use the by default the data location of the current user
         cellTitlesSelected[0] = currentNiko.plant
         cellTitlesSelected[1] = currentNiko.workshop
         cellTitlesSelected[2] = currentNiko.shift
         
-        print(cellTitlesSelected)
-        
-        locationTableView.register(LocationTableCell.self, forCellReuseIdentifier: "locationTableCell")
-        locationTableView.translatesAutoresizingMaskIntoConstraints = false
-        locationTableView.rowHeight = 35
-        locationTableView.backgroundColor = .none
-        view.addSubview(locationTableView)
+        reustableTable = GenericTableView(frame: view.frame, items: cellTitles, itemsSelected: cellTitlesSelected, permission: currentNiko.permission
+                , config: { (item, itemSelected, cell) in
+                    cell.cellLabelEtablissement.text = item
+                    cell.cellLabelEtablissementSelected.text = itemSelected }
+                , selectHandler: { (item) in       // item = buttonnumber
+                    let vc = TeamLocationTableViewController()
+                    vc.completion = {[weak self] text in    // text contains the location selected
+                        self!.cellTitlesSelected[item] = text ?? ""
+                        LocationEntreprise.locations[item].locationSelected = text ?? ""
+                        // Update the tableview location
+                        self!.reustableTable.reload(items: self!.cellTitles, itemsSelected: self!.cellTitlesSelected)
+                    }
+                    vc.locationRank = item
+                    self.navigationController?.pushViewController(vc, animated: true)
+                })
+        view.addSubview(reustableTable)
         let g = view.safeAreaLayoutGuide
         NSLayoutConstraint.activate([
-            locationTableView.leadingAnchor.constraint(equalTo: g.leadingAnchor),
-            locationTableView.trailingAnchor.constraint(equalTo: g.trailingAnchor),
-            locationTableView.topAnchor.constraint(equalTo: g.topAnchor, constant: 36),
-            locationTableView.heightAnchor.constraint(equalToConstant: 100)
+            reustableTable.leadingAnchor.constraint(equalTo: g.leadingAnchor),
+            reustableTable.trailingAnchor.constraint(equalTo: g.trailingAnchor),
+            reustableTable.topAnchor.constraint(equalTo: g.topAnchor, constant: 36),
+            reustableTable.heightAnchor.constraint(equalToConstant: 100)
         ])
     }
     
-    private func setCellsView() {
+    private func setCellsViewCalendar() {
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         flowLayout.sectionInset.left = 0
         flowLayout.sectionInset.right = 0
@@ -191,6 +181,31 @@ print(data)
             }
         }
     }
+    
+    private func setPieChart(dataPoints: [String], values: [Double]) {
+        var dataEntries: [ChartDataEntry] = []
+        for i in 0..<dataPoints.count {
+            let dataEntry1 = ChartDataEntry(x: Double(i), y: values[i], data: dataPoints[i] as AnyObject)
+            dataEntries.append(dataEntry1)
+        }
+        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: "")
+        let c1 = UIColor.green
+        let c2 = UIColor.yellow
+        let c3 = UIColor.red
+
+        pieChartDataSet.colors = [c1, c2, c3,]
+        pieChartDataSet.valueTextColor = .black
+
+        let pieChartData = PieChartData(dataSet: pieChartDataSet)
+        let pFormatter = NumberFormatter()
+        pFormatter.maximumFractionDigits = 0
+        pFormatter.zeroSymbol = ""          // don't display label if data = 0
+        pieChartData.setValueFormatter(DefaultValueFormatter(formatter: pFormatter))
+        pieChartView.legend.enabled = false
+        pieChartView.animate(yAxisDuration: 1)
+        pieChartView.centerText = "Status"
+        pieChartView.data = pieChartData
+    }
 
     private func displayPieChart(index : Int) {
         if totalSquares[index] != "" {
@@ -207,112 +222,6 @@ print(data)
         }
     }
 
-    private func setPieChart(dataPoints: [String], values: [Double]) {
-        var dataEntries: [ChartDataEntry] = []
-        for i in 0..<dataPoints.count {
-            let dataEntry1 = ChartDataEntry(x: Double(i), y: values[i], data: dataPoints[i] as AnyObject)
-            dataEntries.append(dataEntry1)
-        }
-
-        //print(dataEntries[0].data)
-        let pieChartDataSet = PieChartDataSet(entries: dataEntries, label: "")
-        let c1 = UIColor.green
-        let c2 = UIColor.yellow
-        let c3 = UIColor.red
-
-        pieChartDataSet.colors = [c1, c2, c3,]
-        pieChartDataSet.valueTextColor = .black
-
-        let pieChartData = PieChartData(dataSet: pieChartDataSet)
-
-        let pFormatter = NumberFormatter()
-        //pFormatter.numberStyle = .percent
-        pFormatter.maximumFractionDigits = 0
-        pFormatter.zeroSymbol = ""          // don't display label if data = 0
-        //pFormatter.multiplier = 1
-        //pFormatter.percentSymbol = " %"
-        pieChartData.setValueFormatter(DefaultValueFormatter(formatter: pFormatter))
-        
-        pieChartView.legend.enabled = false
-        //pieChartView.spin(duration: 1, fromAngle: 0, toAngle: 20, easingOption: .easeOutCirc)
-        pieChartView.animate(yAxisDuration: 1)
-        pieChartView.centerText = "Niko Status"
-        pieChartView.data = pieChartData
-    }
-
-}
-
-//
-// Extension Delegate et DataSource pour la la table locationTableView
-//
-extension CalendViewController: UITableViewDelegate, UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return cellTitles.count
-    }
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = locationTableView.dequeueReusableCell(withIdentifier: "locationTableCell", for: indexPath) as? LocationTableCell else { fatalError("Unable to dequeue locationTableCell") }
-        handlePermission(cell: cell, button: cell.button, index: indexPath.row)
-        cell.button.tag = indexPath.row
-        cell.button.addTarget(self, action: #selector(didChangeButton(_:)), for: .touchUpInside)
-        let title = cellTitles[indexPath.row]
-        let titleSlected = cellTitlesSelected[indexPath.row]
-        cell.cellLabelEtablissement.text = title
-        cell.cellLabelEtablissementSelected.text = titleSlected
-        return cell
-    }
-
-    private func handlePermission(cell: UITableViewCell, button: UIButton, index : Int) {
-        switch index {
-        case 0:
-        if currentNiko.permission >= 4  {
-            cell.isUserInteractionEnabled = true
-            button.isHidden = false
-        } else {
-            cell.isUserInteractionEnabled = false
-            button.isHidden = true
-        }
-        case 1:
-        if currentNiko.permission >= 3   {
-            cell.isUserInteractionEnabled = true
-            button.isHidden = false
-        } else {
-            cell.isUserInteractionEnabled = false
-            button.isHidden = false
-            button.isHidden = true
-        }
-        case 2:
-        if currentNiko.permission >= 2   {
-            cell.isUserInteractionEnabled = true
-            button.isHidden = false
-        } else {
-            cell.isUserInteractionEnabled = false
-            button.isHidden = true
-        }
-        default:
-            return
-        }
-    }
-    
-    func tableView(_ TableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        cell.separatorInset = UIEdgeInsets(top: 8, left: 20, bottom: 8, right: 8)
-    }
-    
-    @objc func didChangeButton(_ sender: UIButton) {
-        
-        if sender.isTouchInside {
-            let buttonNumber = sender.tag
-            let vc = TeamLocationTableViewController()
-            vc.completion = {[weak self] text in
-                self!.cellTitlesSelected[buttonNumber] = text ?? ""
-                LocationEntreprise.locations[buttonNumber].locationSelected = text ?? ""
-                self!.setMonthView()
-            }
-            vc.locationRank = buttonNumber
-            navigationController?.pushViewController(vc, animated: true)
-        }
-    }
 }
 
 //
@@ -331,7 +240,6 @@ extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSo
         if totalSquares[indexPath.item] != "" {
             let jour = Int(totalSquares[indexPath.item])
             let nikoRank = dataTCDMonth[jour! - 1].rankAverage
-//print ("jour : \(jour!)  nikoRank : \(nikoRank)")
             switch nikoRank {
             case 0, 1:
                 cell.backgroundColor = .red
@@ -346,12 +254,10 @@ extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSo
             default:
                 cell.backgroundColor = .none
             }
-        
         } else {
             cell.backgroundColor = .none
         }
         cell.layer.cornerRadius = cell.bounds.size.width / 2
-        
         return cell
     }
     
@@ -366,7 +272,6 @@ extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) {
-            //cell.contentView.backgroundColor = #colorLiteral(red: 1, green: 0.4932718873, blue: 0.4739984274, alpha: 1)
             cell.contentView.layer.borderWidth = 2
             cell.contentView.layer.borderColor = UIColor.blue.cgColor
         }

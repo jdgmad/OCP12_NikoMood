@@ -36,20 +36,6 @@ class LoginViewController: UIViewController {
             switch isConnected {
             case true:
                 self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
-//                self.databaseManager.getUserData(with: self.authService.currentUID!) { (result) in
-//                    DispatchQueue.main.async {
-//                        print("dans dispatch get user data de signin view")
-//                        switch result {
-//                        case .success(let data):
-//                            self.currentNiko = data
-//                            print("currentNiko userID: \(self.currentNiko.userID)")
-//                            self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
-//
-//                        case .failure(let error):
-//                            self.presentFirebaseAlert(typeError: error, message: "")
-//                        }
-//                    }
-//                }
             case false:
                 print("No user selected in Login view")
             }
@@ -62,33 +48,24 @@ class LoginViewController: UIViewController {
     // MARK: - IBActions
     
     @IBAction func loginButtonTapped(_ sender: UIButton) {
-        
-        // Create cleaned versions of the text field
-        let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        let password = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        
-        // Signing in the user
-        authService.signIn(email: email, password: password) { isSuccess in
-            DispatchQueue.main.async {
-                switch isSuccess {
-                case true:
-                    self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
-//            case .success(let authResult):
-//                let userID = authResult.user.uid
-//                self.databaseManager.getUserData(with: userID) { (result) in
-//                    DispatchQueue.main.async {
-//                        switch result {
-//                        case .success(let data):
-//                            self.currentNiko = data
-//                            self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
-//                        case .failure(let error):
-//                            self.presentFirebaseAlert(typeError: error, message: "")
-//                        }
-//                    }
-//                }
-
-                case false:
-                    self.presentFirebaseAlert(typeError: .errSignin, message: self.currentNiko.error!)
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+        guard let password = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+        // Validate the fields
+        let error = validateFields()
+        if error != nil {
+            // There's something wrong wirh the fields, show error message
+            showError(error!)
+        }
+        else {
+            // Signing in the user
+            authService.signIn(email: email, password: password) { isSuccess in
+                DispatchQueue.main.async {
+                    switch isSuccess {
+                    case true:
+                        self.performSegue(withIdentifier: self.segueToTabbarFromLogin, sender: self)
+                    case false:
+                        self.presentFirebaseAlert(typeError: .errSignin, message: self.currentNiko.error!)
+                    }
                 }
             }
         }
@@ -96,11 +73,35 @@ class LoginViewController: UIViewController {
     
     // MARK: - Methods
     
+    // Check the fields and validate that the data is correct. If everything is correct, this method returns nil. Otherwise, it returns the error message
+    private func validateFields() -> String? {
+
+        // Check that all fields are filled in
+        guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in email text".localized()}
+        guard let cleanedPassword = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in second password text".localized()}
+        if email == "" || cleanedPassword == "" {
+            return "Please fill in all the fields".localized()
+        }
+        // Check if the password is secure
+        if Utilities.isPasswordValid(cleanedPassword) == false {
+            return "Please make sure your password is at least 8 characters, contains a special character and a number".localized()
+        }
+        if Utilities.isValidEmail(email: email) == false {
+            return "Your email do not respect the email format".localized()
+        }
+        return nil
+    }
+    
     private func setUpElements() {
         errorLabel.alpha = 0
         Utilities.styleTextField(emailTextField)
         Utilities.styleTextField(passwordTextField)
         Utilities.styleFilledButton(loginButton)
+    }
+    
+    private func showError(_ message:String) {
+        errorLabel.text = message
+        errorLabel.alpha = 1
     }
 }
 

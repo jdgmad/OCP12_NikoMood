@@ -78,7 +78,7 @@ final class DatabaseManager {
             "nikoComment": record.nikoComment,
             "permission": record.permission,
             "date": record.date,
-            "formattedMonthString": calendarHelper.monthString(date: date),
+            "formattedMonthString": calendarHelper.month2Digits(date: date),
             "formattedDateString": calendarHelper.dateString(date: date),
             "formattedYearString": calendarHelper.yearString(date: date),
             "error": error
@@ -231,9 +231,9 @@ print("NB records dans calcMonth : \(records.count)")
               
         (0...nbMonth - 1).forEach { n in
             let date = calendar.date(byAdding: .month, value: n, to: firstDayOfYear)!
-            let monthString = calendarHelper.monthString(date: date)
+            let month2D = calendarHelper.month2Digits(date: date)
             
-            let recordsDate = records.filter ({$0.formattedMonthString == monthString})
+            let recordsDate = records.filter ({$0.formattedMonthString == month2D})
             currentNikoTCD.nbRecord = recordsDate.count
             let recordsRank = recordsDate.map({return $0.nikoRank})
             let ranksCount = recordsRank.count
@@ -247,15 +247,15 @@ print("NB records dans calcMonth : \(records.count)")
             currentNikoTCD.nbNTR = recordsNTR.count
             let recordsTought = recordsDate.filter({$0.nikoStatus == "Tought"})
             currentNikoTCD.nbTought = recordsTought.count
-            let recordsMethode = recordsDate.filter({$0.nikoCause == "Methode"})
+            let recordsMethode = recordsDate.filter({$0.nikoCause == "methode"})
             currentNikoTCD.nbMethod = recordsMethode.count
-            let recordsMatiere = recordsDate.filter({$0.nikoCause == "Matiere"})
+            let recordsMatiere = recordsDate.filter({$0.nikoCause == "matiere"})
             currentNikoTCD.nbMatiere = recordsMatiere.count
-            let recordsMachine = recordsDate.filter({$0.nikoCause == "Machine"})
+            let recordsMachine = recordsDate.filter({$0.nikoCause == "machine"})
             currentNikoTCD.nbMachine = recordsMachine.count
-            let recordsMaindoeuvre = recordsDate.filter({$0.nikoCause == "Maindoeuvre"})
+            let recordsMaindoeuvre = recordsDate.filter({$0.nikoCause == "maindoeuvre"})
             currentNikoTCD.nbMaindoeuvre = recordsMaindoeuvre.count
-            let recordsMilieu = recordsDate.filter({$0.nikoCause == "Milieu"})
+            let recordsMilieu = recordsDate.filter({$0.nikoCause == "milieu"})
             currentNikoTCD.nbMilieu = recordsMilieu.count
         
 //print(" \(monthString) \(n)  nbRecord = \(currentNikoTCD.nbRecord) rank = \(currentNikoTCD.rankAverage) nbSuper = \(currentNikoTCD.nbSuper)  nbNTR = \(currentNikoTCD.nbNTR)  nbTought : \(currentNikoTCD.nbTought)")

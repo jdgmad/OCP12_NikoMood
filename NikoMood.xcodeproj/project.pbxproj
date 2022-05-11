@@ -25,7 +25,6 @@
 		65462AA227E618AB005C780E /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65462AA127E618AB005C780E /* Constants.swift */; };
 		65502D132825C82B00386163 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65502D122825C82B00386163 /* String.swift */; };
 		65502D172825CAE400386163 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 65502D192825CAE400386163 /* Localizable.strings */; };
-		6555E4C027FDD58B0036C64A /* Snipet in Resources */ = {isa = PBXBuildFile; fileRef = 6555E4BF27FDD58B0036C64A /* Snipet */; };
 		655AD4712816CCC80053F2BA /* AuthFirebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4702816CCC80053F2BA /* AuthFirebase.swift */; };
 		655AD4732816CD390053F2BA /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4722816CD390053F2BA /* AuthService.swift */; };
 		655AD4772816D7EE0053F2BA /* FirebaseDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 655AD4762816D7EE0053F2BA /* FirebaseDatabase.swift */; };
@@ -41,6 +40,7 @@
 		65AF5428280F4A57003C222A /* IshikawaViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65AF5427280F4A57003C222A /* IshikawaViewController.swift */; };
 		65D3F12C27F4B0CB00D0355C /* FirestoreError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D3F12B27F4B0CB00D0355C /* FirestoreError.swift */; };
 		65D3F13427F5CE2D00D0355C /* CalendViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65D3F13327F5CE2D00D0355C /* CalendViewController.swift */; };
+		65EC619D282ADAD5004C509F /* GenericTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65EC619C282ADAD5004C509F /* GenericTableView.swift */; };
 		65F5B746280CC040003A9968 /* NikoSuiviViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65F5B745280CC040003A9968 /* NikoSuiviViewController.swift */; };
 		FC956A3E822ED87C96C80078 /* Pods_NikoMood.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 65924F9B32266F7CDDC68A4F /* Pods_NikoMood.framework */; };
 /* End PBXBuildFile section */
@@ -80,7 +80,6 @@
 		65502D182825CAE400386163 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		65502D1B2825CFDC00386163 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
 		65502D1E2825D00F00386163 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
-		6555E4BF27FDD58B0036C64A /* Snipet */ = {isa = PBXFileReference; lastKnownFileType = text; path = Snipet; sourceTree = "<group>"; };
 		655AD4702816CCC80053F2BA /* AuthFirebase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthFirebase.swift; sourceTree = "<group>"; };
 		655AD4722816CD390053F2BA /* AuthService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		655AD4762816D7EE0053F2BA /* FirebaseDatabase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FirebaseDatabase.swift; sourceTree = "<group>"; };
@@ -98,6 +97,7 @@
 		65AF5427280F4A57003C222A /* IshikawaViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IshikawaViewController.swift; sourceTree = "<group>"; };
 		65D3F12B27F4B0CB00D0355C /* FirestoreError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreError.swift; sourceTree = "<group>"; };
 		65D3F13327F5CE2D00D0355C /* CalendViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendViewController.swift; sourceTree = "<group>"; };
+		65EC619C282ADAD5004C509F /* GenericTableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenericTableView.swift; sourceTree = "<group>"; };
 		65F5B745280CC040003A9968 /* NikoSuiviViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NikoSuiviViewController.swift; sourceTree = "<group>"; };
 		6FB0920377F7C20C5BE299C4 /* Pods-NikoMood.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NikoMood.debug.xcconfig"; path = "Target Support Files/Pods-NikoMood/Pods-NikoMood.debug.xcconfig"; sourceTree = "<group>"; };
 		A897EF6B93E9ADE363CC83D4 /* Pods-NikoMood.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NikoMood.release.xcconfig"; path = "Target Support Files/Pods-NikoMood/Pods-NikoMood.release.xcconfig"; sourceTree = "<group>"; };
@@ -170,6 +170,7 @@
 				652307CA27EC92F40069EB12 /* NikorecordViewController.swift */,
 				6538BA7F27F08E9000C1B8EF /* 5MCauseTableViewController.swift */,
 				65D3F13327F5CE2D00D0355C /* CalendViewController.swift */,
+				65EC619C282ADAD5004C509F /* GenericTableView.swift */,
 				656386BE27F72B6A00539713 /* CalendarCell.swift */,
 				656386C027F9D25500539713 /* LocationTableCell.swift */,
 				6563870027FCED7A00539713 /* TeamLocationTableViewController.swift */,
@@ -184,7 +185,6 @@
 			children = (
 				652CB7E027E4BDD6003C9AFB /* Utilities.swift */,
 				65462AA127E618AB005C780E /* Constants.swift */,
-				6555E4BF27FDD58B0036C64A /* Snipet */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -353,7 +353,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6555E4C027FDD58B0036C64A /* Snipet in Resources */,
 				65502D172825CAE400386163 /* Localizable.strings in Resources */,
 				652CB7B327E36833003C9AFB /* LaunchScreen.storyboard in Resources */,
 				652CB7D727E36A84003C9AFB /* GoogleService-Info.plist in Resources */,
@@ -447,6 +446,7 @@
 				6563870127FCED7A00539713 /* TeamLocationTableViewController.swift in Sources */,
 				6538BA8027F08E9000C1B8EF /* 5MCauseTableViewController.swift in Sources */,
 				65D3F13427F5CE2D00D0355C /* CalendViewController.swift in Sources */,
+				65EC619D282ADAD5004C509F /* GenericTableView.swift in Sources */,
 				652CB7AB27E36831003C9AFB /* ViewController.swift in Sources */,
 				65F5B746280CC040003A9968 /* NikoSuiviViewController.swift in Sources */,
 				65AF5428280F4A57003C222A /* IshikawaViewController.swift in Sources */,

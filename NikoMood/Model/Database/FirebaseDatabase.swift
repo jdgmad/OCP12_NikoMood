@@ -10,8 +10,6 @@ import Foundation
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 
-
-
 protocol DatabaseType {
     func getUserData(with uid: String, callback: @escaping (Result<NikoUser, FirebaseError>) -> Void)
     func addRecord(docData : [String: Any], callback: @escaping (Bool) -> Void)
@@ -21,7 +19,7 @@ protocol DatabaseType {
 
 final class FirebaseDatabase: DatabaseType {
 
-    // MARK: - Read Queries
+    // MARK: - Methods
 
     func getUserData(with uid: String, callback: @escaping (Result<NikoUser, FirebaseError>) -> Void) {
         
@@ -62,9 +60,9 @@ final class FirebaseDatabase: DatabaseType {
     }
     
     func checkIfRecordExist (uid: String, dateString: String, callback: @escaping (Bool) -> Void) {
-        print("checkIfRecorsExist")
-        print("uid: \(uid)")
-        print("date: \(dateString)")
+//        print("checkIfRecorsExist")
+//        print("uid: \(uid)")
+//        print("date: \(dateString)")
         let db = Firestore.firestore()
         let usersRef = db.collection("NikoRecord")
         usersRef.whereField("userID", isEqualTo: uid)
@@ -96,12 +94,12 @@ final class FirebaseDatabase: DatabaseType {
         var q: Query?
         var records = [NikoRecord]()
         let calendarHelper = CalendarHelper()
-        let month = calendarHelper.monthString(date: selectedDate)
+        let month2D = calendarHelper.month2Digits(date: selectedDate)
         let year = calendarHelper.yearString(date: selectedDate)
         let db = Firestore.firestore()
         let usersRef = db.collection("NikoRecord")
         if monthVsYear {
-            q = usersRef.whereField("formattedMonthString", isEqualTo: month)
+            q = usersRef.whereField("formattedMonthString", isEqualTo: month2D)
         } else {
             q = usersRef.whereField("formattedYearString", isEqualTo: year)
         }
@@ -110,7 +108,7 @@ final class FirebaseDatabase: DatabaseType {
         } else {
             for (index, val) in location.enumerated() {
                 if location[index] != "" {
-print("location name : \(LocationEntreprise.locations[index].locationName!) val: \(val)")
+//print("location name : \(LocationEntreprise.locations[index].locationName!) val: \(val)")
                     q = q?.whereField(LocationEntreprise.locations[index].locationName!, isEqualTo: val)
                 }
             }

@@ -15,7 +15,7 @@ class LocationTableCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: "locationTableCell")
-
+        
         cellLabelEtablissement.translatesAutoresizingMaskIntoConstraints = false
         cellLabelEtablissement.font = UIFont.systemFont(ofSize: 16)
         contentView.addSubview(cellLabelEtablissement)
@@ -25,7 +25,6 @@ class LocationTableCell: UITableViewCell {
         cellLabelEtablissementSelected.font = UIFont.systemFont(ofSize: 14)
         contentView.addSubview(cellLabelEtablissementSelected)
         
-
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular, scale: .large)
         let symbolImage = UIImage(systemName: "chevron.right",
                                   withConfiguration: symbolConfig)

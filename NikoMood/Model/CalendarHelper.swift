@@ -41,6 +41,13 @@ class CalendarHelper
 		return dateFormatter.string(from: date)
 	}
     
+    func month2Digits(date: Date) -> String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM"
+        return dateFormatter.string(from: date)
+    }
+    
     func dateString(date: Date) -> String
     {
         let dateFormatter = DateFormatter()

@@ -9,7 +9,7 @@ import Foundation
 
 
 enum FirebaseError: Error {
-    case errSignin, errSignup, errSignout, noUserConnected, noDocUser, errGettingDoc, errWritingData
+    case errSignin, errSignup, errSignout, noUserConnected, noDocUser, errGettingDoc, errWritingData, errEmailNotEnable
 }
 
 extension FirebaseError: CustomStringConvertible {
@@ -22,6 +22,7 @@ extension FirebaseError: CustomStringConvertible {
         case .noDocUser: return "No user document".localized()
         case .errGettingDoc: return "Error access to document".localized()
         case .errWritingData: return "Error writing data".localized()
+        case .errEmailNotEnable: return "Email not enable".localized()
         }
     }
 }

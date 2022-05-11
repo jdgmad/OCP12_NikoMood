@@ -279,6 +279,10 @@ print("Niko record has been stored")
         toughtUIButton.isSelected = false
         causeTextField.text = ""
         commentUITextField.text = ""
+        currentNiko.niko5M = ""
+        currentNiko.nikoCause = ""
+        currentNiko.nikoComment = ""
+        
     }
     
     private func raz5MButton () {

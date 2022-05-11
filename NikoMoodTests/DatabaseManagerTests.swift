@@ -61,13 +61,6 @@ class DatabaseManagerTests: XCTestCase {
         }
     }
 
-
-//
-//    enum TestError: Error {
-//        case invalidUID
-//    }
-
-    
         
     // MARK: - Tests
 

@@ -13,13 +13,12 @@ protocol AuthType {
     var currentUID: String? { get }
     var currentEmail: String? { get }
     func signIn(email: String, password: String, callback: @escaping (Bool) -> Void)
-    func signUp(email: String, password: String, callback: @escaping (Bool) -> Void)
+    func signUp(email: String, password: String, callback: @escaping (Result<Bool, FirebaseError>) -> Void)
     func signOut(callback: @escaping (Bool) -> Void)
     func isUserConnected(callback: @escaping (Bool) -> Void)
 }
 
 final class AuthFirebase: AuthType {
-    
     
     // MARK: - Properties
 
@@ -43,21 +42,20 @@ final class AuthFirebase: AuthType {
         }
     }
 
-    func signUp(email: String, password: String, callback: @escaping (Bool) -> Void) {
+    func signUp(email: String, password: String, callback: @escaping (Result<Bool, FirebaseError>) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { authDataResult, error in
             guard let authDataResult = authDataResult, error == nil else {
-                callback(false)
+                callback(.failure(.errSignup))
                 return
             }
             let  authUserID =  authDataResult.user.uid
-            
             let db = Firestore.firestore()
             let usersRef = db.collection("users")
             usersRef.whereField("email", isEqualTo: email)
                     .getDocuments() { (querySnapshot, err) in
                         if let err = err {
                             print("Error getting documents: \(err)")
-                            callback(false)
+                            callback(.failure(.errSignup))
                             return
                         } else {
                             // Check if the email is in the company list
@@ -70,18 +68,18 @@ final class AuthFirebase: AuthType {
                                         if let err = err {
                                             print ("Erreur update \(err)")
                                             //self.showError("Error updating document: \(err)")
-                                            callback(false)
+                                            callback(.failure(.errWritingData))
                                             return
                                         } else {
                                             //print("Document successfully updated")
-                                            callback(true)
+                                            callback(.success(true))
                                             return
                                         }
                                     }
                                 }
                             } else {
                                 //self.showError("Vous n'êtes pas identifié dans la liste des salariés")
-                                callback(false)
+                                callback(.failure(.errEmailNotEnable))
                                 return
                             }
                         }

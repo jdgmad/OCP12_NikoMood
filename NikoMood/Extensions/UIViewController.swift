@@ -26,23 +26,20 @@ extension UIViewController {
         switch typeError {
         case .errSignin:
             title = "Signin error"
-            //message = message
         case .errSignup:
             title = "Signup error"
         case .errSignout:
             title = "Erreur Signout"
-            //message = "Signup error"
         case .noUserConnected:
             title = "no user connected"
-            //message = "no user connected"
         case .noDocUser:
             title = "no document user"
-            //message = "no document user"
         case .errGettingDoc:
-            title = "Accès document Firestore"
+            title = "Access to document Firestore"
         case .errWritingData:
-            title = "Erreur enregistrement de données"
-            //message = "Erreur accès document"
+            title = "Firestore data"
+        case .errEmailNotEnable:
+            title = "Signup error"
         }
         
         

@@ -6,15 +6,11 @@
 //
 
 import UIKit
-//import FirebaseAuth
-//import Firebase
-//import FirebaseFirestore
 
 class SignUpViewController: UIViewController {
     
     // MARK: - Properties
     
-    //let nikoFirestoreManager = NikoFirestoreManager.shared
     private let authService: AuthService = AuthService()
     private let databaseManager: DatabaseManager = DatabaseManager()
     private let segueToTabbarFromSignup = "segueToTabbarFromSignup"
@@ -90,21 +86,25 @@ class SignUpViewController: UIViewController {
         //var userDocumentID = String()
         guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
         guard let password = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
-        // Check if the email is in the company list
-        
-        
-
         // Create the user
-        authService.signUp(email: email, password: password) { isSuccess in
-            self.databaseManager.getUserData(with: self.authService.currentUID!) { (result) in
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let data):
-                        self.currentNiko = data
-                        self.performSegue(withIdentifier: self.segueToTabbarFromSignup, sender: self)
-                    case .failure(let error):
-                        self.presentFirebaseAlert(typeError: error, message: "")
+        authService.signUp(email: email, password: password) { (resultSignup) in
+            DispatchQueue.main.async {
+                switch resultSignup {
+                case .success(_):
+                    self.databaseManager.getUserData(with: self.authService.currentUID!) { (result) in
+                        DispatchQueue.main.async {
+                            switch result {
+                            case .success(let data):
+                                self.currentNiko = data
+                                self.performSegue(withIdentifier: self.segueToTabbarFromSignup, sender: self)
+                            case .failure(let error):
+                                self.presentFirebaseAlert(typeError: error, message:error.description)
+                            }
+                        }
                     }
+                case .failure(let error):
+                    // Error in signup
+                    self.presentFirebaseAlert(typeError: error, message: error.description)
                 }
             }
         }

@@ -128,7 +128,6 @@ extension TeamLocationTableViewController : UITableViewDelegate, UITableViewData
         cell.accessoryType = .checkmark
         completion?(cellTitles[indexPath.row])
         navigationController?.popViewController(animated: true)
-//        dismiss(animated: true, completion: nil)
     }
 }
 
@@ -141,7 +140,6 @@ class TeamTableCell: UITableViewCell {
         cellLabel.translatesAutoresizingMaskIntoConstraints = false
         cellLabel.font = UIFont.systemFont(ofSize: 16)
         contentView.addSubview(cellLabel)
-
         NSLayoutConstraint.activate([
             cellLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             cellLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20)
