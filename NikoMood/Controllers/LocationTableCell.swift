@@ -19,7 +19,6 @@ class LocationTableCell: UITableViewCell {
         cellLabelEtablissement.translatesAutoresizingMaskIntoConstraints = false
         cellLabelEtablissement.font = UIFont.systemFont(ofSize: 16)
         contentView.addSubview(cellLabelEtablissement)
-        
         cellLabelEtablissementSelected.translatesAutoresizingMaskIntoConstraints = false
         cellLabelEtablissementSelected.textColor = .darkGray
         cellLabelEtablissementSelected.font = UIFont.systemFont(ofSize: 14)

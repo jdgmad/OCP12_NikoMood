@@ -6,31 +6,24 @@
 //
 
 import UIKit
-//import FirebaseAuth
-//import Firebase
 
 class NikoRecordViewController: UIViewController {
-
+    
     // MARK: - Properties
     private let authService: AuthService = AuthService()
     private let databaseManager: DatabaseManager = DatabaseManager()
-    //let nikoFirestoreManager =  NikoFirestoreManager.shared
     var currentNiko = NikoRecord(userID: "user", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
-    //var userUID = String()
-
-
+    
     // MARK: - Outlets
     
     @IBOutlet weak var superUIButton: UIButton!
     @IBOutlet weak var ntrUIButton: UIButton!
     @IBOutlet weak var toughtUIButton: UIButton!
-    
     @IBOutlet weak var methodeUIButton: UIButton!
     @IBOutlet weak var matiereUIButton: UIButton!
     @IBOutlet weak var machineUIButton: UIButton!
     @IBOutlet weak var maindoeuvreUIButton: UIButton!
     @IBOutlet weak var milieuUIButton: UIButton!
-    
     @IBOutlet weak var stackView2M: UIStackView!
     @IBOutlet weak var stackView3M: UIStackView!
     @IBOutlet weak var ishikawaUIImage: UIImageView!
@@ -48,7 +41,6 @@ class NikoRecordViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
         let  useremail = authService.currentEmail
         yourEmail.text = useremail
@@ -189,15 +181,14 @@ class NikoRecordViewController: UIViewController {
                 case true:
                     self.presentFirebaseAlert(typeError: .errWritingData, message: "This date has already a record")
                 case false:
-print("date disponible <<<<<<<<<<<<<<<<<<<")
                     // Store the record in Firestore
                     self.databaseManager.storeNikoRecord(record: self.currentNiko) { (result) in
                         DispatchQueue.main.async {
                             switch result {
                             case true:
-print("Niko record has been stored")
+                                print("Niko record has been stored")
                             case false:
-                                    self.presentFirebaseAlert(typeError: .errWritingData, message: "Error recording data")
+                                self.presentFirebaseAlert(typeError: .errWritingData, message: "Error recording data")
                             }
                         }
                     }
@@ -299,7 +290,6 @@ print("Niko record has been stored")
         causeTextField.text = ""
         commentUITextField.text = ""
     }
-
 }
 
 

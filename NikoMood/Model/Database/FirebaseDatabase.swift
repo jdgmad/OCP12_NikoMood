@@ -18,11 +18,11 @@ protocol DatabaseType {
 }
 
 final class FirebaseDatabase: DatabaseType {
-
+    
     // MARK: - Methods
-
+    
+    // Retrieve the user data and decode according to NikoUser
     func getUserData(with uid: String, callback: @escaping (Result<NikoUser, FirebaseError>) -> Void) {
-        
         let db = Firestore.firestore()
         let usersRef = db.collection("users")
         usersRef.whereField("userID", isEqualTo: uid)
@@ -42,9 +42,12 @@ final class FirebaseDatabase: DatabaseType {
                     callback(.failure(.errGettingDoc))
                     return
                 }
-        }
+            }
     }
     
+    /// Add a record and return a status BOOL type within a closure.
+    /// - Parameters:
+    ///   - docData: records to save
     func addRecord(docData : [String: Any], callback: @escaping (Bool) -> Void) {
         let db = Firestore.firestore()
         var ref: DocumentReference? = nil
@@ -59,10 +62,11 @@ final class FirebaseDatabase: DatabaseType {
         }
     }
     
+    /// Check if a record already exist for the user at the date and return a status BOOL type within a closure.
+    /// - Parameters:
+    ///   - uid: user ID
+    ///   - dateString: date to check if a record exist.
     func checkIfRecordExist (uid: String, dateString: String, callback: @escaping (Bool) -> Void) {
-//        print("checkIfRecorsExist")
-//        print("uid: \(uid)")
-//        print("date: \(dateString)")
         let db = Firestore.firestore()
         let usersRef = db.collection("NikoRecord")
         usersRef.whereField("userID", isEqualTo: uid)
@@ -82,19 +86,19 @@ final class FirebaseDatabase: DatabaseType {
             }
     }
     
+    /// Format and Launch a query and decode the result as NikoRecord type  and return it within a closure.
+    /// - Parameters:
+    ///   - uid: user ID
+    ///   - location: Array with the location selected by the user (Plant, Workshop, shift)
+    ///   - personnal: Indicate that the user only want to see his data
+    ///   - selectedDate: date selected by the user in the view controller
+    ///   - monthVsYear: Indicate weither month or year data retrieve (true for month, false for year)
     func getQuery(uid: String, location: [String], monthVsYear: Bool, personnal: Bool, selectedDate: Date, callback: @escaping (Result<[NikoRecord], FirebaseError>) -> Void) {
-        
-        print("\n\n")
-        print("uid: \(uid)")
-        print("location: \(location)")
-        print("monthVsYear: \(monthVsYear)")
-        print("personnal: \(personnal)")
-        print("date: \(selectedDate)")
-        
         var q: Query?
         var records = [NikoRecord]()
         let calendarHelper = CalendarHelper()
         let month2D = calendarHelper.month2Digits(date: selectedDate)
+        print("month 2D \(month2D)")
         let year = calendarHelper.yearString(date: selectedDate)
         let db = Firestore.firestore()
         let usersRef = db.collection("NikoRecord")
@@ -108,7 +112,7 @@ final class FirebaseDatabase: DatabaseType {
         } else {
             for (index, val) in location.enumerated() {
                 if location[index] != "" {
-//print("location name : \(LocationEntreprise.locations[index].locationName!) val: \(val)")
+                    print("location name : \(LocationEntreprise.locations[index].locationName!) val: \(val)")
                     q = q?.whereField(LocationEntreprise.locations[index].locationName!, isEqualTo: val)
                 }
             }
@@ -124,6 +128,4 @@ final class FirebaseDatabase: DatabaseType {
             callback(.success(records))
         }
     }
-
-    
 }

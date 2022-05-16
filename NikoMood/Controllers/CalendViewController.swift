@@ -36,7 +36,7 @@ class CalendViewController: UIViewController {
     @IBOutlet weak var pieChartView: PieChartView!
     
     // MARK: - Overrides
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -76,7 +76,7 @@ class CalendViewController: UIViewController {
             setMonthView()
         }
     }
-
+    
     // MARK: - Methods
     
     func getUserData() {
@@ -107,30 +107,31 @@ class CalendViewController: UIViewController {
         cellTitlesSelected[2] = currentNiko.shift
         
         reustableTable = GenericTableView(frame: view.frame, items: cellTitles, itemsSelected: cellTitlesSelected, permission: currentNiko.permission
-                , config: { (item, itemSelected, cell) in
-                    cell.cellLabelEtablissement.text = item
-                    cell.cellLabelEtablissementSelected.text = itemSelected }
-                , selectHandler: { (item) in       // item = buttonnumber
-                    let vc = TeamLocationTableViewController()
-                    vc.completion = {[weak self] text in    // text contains the location selected
-                        self!.cellTitlesSelected[item] = text ?? ""
-                        LocationEntreprise.locations[item].locationSelected = text ?? ""
-                        // Update the tableview location
-                        self!.reustableTable.reload(items: self!.cellTitles, itemsSelected: self!.cellTitlesSelected)
-                    }
-                    vc.locationRank = item
-                    self.navigationController?.pushViewController(vc, animated: true)
-                })
-        view.addSubview(reustableTable)
-        let g = view.safeAreaLayoutGuide
-        NSLayoutConstraint.activate([
-            reustableTable.leadingAnchor.constraint(equalTo: g.leadingAnchor),
-            reustableTable.trailingAnchor.constraint(equalTo: g.trailingAnchor),
-            reustableTable.topAnchor.constraint(equalTo: g.topAnchor, constant: 36),
-            reustableTable.heightAnchor.constraint(equalToConstant: 100)
-        ])
+                                          , config: { (item, itemSelected, cell) in
+                                                cell.cellLabelEtablissement.text = item
+                                                cell.cellLabelEtablissementSelected.text = itemSelected }
+                                          , selectHandler: { (item) in       // item = buttonnumber
+                                                let vc = TeamLocationTableViewController()
+                                                vc.completion = {[weak self] text in    // text contains the location selected
+                                                    self!.cellTitlesSelected[item] = text ?? ""
+                                                    LocationEntreprise.locations[item].locationSelected = text ?? ""
+                                                    // Update the tableview location
+                                                    self!.reustableTable.reload(items: self!.cellTitles, itemsSelected: self!.cellTitlesSelected)
+                                                }
+                                                vc.locationRank = item
+                                                self.navigationController?.pushViewController(vc, animated: true)
+                                                })
+            view.addSubview(reustableTable)
+            let g = view.safeAreaLayoutGuide
+            NSLayoutConstraint.activate([
+                reustableTable.leadingAnchor.constraint(equalTo: g.leadingAnchor),
+                reustableTable.trailingAnchor.constraint(equalTo: g.trailingAnchor),
+                reustableTable.topAnchor.constraint(equalTo: g.topAnchor, constant: 36),
+                reustableTable.heightAnchor.constraint(equalToConstant: 100)
+            ])
     }
     
+    // Settings for the niko calendar
     private func setCellsViewCalendar() {
         let flowLayout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         flowLayout.sectionInset.left = 0
@@ -142,6 +143,7 @@ class CalendViewController: UIViewController {
         flowLayout.itemSize = CGSize(width: width, height: height)
         collectionView!.collectionViewLayout = flowLayout
     }
+    
     
     private func setMonthView()
     {
@@ -166,12 +168,8 @@ class CalendViewController: UIViewController {
         let month = calendarHelper.monthString(date: selectedDate)
         let year = calendarHelper.yearString(date: selectedDate)
         monthLabel.text = month + " " + year
-        
-        print("cellTitleSerlected dans calendar view")
-        print(cellTitlesSelected)
-        
         // Update de Niko value with a request to Fierstore
-        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedDate, location: cellTitlesSelected, personnal: personnalCalendarSwitch, monthVsYear: true, ishikawa: false) { (result) in
+        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedDate, location: cellTitlesSelected, personnal: personnalCalendarSwitch, monthVsYear: true) { (result) in
             switch result {
             case .success(let data):
                 self.dataTCDMonth = data
@@ -192,10 +190,10 @@ class CalendViewController: UIViewController {
         let c1 = UIColor.green
         let c2 = UIColor.yellow
         let c3 = UIColor.red
-
+        
         pieChartDataSet.colors = [c1, c2, c3,]
         pieChartDataSet.valueTextColor = .black
-
+        
         let pieChartData = PieChartData(dataSet: pieChartDataSet)
         let pFormatter = NumberFormatter()
         pFormatter.maximumFractionDigits = 0
@@ -206,7 +204,7 @@ class CalendViewController: UIViewController {
         pieChartView.centerText = "Status"
         pieChartView.data = pieChartData
     }
-
+    
     private func displayPieChart(index : Int) {
         if totalSquares[index] != "" {
             var nikoRanks = [Double]()
@@ -221,7 +219,15 @@ class CalendViewController: UIViewController {
             setPieChart(dataPoints: nikoStatus, values: nikoRanks)
         }
     }
-
+    
+    private func deleteRecord(uid: String, dateString: String) {
+        // Retrieve the Firebase documentID for the userID and the date.
+        
+        // If document and Niko status exist ask if the user want to delete the Niko Status.
+        
+        // Delete the record if asked.
+    }
+    
 }
 
 //
@@ -267,6 +273,16 @@ extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSo
             displayPieChart(index: indexPath.item)
         } else {
             pieChartView.isHidden = true
+            // Calculate the date selected on the calendar
+            //if totalSquares[indexPath.item] != "" {
+                //let calendar = Calendar.current
+                //guard let jour = Int(totalSquares[indexPath.item]) else { return }
+                //let firstDayOfMonth = calendarHelper.firstOfMonth(date: selectedDate)
+                //let date = calendar.date(byAdding: .day, value: jour - 1, to: firstDayOfMonth)!
+                //let dateString = calendarHelper.dateString(date: date)
+                //print("date sélectionnée: \(dateString)")
+                //deleteRecord(uid: userUID, dateString: dateString)
+            //}
         }
     }
     
@@ -276,7 +292,7 @@ extension CalendViewController: UICollectionViewDelegate, UICollectionViewDataSo
             cell.contentView.layer.borderColor = UIColor.blue.cgColor
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, didUnhighlightItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) {
             //cell.contentView.backgroundColor = nil

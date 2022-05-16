@@ -10,7 +10,6 @@ import Charts
 
 class IshikawaViewController: UIViewController {
 
-    //Refactor the location table view in : Niko Record, Niko following and Ishikawa by creating a genericTableView
     // MARK: - Properties
     
     private let authService: AuthService = AuthService()
@@ -45,20 +44,19 @@ class IshikawaViewController: UIViewController {
         setBarMonthView()
         setHorizontalBarChartView()
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-    }
 
     // MARK: - IBActions
     
     @IBAction func previousMonthButtonTapped(_ sender: UIButton) {
         selectedBarDate = calendarHelper.minusMonth(date: selectedBarDate)
         setBarMonthView()
+        horizontalBarChartView.isHidden = true
     }
     
     @IBAction func nextMonthButtonTapped(_ sender: UIButton) {
         selectedBarDate = calendarHelper.plusMonth(date: selectedBarDate)
         setBarMonthView()
+        horizontalBarChartView.isHidden = true
     }
     
     // MARK: - Methods
@@ -100,6 +98,8 @@ class IshikawaViewController: UIViewController {
                         LocationEntreprise.locations[item].locationSelected = text ?? ""
                         // Update the tableview location
                         self!.reustableTable.reload(items: self!.cellTitles, itemsSelected: self!.cellTitlesSelected)
+                        self!.setBarMonthView()
+                        self!.horizontalBarChartView.isHidden = true
                     }
                     vc.locationRank = item
                     self.navigationController?.pushViewController(vc, animated: true)
@@ -118,13 +118,13 @@ class IshikawaViewController: UIViewController {
     // Bar Chart 5M
     //
     
-    func setBarMonthView()
+    private func setBarMonthView()
     {
         let month = calendarHelper.monthString(date: selectedBarDate)
         let year = calendarHelper.yearString(date: selectedBarDate)
         monthLabel.text = month + " " + year
 
-        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true, ishikawa: false) { (result) in
+        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true) { (result) in
             switch result {
             case .success(let data):
                 // update display bar Charts
@@ -136,7 +136,7 @@ class IshikawaViewController: UIViewController {
         }
     }
     
-    func setBarChart() {
+    private func setBarChart() {
         let category5M = ["Methode", "Matiere", "Machine", "MO", "Milieu"]
         barChartView.maxVisibleCount = 40
         barChartView.drawBarShadowEnabled = false
@@ -161,7 +161,7 @@ class IshikawaViewController: UIViewController {
         xAxis.valueFormatter = IndexAxisValueFormatter(values: category5M)
     }
     
-    func setBarChartData(niKoRecords: [NikoTCD]) {
+    private func setBarChartData(niKoRecords: [NikoTCD]) {
         var val5M = [Double]()
         let recordsMethode = niKoRecords.map({$0.nbMethod})
         let sumRecordsMethode = Double(recordsMethode.reduce(0,+))
@@ -178,7 +178,6 @@ class IshikawaViewController: UIViewController {
         let recordsMilieu = niKoRecords.map({$0.nbMilieu})
         let sumrecordsMilieu = Double(recordsMilieu.reduce(0,+))
         val5M.append(sumrecordsMilieu)
-        
         
         let yVals = (0..<5).map { (i) -> BarChartDataEntry in
             let val = val5M[i]
@@ -207,7 +206,7 @@ class IshikawaViewController: UIViewController {
     // Bar Chart Cause (horizontal)
     //
     
-    func setHorizontalBarChartView() {
+    private func setHorizontalBarChartView() {
         horizontalBarChartView.legend.enabled = false
         horizontalBarChartView.xAxis.granularityEnabled = true
         horizontalBarChartView.xAxis.granularity = 1
@@ -226,15 +225,11 @@ class IshikawaViewController: UIViewController {
         horizontalBarChartView.setExtraOffsets (left: 30.0, top: 20.0, right:30.0, bottom: 20.0)
     }
     
-    func drawHorizontalBarChartView(valCategory5M: Int) {
-
+    private func drawHorizontalBarChartView(valCategory5M: Int) {
         databaseManager.requestRecordUserRetrieveIshikawaData(uid: userUID, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true, category5MSelected: valCategory5M) { (result) in
             switch result {
             case .success(let data):
                 // update display bar Charts
-print ("data ishi")
-print(data)
-print(data.count)
                 var dataEntries = [ChartDataEntry]()
                 var labels = [String] ()
                 
@@ -253,7 +248,7 @@ print(data.count)
                     pFormatter.maximumFractionDigits = 0
                     pFormatter.zeroSymbol = ""          // don't display label if data = 0
                     barChartData.setValueFormatter(DefaultValueFormatter(formatter: pFormatter))
-                    
+                    self.horizontalBarChartView.isHidden = false
                     self.horizontalBarChartView.data = barChartData
                         
                     self.horizontalBarChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values: labels)

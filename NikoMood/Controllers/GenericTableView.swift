@@ -95,7 +95,6 @@ class GenericTableView : UITableView, UITableViewDelegate, UITableViewDataSource
             selectHandler(buttonNumber)
         }
     }
-    
 }
 
 extension GenericTableView {

@@ -30,7 +30,7 @@ class LoginViewController: UIViewController {
         
         // Do any additional setup after loading the view.
         setUpElements()
- 
+        
         
         authService.isUserConnected { isConnected in
             switch isConnected {
@@ -40,7 +40,7 @@ class LoginViewController: UIViewController {
                 print("No user selected in Login view")
             }
         }
-    
+        
         
     }
     
@@ -75,7 +75,6 @@ class LoginViewController: UIViewController {
     
     // Check the fields and validate that the data is correct. If everything is correct, this method returns nil. Otherwise, it returns the error message
     private func validateFields() -> String? {
-
         // Check that all fields are filled in
         guard let email = emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in email text".localized()}
         guard let cleanedPassword = passwordTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) else {return "Error in second password text".localized()}

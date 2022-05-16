@@ -338,13 +338,6 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="Urg-IJ-I77" firstAttribute="leading" secondItem="Rp8-d1-njN" secondAttribute="leading" id="1j5-ph-h1q"/>
-                                    <constraint firstItem="yPO-Qs-OX8" firstAttribute="leading" secondItem="Rp8-d1-njN" secondAttribute="leading" constant="30" id="NSc-AW-J7G"/>
-                                    <constraint firstAttribute="trailing" secondItem="yPO-Qs-OX8" secondAttribute="trailing" constant="30" id="Vm2-UV-rm9"/>
-                                    <constraint firstAttribute="trailing" secondItem="LeM-es-s43" secondAttribute="trailing" constant="30" id="Yrv-F7-Nk9"/>
-                                    <constraint firstItem="LeM-es-s43" firstAttribute="leading" secondItem="Rp8-d1-njN" secondAttribute="leading" constant="30" id="ttN-7C-aBr"/>
-                                </constraints>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="1PV-Se-HTX"/>
@@ -971,10 +964,6 @@
                                         </constraints>
                                     </view>
                                 </subviews>
-                                <constraints>
-                                    <constraint firstItem="A97-L3-rbY" firstAttribute="leading" secondItem="8VA-no-adM" secondAttribute="leading" constant="30" id="rW4-Wv-hno"/>
-                                    <constraint firstAttribute="trailing" secondItem="A97-L3-rbY" secondAttribute="trailing" constant="30" id="yYI-Yo-1W3"/>
-                                </constraints>
                             </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="gd4-cI-cA0"/>

@@ -20,16 +20,10 @@ final class DatabaseManager {
     var dataTCDMonth = [NikoTCD]()
     var dataTCDYear = [NikoTCD]()
     var dataCause5M = [Dictionary<String, Int>.Element]()
-    //var dataCause5M = [String : Int]()
-
     var currentNikoTCD = NikoTCD(rankAverage: -1, nbRecord: 0, nbSuper: 0, nbNTR: 0, nbTought: 0, nbMethod: 0, nbMatiere: 0, nbMachine: 0, nbMaindoeuvre: 0, nbMilieu: 0)
-
     var currentNiko = NikoRecord(userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "", nikoStatus: "", nikoRank: 0, niko5M: "", nikoCause: "", nikoComment: "", permission: 0, date: Date(), formattedMonthString: "", formattedDateString : "", formattedYearString: "", error: "")
-
     var currentUser = NikoUser(id: "", userID: "", firstname: "", lastname: "", position: "", plant: "", department: "", workshop: "", shift: "",  permission: 0, password: "", birthday: Date(), email: "")
-
     var paramQueryField = ["plant", "workshop", "shift"  ]
-
     var category5M = ["methode", "matiere", "machine", "maindoeuvre", "milieu"]
 
     // MARK: - Initialization
@@ -55,8 +49,10 @@ final class DatabaseManager {
         }
     }
     
+    /// Store the record and return a status BOOL type within a closure.
+    /// - Parameters:
+    ///   - record: records to save
     func storeNikoRecord (record : NikoRecord, callback: @escaping (Bool) -> Void) {
-        
         // MARK: - Properties
         let currentNiko = record
         let calendarHelper = CalendarHelper()
@@ -106,13 +102,19 @@ final class DatabaseManager {
             }
         }
     }
-    
+
+    /// Retrieve the user or location data, calculate sums by items and return a NikoTCD type within a closure.
+    /// - Parameters:
+    ///   - uid: user ID
+    ///   - selectedDate: date selected by the user in the view controller
+    ///   - location: Array with the location selected by the user (Plant, Workshop, shift)
+    ///   - personnal: Indicate that the user only want to see his data
+    ///   - monthVsYear: Indicate weither month or year data retrieve (true for month, false for year)
     func requestRecordUserRetrievelocalisationData (uid: String,
                                                   selectedDate: Date,
                                                   location : [String],
                                                   personnal : Bool,
                                                   monthVsYear: Bool,
-                                                  ishikawa : Bool,
                                                   callback: @escaping (Result<[NikoTCD], FirebaseError>) -> Void) {
 
         dataTCDMonth = Array(repeating: currentNikoTCD, count: 31)
@@ -122,8 +124,6 @@ final class DatabaseManager {
             
             switch records {
             case .success(let records):
-print("records dans requestRecordUser")
-print(records)
                 if monthVsYear {
                     self.calcTCDMonth(records: records, selectedDate: selectedDate)
                     callback(.success(self.dataTCDMonth))
@@ -139,6 +139,7 @@ print(records)
         }
     }
     
+    /// Retrieve the user or location data, calculate sums by items and return a NikoTCD type within a closure.
     /// - Parameters:
     ///   - uid: user ID
     ///   - selectedDate: date selected by the user in the view controller
@@ -155,7 +156,6 @@ print(records)
                                               callback: @escaping (Result<[Dictionary<String, Int>.Element], FirebaseError>) -> Void) {
  
         database.getQuery(uid: uid, location: location, monthVsYear: monthVsYear, personnal: personnal, selectedDate: selectedDate) { records in
-            
             switch records {
             case .success(let records):
                 if monthVsYear {
@@ -169,14 +169,14 @@ print(records)
         }
     }
     
-    
+    /// Calculate the month sums of nikoStatus and niko5M and store the result in dataTCDMonth.
+    /// - Parameters:
+    ///   - records: records returns from the query
     private func calcTCDMonth(records: [NikoRecord], selectedDate: Date) {
-        
         let calendarHelper = CalendarHelper()
         let calendar = Calendar.current
         let daysInMonth = calendarHelper.daysInMonth(date: selectedDate)
         let firstDayOfMonth = calendarHelper.firstOfMonth(date: selectedDate)
-print("NB records dans calcMonth : \(records.count)")
         (0...daysInMonth - 1).forEach { n in
             let date = calendar.date(byAdding: .day, value: n, to: firstDayOfMonth)!
             let dateString = calendarHelper.dateString(date: date)
@@ -205,15 +205,15 @@ print("NB records dans calcMonth : \(records.count)")
             currentNikoTCD.nbMaindoeuvre = recordsMaindoeuvre.count
             let recordsMilieu = recordsDate.filter({$0.niko5M == "milieu"})
             currentNikoTCD.nbMilieu = recordsMilieu.count
-        
-//print(" \(dateString) \(n)  nbRecord = \(currentNikoTCD.nbRecord) Method = \(currentNikoTCD.nbMethod) nbMatiere = \(currentNikoTCD.nbMatiere)  nbMachine = \(currentNikoTCD.nbMachine)  nbMO : \(currentNikoTCD.nbMaindoeuvre)")
             
             dataTCDMonth[n] = currentNikoTCD
             razCurrentTCD()
-            
         }
     }
  
+    /// Group the month records  by nikoCause and store the result in dataCause5M.
+    /// - Parameters:
+    ///   - records: records returns from the query
     private func calcTCDMonthIshikawa(records: [NikoRecord], category5MSelected: Int) {
         // Group the table by niko5M record and count the number of record
         let selected5M = category5M[category5MSelected]
@@ -222,8 +222,10 @@ print("NB records dans calcMonth : \(records.count)")
         dataCause5M = grouped.sorted { $0.1 > $1.1 }
     }
     
+    /// Calculate the year sums of nikoStatus and niko5M and store the result in dataTCDYear.
+    /// - Parameters:
+    ///   - records: records returns from the query
     private func calcTCDYear(records: [NikoRecord], selectedDate: Date) {
-        
         let calendarHelper = CalendarHelper()
         let calendar = Calendar.current
         let nbMonth = 12
@@ -257,9 +259,7 @@ print("NB records dans calcMonth : \(records.count)")
             currentNikoTCD.nbMaindoeuvre = recordsMaindoeuvre.count
             let recordsMilieu = recordsDate.filter({$0.nikoCause == "milieu"})
             currentNikoTCD.nbMilieu = recordsMilieu.count
-        
-//print(" \(monthString) \(n)  nbRecord = \(currentNikoTCD.nbRecord) rank = \(currentNikoTCD.rankAverage) nbSuper = \(currentNikoTCD.nbSuper)  nbNTR = \(currentNikoTCD.nbNTR)  nbTought : \(currentNikoTCD.nbTought)")
-            
+     
             dataTCDYear[n] = currentNikoTCD
             razCurrentTCD()
         }
@@ -274,7 +274,6 @@ print("NB records dans calcMonth : \(records.count)")
     }
     
     private func razCurrentTCD() {
-        
         currentNikoTCD = NikoTCD(rankAverage: -1, nbRecord: 0, nbSuper: 0, nbNTR: 0, nbTought: 0, nbMethod: 0, nbMatiere: 0, nbMachine: 0, nbMaindoeuvre: 0, nbMilieu: 0)
     }
     

@@ -26,7 +26,6 @@ final class AuthService {
 
     func signIn(email: String, password: String, callback: @escaping (Bool) -> Void) {
         auth.signIn(email: email, password: password, callback: callback)
-        
     }
 
     func signUp(email: String, password: String, callback: @escaping (Result<Bool, FirebaseError>) -> Void) {

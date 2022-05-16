@@ -153,7 +153,7 @@ class DatabaseManagerTests: XCTestCase {
         
         let sut: DatabaseManager = DatabaseManager(database: DatabaseStub(false, nil, nikoRecords, nil))
         let expectation = XCTestExpectation(description: "Wait for queue change.")
-        sut.requestRecordUserRetrievelocalisationData(uid: uid, selectedDate: dateFormatter.date(from: "2022-04-02")!, location: locationSelected, personnal: true, monthVsYear: true, ishikawa: false ) { result in
+        sut.requestRecordUserRetrievelocalisationData(uid: uid, selectedDate: dateFormatter.date(from: "2022-04-02")!, location: locationSelected, personnal: true, monthVsYear: true) { result in
             guard case .success(let userData) = result else {
                 XCTFail("Get User Data Method Success Tests Fails")
                 return
@@ -176,7 +176,7 @@ class DatabaseManagerTests: XCTestCase {
         
         let sut: DatabaseManager = DatabaseManager(database: DatabaseStub(false, nil, nikoRecords, nil))
         let expectation = XCTestExpectation(description: "Wait for queue change.")
-        sut.requestRecordUserRetrievelocalisationData(uid: uid, selectedDate: dateFormatter.date(from: "2022-04-02")!, location: locationSelected, personnal: true, monthVsYear: false, ishikawa: false ) { result in
+        sut.requestRecordUserRetrievelocalisationData(uid: uid, selectedDate: dateFormatter.date(from: "2022-04-02")!, location: locationSelected, personnal: true, monthVsYear: false) { result in
             guard case .success(let userData) = result else {
                 XCTFail("Get User Data Method Success Tests Fails")
                 return
@@ -197,7 +197,7 @@ class DatabaseManagerTests: XCTestCase {
         
         let sut: DatabaseManager = DatabaseManager(database: DatabaseStub(false, nil, nil, FirebaseError.errGettingDoc))
         let expectation = XCTestExpectation(description: "Wait for queue change.")
-        sut.requestRecordUserRetrievelocalisationData(uid: uid, selectedDate: dateFormatter.date(from: "2022-04-02")!, location: locationSelected, personnal: true, monthVsYear: true, ishikawa: false ) { result in
+        sut.requestRecordUserRetrievelocalisationData(uid: uid, selectedDate: dateFormatter.date(from: "2022-04-02")!, location: locationSelected, personnal: true, monthVsYear: true) { result in
             guard case .failure(let error) = result else {
                 XCTFail("Get User Data Method Success Tests Fails")
                 return

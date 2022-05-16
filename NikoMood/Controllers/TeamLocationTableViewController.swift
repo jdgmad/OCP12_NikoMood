@@ -34,15 +34,13 @@ class TeamLocationTableViewController: UIViewController {
             "HR",
             "Finance",
             "Supply Chain",
-            "HR",
             "Marketing",
             "R&D",
             "Production",
             "Quality",
             "Maintenance",
             "Process",
-            "Purchasing",
-            "Comptability"
+            "Purchasing"
     ]
     var equipe = [
             "",
@@ -63,7 +61,6 @@ class TeamLocationTableViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         view.backgroundColor = .white
         setTableView()
         print("location rank: \(locationRank)")
@@ -86,7 +83,7 @@ class TeamLocationTableViewController: UIViewController {
         tableView.dataSource = self
         tableView.register(TeamTableCell.self, forCellReuseIdentifier: "teamTableCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 35
+        tableView.rowHeight = 30
 
         view.addSubview(tableView)
         let g = view.safeAreaLayoutGuide

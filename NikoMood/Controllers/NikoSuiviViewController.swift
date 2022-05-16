@@ -41,10 +41,6 @@ class NikoSuiviViewController: UIViewController {
         getUserData()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        //collectionView.reloadData()
-    }
-    
     // MARK: - IBActions
 
     @IBAction func previousMonthButtonTapped(_ sender: UIButton) {
@@ -136,7 +132,7 @@ class NikoSuiviViewController: UIViewController {
         let year = calendarHelper.yearString(date: selectedBarDate)
         monthLabel.text = month + " " + year
 
-        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true, ishikawa: false) { (result) in
+        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedBarDate, location: cellTitlesSelected, personnal: false, monthVsYear: true) { (result) in
             switch result {
             case .success(let data):
                 // update display bar Charts
@@ -148,33 +144,27 @@ class NikoSuiviViewController: UIViewController {
         }
     }
     
-    func setBarChart() {
-        //chartView.chartDescription.enabled = false
-        
+    private func setBarChart() {
         barChartView.maxVisibleCount = 40
         barChartView.drawBarShadowEnabled = false
         barChartView.drawValueAboveBarEnabled = false
         barChartView.highlightFullBarEnabled = false
+        barChartView.rightAxis.enabled = false
+        barChartView.fitBars = true
+        barChartView.legend.enabled = false
+        barChartView.backgroundColor = .systemBlue
         
         let leftAxis = barChartView.leftAxis
         leftAxis.axisMinimum = 0
         leftAxis.labelTextColor = .white
         leftAxis.gridColor = .white
-        
-        barChartView.rightAxis.enabled = false
-        
         let xAxis = barChartView.xAxis
         xAxis.labelPosition = .bottom
         xAxis.labelTextColor = .white
         xAxis.gridColor = .clear
-        
-        barChartView.fitBars = true
-        barChartView.legend.enabled = false
-        
-        barChartView.backgroundColor = .systemBlue
     }
     
-    func setBarChartData(niKoRecords: [NikoTCD]) {
+    private func setBarChartData(niKoRecords: [NikoTCD]) {
         let yVals = (0..<niKoRecords.count).map { (i) -> BarChartDataEntry in
             let val1 = Double(niKoRecords[i].nbSuper)
             let val2 = Double(niKoRecords[i].nbNTR)
@@ -184,7 +174,6 @@ class NikoSuiviViewController: UIViewController {
         let set = BarChartDataSet(entries: yVals, label: "Niko Niko survey")
         set.drawIconsEnabled = false
         set.colors = [UIColor.green, UIColor.yellow, UIColor.red]
-        //set.fillAlpha = 65/255
         set.stackLabels = ["Super", "Normal", "Dificille"]
         
         let data = BarChartData(dataSet: set)
@@ -200,14 +189,14 @@ class NikoSuiviViewController: UIViewController {
     }
     
     //
-    // Line Chart
+    // Year Line Chart
     //
 
-    func setLineYearView() {
+    private func setLineYearView() {
         let year = calendarHelper.yearString(date: selectedLineDate)
         yearLabel.text =  year
 
-        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedLineDate, location: cellTitlesSelected, personnal: false, monthVsYear: false, ishikawa: false) { (result) in
+        databaseManager.requestRecordUserRetrievelocalisationData(uid: userUID, selectedDate: selectedLineDate, location: cellTitlesSelected, personnal: false, monthVsYear: false) { (result) in
             switch result {
             case .success(let data):
                 // update display bar Charts
@@ -219,35 +208,30 @@ class NikoSuiviViewController: UIViewController {
         }
     }
     
-    func setLineChart() {
-        lineChartView.setScaleEnabled(true)
-
+    private func setLineChart() {
         let xAxis = lineChartView.xAxis
         xAxis.labelFont = .systemFont(ofSize: 10)
         xAxis.labelTextColor = .white
         xAxis.drawAxisLineEnabled = false
         xAxis.labelPosition = .bottom
         xAxis.axisMinimum = 0
-
         xAxis.granularityEnabled = true
-        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-        lineChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values:months)
-        lineChartView.xAxis.granularity = 1
-        
         let leftAxis = lineChartView.leftAxis
         leftAxis.axisMinimum = 0
         leftAxis.labelTextColor = .white
         leftAxis.gridColor = .white
         
+        let months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        lineChartView.xAxis.valueFormatter = IndexAxisValueFormatter(values:months)
+        lineChartView.xAxis.granularity = 1
         lineChartView.backgroundColor = .systemBlue
         lineChartView.rightAxis.enabled = false
         lineChartView.legend.enabled = false
-
         lineChartView.animate(xAxisDuration: 1)
+        lineChartView.setScaleEnabled(true)
     }
 
-    func setLineChartData(niKoRecords: [NikoTCD]) {
-
+    private func setLineChartData(niKoRecords: [NikoTCD]) {
         let yVals1 = (0..<niKoRecords.count).map { (i) -> ChartDataEntry in
             let val1 = Double(niKoRecords[i].nbNTR)
             return ChartDataEntry(x: Double(i), y: val1 )
@@ -260,7 +244,6 @@ class NikoSuiviViewController: UIViewController {
             let val3 = Double(niKoRecords[i].nbSuper)
             return ChartDataEntry(x: Double(i), y: val3 )
         }
-        
         let set1 = LineChartDataSet(entries: yVals1, label: "NTR")
         set1.axisDependency = .left
         set1.setColor(.yellow)
@@ -301,5 +284,4 @@ class NikoSuiviViewController: UIViewController {
 
         lineChartView.data = data
     }
-
 }

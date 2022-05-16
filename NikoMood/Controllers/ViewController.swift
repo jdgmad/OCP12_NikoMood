@@ -16,6 +16,9 @@ class ViewController: UIViewController {
     private let authService: AuthService = AuthService()
     private let segueToSigninFromRoot = "segueToLoginFromRoot"
     private var userEmail = ""
+    
+    // MARK: - IBOutlets
+    
     @IBOutlet weak var signupButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
     
@@ -42,7 +45,6 @@ class ViewController: UIViewController {
         Utilities.styleFilledButton(signupButton)
         Utilities.styleHollowButton(loginButton)
     }
-    
     
     private func presentAlertLogin(userEmail: String) {
         

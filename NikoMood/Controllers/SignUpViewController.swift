@@ -71,7 +71,6 @@ class SignUpViewController: UIViewController {
             return "Please fill in all the fields".localized()
         }
         // Check if the password is secure
-
         if Utilities.isPasswordValid(cleanedPassword2) == false {
             return "Please make sure your password is at least 8 characters, contains a special character and a number".localized()
         }
@@ -114,8 +113,6 @@ class SignUpViewController: UIViewController {
         errorLabel.text = message
         errorLabel.alpha = 1
     }
-    
-
 }
 
 
