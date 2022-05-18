@@ -58,12 +58,13 @@ class CalendViewController: UIViewController {
     @IBAction func previousMonth(_ sender: UIButton) {
         selectedDate = calendarHelper.minusMonth(date: selectedDate)
         setMonthView()
+        pieChartView.isHidden = true
     }
     
     @IBAction func nextMonth(_ sender: UIButton) {
         selectedDate = calendarHelper.plusMonth(date: selectedDate)
         setMonthView()
-    }
+        pieChartView.isHidden = true    }
     
     @IBAction func personnalDataSwitch(_ sender: UISwitch) {
         if sender.isOn {

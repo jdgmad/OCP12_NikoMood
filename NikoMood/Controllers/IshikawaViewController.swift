@@ -137,7 +137,7 @@ class IshikawaViewController: UIViewController {
     }
     
     private func setBarChart() {
-        let category5M = ["Methode", "Matiere", "Machine", "MO", "Milieu"]
+        let category5M = ["Methods".localized(), "Materials".localized(), "Machinery".localized(), "Manpower".localized(), "Management".localized()]
         barChartView.maxVisibleCount = 40
         barChartView.drawBarShadowEnabled = false
         barChartView.drawValueAboveBarEnabled = false
@@ -156,6 +156,7 @@ class IshikawaViewController: UIViewController {
         
         let xAxis = barChartView.xAxis
         xAxis.labelPosition = .bottom
+        xAxis.labelFont = .systemFont(ofSize: 8.0)
         xAxis.labelTextColor = .white
         xAxis.gridColor = .clear
         xAxis.valueFormatter = IndexAxisValueFormatter(values: category5M)
